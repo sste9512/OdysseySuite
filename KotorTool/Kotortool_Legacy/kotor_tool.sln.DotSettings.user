@@ -1,0 +1,9 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=kotor_005Ftool_002FfrmDialogEditor/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=kotor_005Ftool_002FInfrastructure_002FView_002FProjectSelection_002FProjectSelectionScreen/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=c8fb3d7b_002D7323_002D49ed_002D8818_002Df81b124b0add_0023OdysseyEngineWebApi/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=d46ff1be_002D568f_002D4013_002D946c_002D88ca8cfcbda6_0023KotorToolX/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=e34a93c0_002Df6e5_002D41bd_002D8b41_002D0eaaca4cf940_0023OdysseyEngineApi/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Lsum/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

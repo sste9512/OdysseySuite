@@ -1,0 +1,18 @@
+﻿- Structural
+----------------------------------------------------------------------
+
+- Add Soft/Weak References where applicable
+- Add Dependency Injection with Standard Microsoft Injection
+- Add Config.Net for way better configuration handling
+- Add Serilog where Console is normally used
+
+
+
+- Behavioral
+---------------------------------------------------------------------
+
+- Add GC Pressure Detection?
+- Create Startup Initialiser
+  - Add Startup Initialiser to Startup
+  - Initialiser must create persistence modules before app begins
+  - Initialiser must create all other modules after persistence modules

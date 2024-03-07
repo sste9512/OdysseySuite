@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+ <html xmlns:msxsl="urn:schemas-microsoft-com:xslt"><head><meta content="en-us" http-equiv="Content-Language" /><meta content="text/html; charset=utf-16" http-equiv="Content-Type" /><title _locID="ConversionReport0">
+          Migration Report
+        </title><style> 
+                    /* Body style, for the entire document */
+                    body
+                    {
+                        background: #F3F3F4;
+                        color: #1E1E1F;
+                        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                        padding: 0;
+                        margin: 0;
+                    }
+
+                    /* Header1 style, used for the main title */
+                    h1
+                    {
+                        padding: 10px 0px 10px 10px;
+                        font-size: 21pt;
+                        background-color: #E2E2E2;
+                        border-bottom: 1px #C1C1C2 solid; 
+                        color: #201F20;
+                        margin: 0;
+                        font-weight: normal;
+                    }
+
+                    /* Header2 style, used for "Overview" and other sections */
+                    h2
+                    {
+                        font-size: 18pt;
+                        font-weight: normal;
+                        padding: 15px 0 5px 0;
+                        margin: 0;
+                    }
+
+                    /* Header3 style, used for sub-sections, such as project name */
+                    h3
+                    {
+                        font-weight: normal;
+                        font-size: 15pt;
+                        margin: 0;
+                        padding: 15px 0 5px 0;
+                        background-color: transparent;
+                    }
+
+                    /* Color all hyperlinks one color */
+                    a
+                    {
+                        color: #1382CE;
+                    }
+
+                    /* Table styles */ 
+                    table
+                    {
+                        border-spacing: 0 0;
+                        border-collapse: collapse;
+                        font-size: 10pt;
+                    }
+
+                    table th
+                    {
+                        background: #E7E7E8;
+                        text-align: left;
+                        text-decoration: none;
+                        font-weight: normal;
+                        padding: 3px 6px 3px 6px;
+                    }
+
+                    table td
+                    {
+                        vertical-align: top;
+                        padding: 3px 6px 5px 5px;
+                        margin: 0px;
+                        border: 1px solid #E7E7E8;
+                        background: #F7F7F8;
+                    }
+
+                    /* Local link is a style for hyperlinks that link to file:/// content, there are lots so color them as 'normal' text until the user mouse overs */
+                    .localLink
+                    {
+                        color: #1E1E1F;
+                        background: #EEEEED;
+                        text-decoration: none;
+                    }
+
+                    .localLink:hover
+                    {
+                        color: #1382CE;
+                        background: #FFFF99;
+                        text-decoration: none;
+                    }
+
+                    /* Center text, used in the over views cells that contain message level counts */ 
+                    .textCentered
+                    {
+                        text-align: center;
+                    }
+
+                    /* The message cells in message tables should take up all avaliable space */
+                    .messageCell
+                    {
+                        width: 100%;
+                    }
+
+                    /* Padding around the content after the h1 */ 
+                    #content 
+                    {
+	                    padding: 0px 12px 12px 12px; 
+                    }
+
+                    /* The overview table expands to width, with a max width of 97% */ 
+                    #overview table
+                    {
+                        width: auto;
+                        max-width: 75%; 
+                    }
+
+                    /* The messages tables are always 97% width */
+                    #messages table
+                    {
+                        width: 97%;
+                    }
+
+                    /* All Icons */
+                    .IconSuccessEncoded, .IconInfoEncoded, .IconWarningEncoded, .IconErrorEncoded
+                    {
+                        min-width:18px;
+                        min-height:18px; 
+                        background-repeat:no-repeat;
+                        background-position:center;
+                    }
+
+                    /* Success icon encoded */
+                    .IconSuccessEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconSuccess#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABcElEQVR4Xq2TsUsCURzHv15g8ZJcBWlyiYYgCIWcb9DFRRwMW5TA2c0/QEFwFkxxUQdxVlBwCYWOi6IhWgQhBLHJUCkhLr/BW8S7gvrAg+N+v8/v+x68Z8MGy+XSCyABQAXgBgHGALoASkIIDWSLeLBetdHryMjd5IxQPWT4rn1c/P7+xxp72Cs9m5SZ0Bq2vPnbPFafK2zDvmNHypdC0BPkLlQhxJsCAhQoZwdZU5mwxh720qGo8MzTxTTKZDPCx2HoVzp6lz0Q9tKhyx0kGs8Ny+TkWRKk8lCROwEduhyg9l/6lunOPSfmH3NUH6uQ0KHLAe7JYvJjevm+DAMGJHToKtigE+vwvIidxLamb8IBY9e+C5LiXREkfho3TSd06HJA13/oh6T51MTsfQbHrsMynQ5dDihFjiK8JJAU9AKIWTp76dCVN7HWHrajmUEGvyF9nkbAE6gLIS7kTUyuf2gscLoJrElZo/Mvj+nPz/kLTmfnEwP3tB0AAAAASUVORK5CYII=);
+                    }
+
+                    /* Information icon encoded */
+                    .IconInfoEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconInformation#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVR4Xs2TsUoDQRRF7wwoziokjZUKadInhdhukR9YP8DMX1hYW+QvdsXa/QHBbcXC7W0CamWTQnclFutceIQJwwaWNLlwm5k5d94M76mmaeCrrmsLYOocY12FcxZFUeozCqKqqgYA8uevv1H6VuPxcwlfk5N92KHBxfFeCSAxxswlYAW/Xr989x/mv9gkhtyMDhcAxgzRsp7flj8B/HF1RsMXq+NZMkopaHe7lbKxQUEIGbKsYNoGn969060hZBkQex/W8oRQwsQaW2o3Ago2SVcJUzAgY3N0lTCZZm+zPS8HB51gMmS1DEYyOz9acKO1D8JWTlafKIMxdhvlfdyT94Vv5h7P8Ky7nQzACmhvKq3zk3PjW9asz9D/1oigecsioooAAAAASUVORK5CYII=);
+                    }
+
+                    /* Warning icon encoded */
+                    .IconWarningEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconWarning#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAx0lEQVR4XpWSMQ7CMAxFf4xAyBMLCxMrO8dhaBcuwdCJS3RJBw7SA/QGTCxdWJgiQYWKXJWKIXHIlyw5lqr34tQgEOdcBsCOx5yZK3hCCKdYXneQkh4pEfqzLfu+wVDSyyzFoJjfz9NB+pAF+eizx2Vruts0k15mPgvS6GYvpVtQhB61IB/dk6AF6fS4Ben0uIX5odtFe8Q/eW1KvFeH4e8khT6+gm5B+t3juyDt7n0jpe+CANTd+oTUjN/U3yVaABnSUjFz/gFq44JaVSCXeQAAAABJRU5ErkJggg==);
+                    }
+
+                    /* Error icon encoded */
+                    .IconErrorEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconError#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQElEQVR4XqWTvUoEQRCE6wYPZUA80AfwAQz23uCMjA7MDRQEIzPBVEyNTQUFIw00vcQTTMzuAh/AxEQQT8HF/3G/oGGnEUGuoNnd6qoZuqltyKEsyzVJq5I6rnUp6SjGeGhESikzzlc1eL7opfuVbrqbU1Zw9NCgtQMaZpY0eNnaaL2fHusvTK5vKu7sjSS1Y4y3QUA6K3e3Mau5UFDyMP7tYF9o8cAHZv68vipoIJg971PZIZ5HiwdvYGGvFVFHmGmZ2MxwmQYPXubPl9Up0tfoMQGetXd6mRbvhBw+boZ6WF7Mbv1+GsHRk0fQmPAH1GfmZirbCfDJ61tw3Px8/8pZsPAG4jlVhcPgZ7adwNWBB68lkRQWFiTgFlbnLY3DGGM7izIJIyT/jjIvEJw6fdJTc6krDzh6aMwMP9bvDH4ADSsa9uSWVJkAAAAASUVORK5CYII=);
+                    }
+                 </style><script type="text/javascript" language="javascript"> 
+          
+            // Startup 
+            // Hook up the the loaded event for the document/window, to linkify the document content
+            var startupFunction = function() { linkifyElement("messages"); };
+            
+            if(window.attachEvent)
+            {
+              window.attachEvent('onload', startupFunction);
+            }
+            else if (window.addEventListener) 
+            {
+              window.addEventListener('load', startupFunction, false);
+            }
+            else 
+            {
+              document.addEventListener('load', startupFunction, false);
+            } 
+            
+            // Toggles the visibility of table rows with the specified name 
+            function toggleTableRowsByName(name)
+            {
+               var allRows = document.getElementsByTagName('tr');
+               for (i=0; i < allRows.length; i++)
+               {
+                  var currentName = allRows[i].getAttribute('name');
+                  if(!!currentName && currentName.indexOf(name) == 0)
+                  {
+                      var isVisible = allRows[i].style.display == ''; 
+                      isVisible ? allRows[i].style.display = 'none' : allRows[i].style.display = '';
+                  }
+               }
+            }
+            
+            function scrollToFirstVisibleRow(name) 
+            {
+               var allRows = document.getElementsByTagName('tr');
+               for (i=0; i < allRows.length; i++)
+               {
+                  var currentName = allRows[i].getAttribute('name');
+                  var isVisible = allRows[i].style.display == ''; 
+                  if(!!currentName && currentName.indexOf(name) == 0 && isVisible)
+                  {
+                     allRows[i].scrollIntoView(true); 
+                     return true; 
+                  }
+               }
+               
+               return false;
+            }
+            
+            // Linkifies the specified text content, replaces candidate links with html links 
+            function linkify(text)
+            {
+                 if(!text || 0 === text.length)
+                 {
+                     return text; 
+                 }
+
+                 // Find http, https and ftp links and replace them with hyper links 
+                 var urlLink = /(http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9\-\._\?\,\/\\\+&%\$#\=~;\{\}])*/gi;
+                 
+                 return text.replace(urlLink, '<a href="$&">$&</a>') ;
+            }
+            
+            // Linkifies the specified element by ID
+            function linkifyElement(id)
+            {
+                var element = document.getElementById(id);
+                if(!!element)
+                {
+                  element.innerHTML = linkify(element.innerHTML); 
+                }
+            }
+            
+            function ToggleMessageVisibility(projectName)
+            {
+              if(!projectName || 0 === projectName.length)
+              {
+                return; 
+              }
+              
+              toggleTableRowsByName("MessageRowClass" + projectName);
+              toggleTableRowsByName('MessageRowHeaderShow' + projectName);
+              toggleTableRowsByName('MessageRowHeaderHide' + projectName); 
+            }
+            
+            function ScrollToFirstVisibleMessage(projectName)
+            {
+              if(!projectName || 0 === projectName.length)
+              {
+                return; 
+              }
+              
+              // First try the 'Show messages' row
+              if(!scrollToFirstVisibleRow('MessageRowHeaderShow' + projectName))
+              {
+                // Failed to find a visible row for 'Show messages', try an actual message row 
+                scrollToFirstVisibleRow('MessageRowClass' + projectName); 
+              }
+            }
+           </script></head><body><h1 _locID="ConversionReport">
+          Migration Report - kotor_tool</h1><div id="content"><h2 _locID="OverviewTitle">Overview</h2><div id="overview"><table><tr><th></th><th _locID="ProjectTableHeader">Project</th><th _locID="PathTableHeader">Path</th><th _locID="ErrorsTableHeader">Errors</th><th _locID="WarningsTableHeader">Warnings</th><th _locID="MessagesTableHeader">Messages</th></tr><tr><td class="IconWarningEncoded" /><td><strong><a href="#Solution"><span _locID="OverviewSolutionSpan">Solution</span></a></strong></td><td>kotor_tool.sln</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#SolutionWarning">1</a></td><td class="textCentered"><a href="#" onclick="ScrollToFirstVisibleMessage('Solution'); return false;">2</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#kotor_tool">kotor_tool</a></strong></td><td>kotor_tool.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#" onclick="ScrollToFirstVisibleMessage('kotor_tool'); return false;">257</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#KotorToolX">KotorToolX</a></strong></td><td>KotorToolX\KotorToolX.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#OdysseyEngineApi">OdysseyEngineApi</a></strong></td><td>OdysseyEngineApi\OdysseyEngineApi.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#OdysseyEngineWebApi">OdysseyEngineWebApi</a></strong></td><td>OdysseyEngineWebApi\OdysseyEngineWebApi.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr><tr><td class="IconSuccessEncoded" /><td><strong><a href="#TestPad">TestPad</a></strong></td><td>TestPad\TestPad.csproj</td><td class="textCentered"><a>0</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#">0</a></td></tr></table></div><h2 _locID="SolutionAndProjectsTitle">Solution and projects</h2><div id="messages"><a name="Solution" /><h3 _locID="ProjectDisplayNameHeader">Solution</h3><table><tr id="SolutionHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Message</th></tr><tr name="WarningRowClassSolution"><td class="IconWarningEncoded"><a name="SolutionWarning" /></td><td class="messageCell"><strong>kotor_tool.sln:
+        </strong><span>Visual Studio needs to make non-functional changes to this project in order to enable the project to open in released versions of Visual Studio newer than Visual Studio 2010 SP1 without impacting project behavior.</span></td></tr><tr name="MessageRowHeaderShowSolution"><td class="IconInfoEncoded" /><td class="messageCell"><a _locID="ShowAdditionalMessages" href="#" name="SolutionMessage" onclick="ToggleMessageVisibility('Solution'); return false;">
+          Show 2 additional messages
+        </a></td></tr><tr name="MessageRowClassSolution" style="display: none"><td class="IconInfoEncoded"><a name="SolutionMessage" /></td><td class="messageCell"><strong>kotor_tool.sln:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\kotor_tool.sln</span></td></tr><tr name="MessageRowClassSolution" style="display: none"><td class="IconInfoEncoded"><a name="SolutionMessage" /></td><td class="messageCell"><strong>kotor_tool.sln:
+        </strong><span>Solution migrated successfully</span></td></tr><tr style="display: none" name="MessageRowHeaderHideSolution"><td class="IconInfoEncoded" /><td class="messageCell"><a _locID="HideAdditionalMessages" href="#" name="SolutionMessage" onclick="ToggleMessageVisibility('Solution'); return false;">
+          Hide 2 additional messages
+        </a></td></tr></table><a name="kotor_tool" /><h3>kotor_tool</h3><table><tr id="kotor_toolHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Message</th></tr><tr name="MessageRowHeaderShowkotor_tool"><td class="IconInfoEncoded" /><td class="messageCell"><a _locID="ShowAdditionalMessages" href="#" name="kotor_toolMessage" onclick="ToggleMessageVisibility('kotor_tool'); return false;">
+          Show 257 additional messages
+        </a></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>kotor_tool.csproj:
+        </strong><span>Project file successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\kotor_tool.csproj</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\AnimListEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\AnimListEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\BIFFArchive.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\BIFFArchive.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\BIFFEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\BIFFEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\BIFFVarRsrcEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\BIFFVarRsrcEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\BIFFVarRsrcEntryInfo.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\BIFFVarRsrcEntryInfo.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\ChitinKey.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\ChitinKey.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\cls2DA.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\cls2DA.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsBaseItems2DA.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsBaseItems2DA.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsBWM.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsBWM.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsDialogTlk.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsDialogTlk.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsDLG.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsDLG.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsERF.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsERF.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsGFF.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsGFF.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsGlobalVars.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsGlobalVars.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsMapInfoCreator.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsMapInfoCreator.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsProject.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsProject.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsProjectManager.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsProjectManager.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsRIM.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsRIM.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsSSF.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsSSF.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsUTC.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsUTC.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsUTD.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsUTD.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsUTI.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsUTI.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsUTM.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsUTM.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsUTP.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsUTP.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsUTS.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsUTS.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsUTT.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsUTT.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\clsUTW.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\clsUTW.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\ERFKeyEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\ERFKeyEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\ERFLocalizedString.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\ERFLocalizedString.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>API\KTSoundInfo.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\API\KTSoundInfo.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Behaviors\Behaviours\AuthorizationBehaviour.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Behaviors\Behaviours\AuthorizationBehaviour.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Behaviors\Behaviours\LoggingBehaviour.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Behaviors\Behaviours\LoggingBehaviour.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Behaviors\Behaviours\PerformanceBehaviour.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Behaviors\Behaviours\PerformanceBehaviour.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Behaviors\Behaviours\UnhandledExceptionBehaviour.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Behaviors\Behaviours\UnhandledExceptionBehaviour.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Behaviors\Behaviours\ValidationBehaviour.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Behaviors\Behaviours\ValidationBehaviour.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\ComboBoxListItem.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\ComboBoxListItem.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Consumers\ErrorOccurredEventConsumer.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Consumers\ErrorOccurredEventConsumer.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Consumers\FaultConsumer.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Consumers\FaultConsumer.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Consumers\SuperObserver.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Consumers\SuperObserver.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Extensions\ByteArrayExtensions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Extensions\ByteArrayExtensions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Extensions\DirectoryExtensions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Extensions\DirectoryExtensions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Extensions\Exceptions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Extensions\Exceptions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\AutofacInternalFactory.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\AutofacInternalFactory.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\BaseApplicationCache.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\BaseApplicationCache.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\BaseApplicationInfo.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\BaseApplicationInfo.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\BaseErrorAggregationStore.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\BaseErrorAggregationStore.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\BaseEventBus.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\BaseEventBus.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\BaseStartupClass.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\BaseStartupClass.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\CurrentUser.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\CurrentUser.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\ErrorOccurredEvent.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\ErrorOccurredEvent.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\InternalServiceFactory.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\InternalServiceFactory.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\PathCoordinator.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\PathCoordinator.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Implementations\Singleton.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Implementations\Singleton.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\AppRequestHandler.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\AppRequestHandler.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IApplicationCache.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IApplicationCache.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IApplicationInfo.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IApplicationInfo.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IApplicationStore.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IApplicationStore.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IDocumentStore.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IDocumentStore.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IErrorAggregationStore.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IErrorAggregationStore.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IEventBus.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IEventBus.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IExternalApplicationRunner.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IExternalApplicationRunner.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IInternalServiceFactory.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IInternalServiceFactory.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IPathCoordinator.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IPathCoordinator.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IProjectManager.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IProjectManager.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IStartup.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IStartup.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\Interfaces\IUser.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\Interfaces\IUser.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\State\ApplicationContext.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\State\ApplicationContext.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Application\StreamExtensions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Application\StreamExtensions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Domain\Events\BaseEvent.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Domain\Events\BaseEvent.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Domain\Events\IEvent.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Domain\Events\IEvent.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Domain\Interfaces\IOwnsMany.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Domain\Interfaces\IOwnsMany.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Domain\Interfaces\IResourceData.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Domain\Interfaces\IResourceData.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmMain.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmMain.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\EncryptionService.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\EncryptionService.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\TreeView\CQRS\Commands\BuildTreeViewFromProjectCommand.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\TreeView\CQRS\Commands\BuildTreeViewFromProjectCommand.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\TreeView\KotorTreeNode.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\TreeView\KotorTreeNode.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\TreeView\NodeContext.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\TreeView\NodeContext.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\TreeView\TreeState.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\TreeView\TreeState.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\TreeView\TreeViewEventDelegate.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\TreeView\TreeViewEventDelegate.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\TreeView\TreeViewExtensions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\TreeView\TreeViewExtensions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\TreeView\TreeViewBuilder.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\TreeView\TreeViewBuilder.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\AppBaseComponent.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\AppBaseComponent.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\AppComponent.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\AppComponent.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\BaseEvent.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\BaseEvent.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\ComponentActions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\ComponentActions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\Extensions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\Extensions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\IComponentActions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\IComponentActions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\MainForm.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\MainForm.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\MainForm.Designer.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\MainForm.Designer.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\MainFormState.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\MainFormState.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\MainForm\AppForm.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\MainForm\AppForm.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\ProjectSelection\ProjectSelectionScreen.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\ProjectSelection\ProjectSelectionScreen.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\ProjectSelection\ProjectSelectionScreen.Designer.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\ProjectSelection\ProjectSelectionScreen.Designer.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ResourceIdentification.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ResourceIdentification.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>TreeBaseItem.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\TreeBaseItem.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>KeyEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\KeyEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>DialogTlkStrDataElement.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\DialogTlkStrDataElement.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>DLGConvListNode.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\DLGConvListNode.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFFStructEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFFStructEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFF_Struct.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFF_Struct.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFF_Field.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFF_Field.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFFFieldEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFFFieldEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFFVoid.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFFVoid.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFFList.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFFList.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFFExoLocString.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFFExoLocString.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFFExoLocSubString.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFFExoLocSubString.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFFType16.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFFType16.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFFType17.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFFType17.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>GFFField.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\GFFField.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>clsGridDisplay.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\clsGridDisplay.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ModuleFileEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ModuleFileEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>RIMKeyEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\RIMKeyEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ColumnEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ColumnEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ColumnVOEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ColumnVOEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ColumnSortEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ColumnSortEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ColumnEntryList.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ColumnEntryList.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ColumnSortEntryList.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ColumnSortEntryList.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ColumnVOEntryList.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ColumnVOEntryList.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frm2DAEditor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frm2DAEditor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmAbout.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmAbout.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmAppearanceWizard.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmAppearanceWizard.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmAutoDialog.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmAutoDialog.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmBasicHelp.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmBasicHelp.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmBWMEditor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmBWMEditor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmByteViewer.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmByteViewer.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmCExoLocStringLanguagePicker.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmCExoLocStringLanguagePicker.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmCreateAnimListEntry.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmCreateAnimListEntry.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmDialogEditor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmDialogEditor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmDialogTlk.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmDialogTlk.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>DataGridEnableTextBoxColumn.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\DataGridEnableTextBoxColumn.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmERFManager.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmERFManager.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmErrorMessageWithCopyableText.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmErrorMessageWithCopyableText.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmFilterDesigner.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmFilterDesigner.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmGlobalVar_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmGlobalVar_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmImageViewer.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmImageViewer.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmInstanceOrRefPrompt.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmInstanceOrRefPrompt.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmInventoryEditor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmInventoryEditor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>InventoryItem.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\InventoryItem.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>InventoryPanel.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\InventoryPanel.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmItemPropertyEditor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmItemPropertyEditor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmMapInfoStatus.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmMapInfoStatus.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>MyMapInfoSurrogate.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\MyMapInfoSurrogate.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmMdlOpsSwitches.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmMdlOpsSwitches.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModule_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModule_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ModItem.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ModItem.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ModItemTvNode.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ModItemTvNode.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModuleEditor_MissingItemSelector.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModuleEditor_MissingItemSelector.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModuleEditorOptions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModuleEditorOptions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModuleIfo_AreaEditor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModuleIfo_AreaEditor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModuleItem_Base_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModuleItem_Base_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmOptions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmOptions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmOverrideFilesUsed.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmOverrideFilesUsed.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmPackageTypeSelector.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmPackageTypeSelector.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmParent.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmParent.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmPathManager.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmPathManager.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmProgressMeter.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmProgressMeter.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmProjectManager.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmProjectManager.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ProjectFileItemTreeNode.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ProjectFileItemTreeNode.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmProjectManagerProperties.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmProjectManagerProperties.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmPromptForString.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmPromptForString.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmQueryUserInfo.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmQueryUserInfo.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmRefSearchCriteria.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmRefSearchCriteria.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmRefSearchResults.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmRefSearchResults.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmResourceTypeSelector.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmResourceTypeSelector.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmSoundChooser.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmSoundChooser.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmSpecifyKotorVersion.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmSpecifyKotorVersion.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmSSFEditor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmSSFEditor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmTextEditor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmTextEditor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmTextEditorFind.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmTextEditorFind.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmTPCFileSaveType.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmTPCFileSaveType.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUserRegistration.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUserRegistration.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTC_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTC_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTD_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTD_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTI_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTI_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTM_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTM_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTP_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTP_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTS_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTS_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTT_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTT_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTW_Editor.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTW_Editor.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Program.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Program.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>MapInfo.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\MapInfo.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ModuleEditorProjectOptions.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ModuleEditorProjectOptions.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>ModuleEditorProjectSettings.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\ModuleEditorProjectSettings.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Options.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Options.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>RegReminder.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\RegReminder.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>RepeatButton.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\RepeatButton.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>RowFilterPart.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\RowFilterPart.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>RowFilter.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\RowFilter.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>UserSettings.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\UserSettings.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>FileValidator.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\FileValidator.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Utils.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Utils.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>utilWindowRelativePositioner.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\utilWindowRelativePositioner.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>AssemblyInfo.cs:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\AssemblyInfo.cs</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>App.config:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\App.config</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>packages.config:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\packages.config</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>appsettings.json:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\appsettings.json</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>TODO.txt:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\TODO.txt</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frm2DAEditor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frm2DAEditor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmAbout.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmAbout.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmAppearanceWizard.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmAppearanceWizard.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmAutoDialog.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmAutoDialog.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmBasicHelp.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmBasicHelp.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmBWMEditor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmBWMEditor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmByteViewer.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmByteViewer.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmCExoLocStringLanguagePicker.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmCExoLocStringLanguagePicker.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmCreateAnimListEntry.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmCreateAnimListEntry.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmDialogEditor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmDialogEditor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmDialogTlk.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmDialogTlk.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmERFManager.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmERFManager.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmErrorMessageWithCopyableText.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmErrorMessageWithCopyableText.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmFilterDesigner.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmFilterDesigner.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmGlobalVar_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmGlobalVar_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmImageViewer.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmImageViewer.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmInstanceOrRefPrompt.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmInstanceOrRefPrompt.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmInventoryEditor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmInventoryEditor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmItemPropertyEditor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmItemPropertyEditor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmMain.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmMain.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmMapInfoStatus.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmMapInfoStatus.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmMdlOpsSwitches.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmMdlOpsSwitches.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModule_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModule_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModuleEditor_MissingItemSelector.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModuleEditor_MissingItemSelector.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModuleEditorOptions.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModuleEditorOptions.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModuleIfo_AreaEditor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModuleIfo_AreaEditor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmModuleItem_Base_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmModuleItem_Base_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmOptions.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmOptions.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmOverrideFilesUsed.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmOverrideFilesUsed.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmPackageTypeSelector.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmPackageTypeSelector.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmParent.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmParent.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmPathManager.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmPathManager.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmProgressMeter.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmProgressMeter.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmProjectManager.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmProjectManager.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmProjectManagerProperties.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmProjectManagerProperties.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmPromptForString.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmPromptForString.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmQueryUserInfo.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmQueryUserInfo.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmRefSearchCriteria.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmRefSearchCriteria.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmRefSearchResults.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmRefSearchResults.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmResourceTypeSelector.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmResourceTypeSelector.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmSoundChooser.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmSoundChooser.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmSpecifyKotorVersion.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmSpecifyKotorVersion.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmSSFEditor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmSSFEditor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmTextEditor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmTextEditor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmTextEditorFind.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmTextEditorFind.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmTPCFileSaveType.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmTPCFileSaveType.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUserRegistration.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUserRegistration.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTC_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTC_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTD_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTD_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTI_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTI_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTM_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTM_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTP_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTP_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTS_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTS_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTT_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTT_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>frmUTW_Editor.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\frmUTW_Editor.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>Infrastructure\View\ProjectSelection\ProjectSelectionScreen.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\Infrastructure\View\ProjectSelection\ProjectSelectionScreen.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>RegReminder.resx:
+        </strong><span>File successfully backed up as C:\Users\steve\RiderProjects\MAIN\kotor_tool\Backup1\RegReminder.resx</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>kotor_tool.csproj:
+        </strong><span>Project migrated successfully</span></td></tr><tr name="MessageRowClasskotor_tool" style="display: none"><td class="IconInfoEncoded"><a name="kotor_toolMessage" /></td><td class="messageCell"><strong>kotor_tool.csproj:
+        </strong><span>Scan complete: Migration not required for project files.</span></td></tr><tr style="display: none" name="MessageRowHeaderHidekotor_tool"><td class="IconInfoEncoded" /><td class="messageCell"><a _locID="HideAdditionalMessages" href="#" name="kotor_toolMessage" onclick="ToggleMessageVisibility('kotor_tool'); return false;">
+          Hide 257 additional messages
+        </a></td></tr></table><a name="KotorToolX" /><h3>KotorToolX</h3><table><tr id="KotorToolXHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Message</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">KotorToolX logged no messages.
+                  </td></tr></table><a name="OdysseyEngineApi" /><h3>OdysseyEngineApi</h3><table><tr id="OdysseyEngineApiHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Message</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">OdysseyEngineApi logged no messages.
+                  </td></tr></table><a name="OdysseyEngineWebApi" /><h3>OdysseyEngineWebApi</h3><table><tr id="OdysseyEngineWebApiHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Message</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">OdysseyEngineWebApi logged no messages.
+                  </td></tr></table><a name="TestPad" /><h3>TestPad</h3><table><tr id="TestPadHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Message</th></tr><tr><td class="IconInfoEncoded" /><td class="messageCell" _locID="NoMessagesRow">TestPad logged no messages.
+                  </td></tr></table></div></div></body></html>
