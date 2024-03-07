@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OdysseySuite", "OdysseySuite\OdysseySuite.csproj", "{5D52A25F-38CD-475C-BA36-4D5EFEF4A0E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "KotorTool", "KotorTool", "{3215889F-0A81-4CEA-90B6-C6E3EC3F6B74}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5D52A25F-38CD-475C-BA36-4D5EFEF4A0E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D52A25F-38CD-475C-BA36-4D5EFEF4A0E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D52A25F-38CD-475C-BA36-4D5EFEF4A0E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D52A25F-38CD-475C-BA36-4D5EFEF4A0E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
