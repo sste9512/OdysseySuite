@@ -88,12 +88,12 @@ public class RegReminder : Form
         [MethodImpl(MethodImplOptions.Synchronized)]
         set
         {
-            if (_Timer1 != null)
+            /*if (_Timer1 != null)
                 _Timer1.Tick -= new EventHandler(Timer1_Tick);
             _Timer1 = value;
             if (_Timer1 == null)
                 return;
-            _Timer1.Tick += new EventHandler(Timer1_Tick);
+            _Timer1.Tick += new EventHandler(Timer1_Tick);*/
         }
     }
 
@@ -149,7 +149,7 @@ public class RegReminder : Form
         Label2 = new Label();
         lblTimeMsg = new Label();
         Button1 = new Button();
-        Timer1 = new Timer(components);
+        //Timer1 = new Timer(components);
         Button2 = new Button();
         Label1 = new Label();
         SuspendLayout();

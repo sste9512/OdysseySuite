@@ -34,7 +34,7 @@ public class FrmMain : Form
 
     private IContainer components;
     public static string GRootPath;
-    public static frmImageViewer GImageViewer;
+    //public static frmImageViewer GImageViewer;
     public static ChitinKey GK1ChitinKey;
     public static ChitinKey GK2ChitinKey;
     public static BIFFArchive GK1TemplatesBif;
@@ -1976,7 +1976,7 @@ public class FrmMain : Form
         }
     }
 
-    private void EditTpcResource(string filename, byte[] data)
+    /*private void EditTpcResource(string filename, byte[] data)
     {
         var frmImageViewer = new frmImageViewer();
         if (File.Exists(GRootPath + "tpc2tga.exe"))
@@ -2017,7 +2017,7 @@ public class FrmMain : Form
                 ProjectData.ClearProjectError();
             }
         }
-    }
+    }*/
 
     private void OpenTgaInExternalViewer(string filename, byte[] data)
     {
@@ -2064,7 +2064,7 @@ public class FrmMain : Form
             data = GetBiffResource(node.FilePath, node.LocalResId).Data;
         }
 
-        if (GImageViewer == null || !GImageViewer.Created)
+        /*if (GImageViewer == null || !GImageViewer.Created)
         {
             GImageViewer = new frmImageViewer();
             ((Control)GImageViewer).Location = new Point(checked(((Control)this).Location.X + Size.Width),
@@ -2073,7 +2073,7 @@ public class FrmMain : Form
 
         GImageViewer.SetupTPCData(data, node.Filename);
         GImageViewer.DecodeImage();
-        GImageViewer.Show();
+        GImageViewer.Show();*/
     }
 
     public void EnsureWorkingDirectoryExists()
@@ -2211,7 +2211,7 @@ public class FrmMain : Form
             ManageMruMainFileList(filepath, true);
             var num = (int)Interaction.MsgBox("Could not find file: " + filepath, MsgBoxStyle.Critical, "");
             ProjectData.ClearProjectError();
-            goto label_26;
+            //goto label_26;
         }
         catch (DirectoryNotFoundException ex)
         {
@@ -2220,10 +2220,10 @@ public class FrmMain : Form
             var num = (int)Interaction.MsgBox("Could not directory in path to: " + filepath, MsgBoxStyle.Critical,
                 "");
             ProjectData.ClearProjectError();
-            goto label_26;
+            //goto label_26;
         }
 
-        if (kotorVersionIndex != -1)
+        /*if (kotorVersionIndex != -1)
         {
             var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read);
             var sLeft = Strings.LCase(Path.GetExtension(filepath));
@@ -2265,13 +2265,17 @@ public class FrmMain : Form
         }
 
         label_26:
-        Form form = null;
-        return form;
+        Form form = null;*/
+        //return form;
+        return null;
     }
 
     private void Open2DaFileEditor() => new frm2DAEditor().Show();
 
-    private void OpenTextEditor() => new frmTextEditor().Show();
+    private void OpenTextEditor()
+    {
+       //new frmTextEditor().Show();
+    } 
 
     private void OpenErfBuilder() => new frmERFManager().Show();
 
@@ -2847,7 +2851,7 @@ public class FrmMain : Form
         */
 
         CreateTemplateTagsHashFiles();
-        ExtractNwScripts();
+        //ExtractNwScripts();
         if (_cmdArgs != null)
             _gCmdLineOpenedForm = OpenFileFromCmdLine();
         ManageMruMainFileMenu();
@@ -2881,11 +2885,11 @@ public class FrmMain : Form
 // TODO : Move to new Form
     private void frmMain_Move(object sender, EventArgs e)
     {
-        if (CurrentSettings == null || !CurrentSettings.bDockImageViewer || GImageViewer == null ||
+        /*if (CurrentSettings == null || !CurrentSettings.bDockImageViewer || GImageViewer == null ||
             !GImageViewer.Visible)
             return;
         ((Control)GImageViewer).Location = new Point(checked(((Control)this).Location.X + Size.Width),
-            ((Control)this).Location.Y);
+            ((Control)this).Location.Y);*/
     }
 // TODO : Move to new Form
     private void frmMain_Activated(object sender, EventArgs e)
@@ -3102,10 +3106,10 @@ public class FrmMain : Form
                 var erfResource = GetErfResource(node.FilePath, node);
                 if (StringType.StrCmp(sLeft, "tga", false) == 0)
                 {
-                    var frmImageViewer = new frmImageViewer();
+                    /*var frmImageViewer = new frmImageViewer();
                     frmImageViewer.SetupTPCData(erfResource, "foo");
                     frmImageViewer.DecodeImage();
-                    frmImageViewer.WriteTGAFile(outputpath);
+                    frmImageViewer.WriteTGAFile(outputpath);*/
                 }
                 else
                     WriteByteArray(outputpath, erfResource);
@@ -3414,7 +3418,7 @@ public class FrmMain : Form
 
     private void CreateTemplateTagsHashFiles()
     {
-        var hashtable = new Hashtable();
+        /*var hashtable = new Hashtable();
         var graph1 = new Hashtable();
         var graph2 = new Hashtable();
         var binaryFormatter = new BinaryFormatter();
@@ -3435,7 +3439,7 @@ public class FrmMain : Form
                 Cursor.Current = Cursors.WaitCursor;
                 BuildTreeView((KotorTreeNode)TreeView.Nodes[0], true);
             }
-            */
+            #1#
 
             try
             {
@@ -3466,7 +3470,7 @@ public class FrmMain : Form
         {
             Cursor.Current = Cursors.WaitCursor;
             BuildTreeView((KotorTreeNode)TreeView.Nodes[1], true);
-        }*/
+        }#1#
 
         try
         {
@@ -3503,7 +3507,7 @@ public class FrmMain : Form
             ExportBiffResource(Path.Combine(CurrentSettings.KotorLocation(0), "data\\scripts.bif"), str, 3533);
         if (!_hasK2 || File.Exists(str))
             return;
-        ExportBiffResource(Path.Combine(CurrentSettings.KotorLocation(1), "data\\scripts.bif"), outputPath, 1245);
+        ExportBiffResource(Path.Combine(CurrentSettings.KotorLocation(1), "data\\scripts.bif"), outputPath, 1245);*/
     }
 
     private void ReadTreeBFD_Click(object sender, EventArgs e)

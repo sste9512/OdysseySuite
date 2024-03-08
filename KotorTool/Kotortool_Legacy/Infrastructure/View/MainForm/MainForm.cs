@@ -22,7 +22,7 @@ public partial class MainForm : AppForm
     // can go into app settings
     public static string GRootPath;
 
-    public static frmImageViewer GImageViewer;
+    //public static frmImageViewer GImageViewer;
 
     public static ChitinKey GK1ChitinKey;
     public static ChitinKey GK2ChitinKey;
@@ -232,11 +232,11 @@ public partial class MainForm : AppForm
 // TODO : Move to new Form
     private void frmMain_Move(object sender, EventArgs e)
     {
-        if (CurrentSettings == null || !CurrentSettings.bDockImageViewer || GImageViewer == null ||
+        /*if (CurrentSettings == null || !CurrentSettings.bDockImageViewer || GImageViewer == null ||
             !GImageViewer.Visible)
             return;
         ((Control)GImageViewer).Location = new Point(checked(((Control)this).Location.X + Size.Width),
-            ((Control)this).Location.Y);
+            ((Control)this).Location.Y);*/
     }
 
 // TODO : Move to new Form
@@ -250,7 +250,7 @@ public partial class MainForm : AppForm
 
     private void miManagePaths_Click(object sender, EventArgs e)
     {
-        new frmPathManager().ShowDialog(this);
+        //new frmPathManager().ShowDialog(this);
     }
 
     private void miOpenGFFFile_Click(object sender, EventArgs e)
@@ -377,7 +377,7 @@ public partial class MainForm : AppForm
                 RtfMode = false
             };
             clsGff.Parse(fs);
-            var frmTextEditor = new frmTextEditor();
+            /*var frmTextEditor = new frmTextEditor();
             frmTextEditor.Filename = Path.GetFileName(strArray[index]);
             frmTextEditor.Text = "Text Editor - " + frmTextEditor.Filename;
             frmTextEditor.RTFMode = true;
@@ -385,7 +385,7 @@ public partial class MainForm : AppForm
             frmTextEditor.tbGeneric.SelectionLength = 0;
             frmTextEditor.Show();
             ((Control)frmTextEditor).Location = new Point(checked(((Control)frmTextEditor).Location.X + index * 20),
-                checked(((Control)frmTextEditor).Location.Y + index * 20));
+                checked(((Control)frmTextEditor).Location.Y + index * 20));*/
             checked
             {
                 ++index;
@@ -415,14 +415,20 @@ public partial class MainForm : AppForm
         }
     }.Start();
 
-    private void miOpenModuleEditor_Click(object sender, EventArgs e) => new frmModule_Editor().Show();
+    private void miOpenModuleEditor_Click(object sender, EventArgs e)
+    {
+        //new frmModule_Editor().Show();
+    } 
 
     private void miShowSupportedModEditorMaps_Click(object sender, EventArgs e)
     {
-        new frmMapInfoStatus().ShowDialog();
+        //new frmMapInfoStatus().ShowDialog();
     }
 
-    private void miOpenSSFEditor_Click(object sender, EventArgs e) => new frmSSFEditor().Show();
+    private void miOpenSSFEditor_Click(object sender, EventArgs e)
+    {
+        //new frmSSFEditor().Show();
+    } 
 
     private void miOpenProjectManager_Click(object sender, EventArgs e)
     {
@@ -434,18 +440,24 @@ public partial class MainForm : AppForm
 
     private void miGlobalVariableEditor_Click(object sender, EventArgs e)
     {
-        var childForm = new frmGlobalVar_Editor();
+        /*var childForm = new frmGlobalVar_Editor();
         new utilWindowRelativePositioner(Mainform, childForm).SetLocationConcentric();
-        childForm.Show();
+        childForm.Show();*/
     }
 
     private void miOpenTextEditor_Click(object sender, EventArgs e) => OpenTextEditor();
 
     private void miOpenERFBuilder_Click(object sender, EventArgs e) => OpenErfBuilder();
 
-    private void miOpenPWKEditor_Click(object sender, EventArgs e) => new frmBWMEditor().Show();
+    private void miOpenPWKEditor_Click(object sender, EventArgs e)
+    {
+       // new frmBWMEditor().Show();
+    }
 
-    private void miOpenDialogTlkViewer_Click(object sender, EventArgs e) => new frmDialogTlk().Show();
+    private void miOpenDialogTlkViewer_Click(object sender, EventArgs e)
+    {
+        //new frmDialogTlk().Show();
+    }
 
     private void miRefSearch_Click(object sender, EventArgs e)
     {
@@ -471,7 +483,7 @@ public partial class MainForm : AppForm
 
     private void miOptions_Click(object sender, EventArgs e)
     {
-        var frmOptions = new frmOptions();
+        /*var frmOptions = new frmOptions();
         CurrentSettings = UserSettings.GetSettings();
         var buildModelsBifNode = CurrentSettings.bBuildModelsBifNode;
         var moduleDescriptions = CurrentSettings.bShowModuleDescriptions;
@@ -510,7 +522,7 @@ public partial class MainForm : AppForm
             {
                 ++index;
             }
-        } while (index <= 1);
+        } while (index <= 1);*/
     }
 
     // Move to Extensions
@@ -564,14 +576,14 @@ public partial class MainForm : AppForm
 
     private void miAbout_Click(object sender, EventArgs e)
     {
-        var frmAbout = new frmAbout();
+        /*var frmAbout = new frmAbout();
         //frmAbout.lblVersion.Text = "Version " + Application.ProductVersion;
-        var num = (int)frmAbout.ShowDialog(this);
+        var num = (int)frmAbout.ShowDialog(this);*/
     }
 
     private void cmiExtractForModuleEditing_Click(object sender, EventArgs e)
     {
-        var mapInfo = frmMapInfoStatus.ReadMapInfoFile();
+        /*var mapInfo = frmMapInfoStatus.ReadMapInfoFile();
         var lower = Path.GetFileNameWithoutExtension(((KotorTreeNode)TreeView.SelectedNode).Filename).ToLower();
         var sLeft1 = "Unsupported";
         var sLeft2 = "Unsupported";
@@ -670,7 +682,7 @@ public partial class MainForm : AppForm
             return;
         CurrentSettings = UserSettings.GetSettings();
         CurrentSettings.LastModuleEditedPath = str3;
-        UserSettings.SaveSettings(CurrentSettings);
+        UserSettings.SaveSettings(CurrentSettings);*/
     }
 
     // Move this to extractek kotorTreeNode Extensions
@@ -824,25 +836,25 @@ public partial class MainForm : AppForm
             {
                 var fs = new FileStream(node.FilePath + "\\" + node.Filename, FileMode.Open, FileAccess.Read);
                 var clsErf = new ClsErf(fs);
-                var childForm = new FrmProgressMeter();
-                childForm.StepAmount = 1;
-                childForm.Maxvalue = clsErf.EntryCount;
-                childForm.Message = "Extracting files from " + node.Filename;
-                ((Control)childForm).Location = new utilWindowRelativePositioner(this, childForm).GetConcentric();
-                childForm.Show();
+                // var childForm = new FrmProgressMeter();
+                // childForm.StepAmount = 1;
+                // childForm.Maxvalue = clsErf.EntryCount;
+                // childForm.Message = "Extracting files from " + node.Filename;
+                // ((Control)childForm).Location = new utilWindowRelativePositioner(this, childForm).GetConcentric();
+                // childForm.Show();
                 var num = checked(clsErf.EntryCount - 1);
                 var index = 0;
                 while (index <= num)
                 {
                     var erfResource = clsErf.GetErfResource(index);
                     var keyEntry = (ERFKeyEntry)clsErf.KeyEntryList[index];
-                    childForm.Status = "Writing " + keyEntry._ResourceName + "." + keyEntry._ResTypeStr;
+                    //childForm.Status = "Writing " + keyEntry._ResourceName + "." + keyEntry._ResTypeStr;
                     var fileStream =
                         new FileStream(outputpath + keyEntry._ResourceName + "." + keyEntry._ResTypeStr,
                             FileMode.Create);
                     fileStream.Write(erfResource, 0, erfResource.Length);
                     fileStream.Close();
-                    childForm.StepUp();
+                    //childForm.StepUp();
                     checked
                     {
                         ++index;
@@ -850,7 +862,7 @@ public partial class MainForm : AppForm
                 }
 
                 fs.Close();
-                childForm.Close();
+                //childForm.Close();
             }
             else
                 goto label_78;
@@ -862,11 +874,11 @@ public partial class MainForm : AppForm
             {
                 if (!CurrentSettings.bAlwaysConvertTPC2TGA)
                 {
-                    var frmTpcFileSaveType = new frmTPCFileSaveType();
+                    /*var frmTpcFileSaveType = new frmTPCFileSaveType();
                     if (frmTpcFileSaveType.ShowDialog(this) != DialogResult.Cancel)
                         sLeft = frmTpcFileSaveType.saveType;
                     else
-                        goto label_78;
+                        goto label_78;*/
                 }
                 else
                     sLeft = "tga";
@@ -886,10 +898,10 @@ public partial class MainForm : AppForm
                 var erfResource = GetErfResource(node.FilePath, node);
                 if (StringType.StrCmp(sLeft, "tga", false) == 0)
                 {
-                    var frmImageViewer = new frmImageViewer();
+                    /*var frmImageViewer = new frmImageViewer();
                     frmImageViewer.SetupTPCData(erfResource, "foo");
                     frmImageViewer.DecodeImage();
-                    frmImageViewer.WriteTGAFile(outputpath);
+                    frmImageViewer.WriteTGAFile(outputpath);*/
                 }
                 else
                 {
@@ -1210,7 +1222,7 @@ public partial class MainForm : AppForm
 
     private void EditTpcResource(string filename, byte[] data)
     {
-        var frmImageViewer = new frmImageViewer();
+        /*var frmImageViewer = new frmImageViewer();
         if (File.Exists(GRootPath + "tpc2tga.exe"))
         {
             Interaction.MsgBox(
@@ -1247,7 +1259,7 @@ public partial class MainForm : AppForm
                         "Error launching image viewer\r\rIs it installed where you specified it to be?");
                 }
             }
-        }
+        }*/
     }
 
     private void OpenTgaInExternalViewer(string filename, byte[] data)
@@ -1295,7 +1307,7 @@ public partial class MainForm : AppForm
             data = GetBiffResource(node.FilePath, node.LocalResId).Data;
         }
 
-        if (GImageViewer == null || !GImageViewer.Created)
+        /*if (GImageViewer == null || !GImageViewer.Created)
         {
             GImageViewer = new frmImageViewer();
             ((Control)GImageViewer).Location = new Point(checked(((Control)this).Location.X + Size.Width),
@@ -1304,7 +1316,7 @@ public partial class MainForm : AppForm
 
         GImageViewer.SetupTPCData(data, node.Filename);
         GImageViewer.DecodeImage();
-        GImageViewer.Show();
+        GImageViewer.Show();*/
     }
 
     public BiffVarRsrcEntry GetBiffResource(string biffPath, int resourceId)
@@ -1377,11 +1389,20 @@ public partial class MainForm : AppForm
     private byte[] GetErfResource(string erfFilePath, string ResRef, int ResType) =>
         new ClsErf(new FileStream(erfFilePath, FileMode.Open, FileAccess.Read)).GetErfResource(ResRef, ResType);
 
-    private void Open2DaFileEditor() => new frm2DAEditor().Show();
+    private void Open2DaFileEditor()
+    {
+        //new frm2DAEditor().Show();
+    }
 
-    private void OpenTextEditor() => new frmTextEditor().Show();
+    private void OpenTextEditor()
+    {
+       // new frmTextEditor().Show();
+    } 
 
-    private void OpenErfBuilder() => new frmERFManager().Show();
+    private void OpenErfBuilder()
+    {
+        //new frmERFManager().Show();
+    }
 
     [Obsolete("this is extension method")]
     public void EnsureWorkingDirectoryExists()
@@ -1423,11 +1444,11 @@ public partial class MainForm : AppForm
         }
         else
         {
-            if (ObjectType.ObjTst(tag, "globalvar", false) != 0)
+            /*if (ObjectType.ObjTst(tag, "globalvar", false) != 0)
                 return;
             new frmGlobalVar_Editor(
                 new clsGlobalVars(ReadByteArray(node.FilePath + "\\" + node.Filename), NodeTreeRootIndex(node)),
-                node.FilePath, NodeTreeRootIndex(node)).Show();
+                node.FilePath, NodeTreeRootIndex(node)).Show();*/
             return;
         }
 
@@ -1440,7 +1461,7 @@ public partial class MainForm : AppForm
                 var num1 = (int)Interaction.MsgBox(
                     "The Model Export Location is not set.\n\nA default path has been set in the Path Manager; you may accept it or choose your own.",
                     MsgBoxStyle.Critical, "Path not set");
-                var frmPathManager = new frmPathManager();
+                /*var frmPathManager = new frmPathManager();
                 if (!Directory.Exists(GRootPath + "working\\Exported Models"))
                     Directory.CreateDirectory(GRootPath + "working\\Exported Models");
                 frmPathManager.tbModuleExportPath.Text = GRootPath + "working\\Exported Models";
@@ -1448,11 +1469,11 @@ public partial class MainForm : AppForm
                 frmPathManager.TabControl1.SelectedIndex = 2;
                 frmPathManager.tbModuleExportPath.BackColor = Color.MistyRose;
                 var num2 = (int)frmPathManager.ShowDialog(this);
-                CurrentSettings = UserSettings.GetSettings();
+                CurrentSettings = UserSettings.GetSettings();*/
             }
 
             var mdlRoomCount = GetMdlRoomCount(node);
-            var frmMdlOpsSwitches = new frmMdlOpsSwitches();
+            /*var frmMdlOpsSwitches = new frmMdlOpsSwitches();
             frmMdlOpsSwitches.chkbExtractAnimations.Checked = CurrentSettings.bModelExtraction_ExtractAnimations;
             frmMdlOpsSwitches.chkbConvertSkin.Checked = CurrentSettings.bModelExtraction_ConvertSkinToTrimesh;
             frmMdlOpsSwitches.chkbEachModelInOwnDir.Checked =
@@ -1478,8 +1499,8 @@ public partial class MainForm : AppForm
                 Directory.CreateDirectory(frmMdlOpsSwitches.tbModelExtractionPath.Text);
             var flag1 = frmMdlOpsSwitches.chkbEachModelInOwnDir.Checked;
             var flag2 = frmMdlOpsSwitches.chkbCleanWorkingDir.Checked;
-            var childForm = new FrmProgressMeter();
-            childForm.StepAmount = 1;
+            var childForm = new FrmProgressMeter();*/
+            /*childForm.StepAmount = 1;
             childForm.Maxvalue = Convert.ToInt32(frmMdlOpsSwitches.nudNumberToExtract.Value);
             childForm.Message = "Extracting models";
             ((Control)childForm).Location = new utilWindowRelativePositioner(this, childForm).GetConcentric();
@@ -1577,7 +1598,7 @@ public partial class MainForm : AppForm
                         childForm.Status = "Extracting textures for " + node.ResRef;
                         var fileStream = new FileStream(path + "-textures.txt", FileMode.Open);
                         var streamReader = new StreamReader(fileStream);
-                        var frmImageViewer = new frmImageViewer();
+                        /*var frmImageViewer = new frmImageViewer();
                         for (var str2 = streamReader.ReadLine(); str2 != null; str2 = streamReader.ReadLine())
                         {
                             var str3 = str2.Trim();
@@ -1592,7 +1613,7 @@ public partial class MainForm : AppForm
                                 frmImageViewer.WriteTGAFile(path.Substring(0, checked(path.LastIndexOf("\\") + 1)) +
                                                             str3 + ".tga");
                             }
-                        }
+                        }#1#
 
                         streamReader.Close();
                         fileStream.Close();
@@ -1635,14 +1656,14 @@ public partial class MainForm : AppForm
                  StringType.StrCmp(resTypeStr, "txi", false) == 0 ||
                  StringType.StrCmp(resTypeStr, "lyt", false) == 0)
         {
-            var frmTextEditor = new frmTextEditor(node.Filename);
+            /*var frmTextEditor = new frmTextEditor(node.Filename);
             var asciiEncoding = new ASCIIEncoding();
             frmTextEditor.tbGeneric.Text = asciiEncoding.GetString(numArray1);
             frmTextEditor.tbGeneric.SelectionLength = 0;
             frmTextEditor.KotorVersionIndex = NodeTreeRootIndex(node);
             if (StringType.StrCmp(node.ResTypeStr, "nss", false) == 0)
                 frmTextEditor.PrepareForScriptEditing();
-            frmTextEditor.Show();
+            frmTextEditor.Show();#1#
         }
         else if (StringType.StrCmp(resTypeStr, "ncs", false) == 0)
         {
@@ -1663,14 +1684,14 @@ public partial class MainForm : AppForm
                 process.StandardOutput.ReadToEnd();
                 process.WaitForExit(4000);
                 var fileStream = new FileStream(GRootPath + "working\\temp.nss", FileMode.Open);
-                var frmTextEditor = new frmTextEditor(node.Filename);
+                /*var frmTextEditor = new frmTextEditor(node.Filename);
                 var asciiEncoding = new ASCIIEncoding();
                 var numArray2 = new byte[checked((int)(fileStream.Length - 1L) + 1)];
                 fileStream.Read(numArray2, 0, checked((int)fileStream.Length));
                 frmTextEditor.tbGeneric.Text = asciiEncoding.GetString(numArray2);
                 frmTextEditor.tbGeneric.SelectionLength = 0;
                 fileStream.Close();
-                frmTextEditor.Show();
+                frmTextEditor.Show();#1#
             }
             catch (Exception ex)
             {
@@ -1708,13 +1729,13 @@ public partial class MainForm : AppForm
                     RtfMode = false
                 };
                 clsGff.Parse(numArray1);
-                var frmTextEditor = new frmTextEditor();
+                /*var frmTextEditor = new frmTextEditor();
                 frmTextEditor.Filename = node.Filename;
                 frmTextEditor.Text = "Text Editor - " + node.Filename;
                 frmTextEditor.RTFMode = false;
                 frmTextEditor.tbGeneric.Text = clsGff.ToString();
                 frmTextEditor.tbGeneric.SelectionLength = 0;
-                frmTextEditor.Show();
+                frmTextEditor.Show();#1#
             }
             /*else if ((ModifierKeys & Keys.Control | (Keys) -(CurrentSettings.bAlwaysUnknownGFFasText ? 1 : 0)) != 0)
             {
@@ -1730,7 +1751,7 @@ public partial class MainForm : AppForm
               frmTextEditor.tbGeneric.Rtf = clsGff.ToString();
               frmTextEditor.tbGeneric.SelectionLength = 0;
               frmTextEditor.Show();
-            }*/
+            }#1#
             else
             {
                 //EditGffResource(node.Filename, numArray1);
@@ -1752,10 +1773,10 @@ public partial class MainForm : AppForm
         }
         else if (StringType.StrCmp(resTypeStr, "uti", false) == 0)
         {
-            var frmUtiEditor = new frmUTI_Editor(new clsUTI(numArray1, NodeTreeRootIndex(node)),
+            /*var frmUtiEditor = new frmUTI_Editor(new clsUTI(numArray1, NodeTreeRootIndex(node)),
                 NodeTreeRootIndex(node));
             frmUtiEditor.EditingFilePath = CurrentSettings.defaultSaveLocation + "\\" + node.Text;
-            frmUtiEditor.Show();
+            frmUtiEditor.Show();#1#
         }
         else if (StringType.StrCmp(resTypeStr, "utm", false) == 0)
         {
@@ -1773,10 +1794,10 @@ public partial class MainForm : AppForm
         }
         else if (StringType.StrCmp(resTypeStr, "uts", false) == 0)
         {
-            var frmUtsEditor = new frmUTS_Editor(new clsUTS(numArray1, NodeTreeRootIndex(node)),
+            /*var frmUtsEditor = new frmUTS_Editor(new clsUTS(numArray1, NodeTreeRootIndex(node)),
                 NodeTreeRootIndex(node));
             frmUtsEditor.EditingFilePath = CurrentSettings.defaultSaveLocation + "\\" + node.Text;
-            frmUtsEditor.Show();
+            frmUtsEditor.Show();#1#
         }
         else if (StringType.StrCmp(resTypeStr, "utt", false) == 0)
         {
@@ -1806,7 +1827,7 @@ public partial class MainForm : AppForm
             new frmDialogEditor(numArray1, node.ResRef, NodeTreeRootIndex(node)).Show();
         else if (StringType.StrCmp(resTypeStr, "ssf", false) == 0)
         {
-            var ssf = new ClsSsf(numArray1, NodeTreeRootIndex(node));
+            /*var ssf = new ClsSsf(numArray1, NodeTreeRootIndex(node));
             var frmSsfEditor = new frmSSFEditor(ssf);
             var index = 0;
             do
@@ -1821,10 +1842,11 @@ public partial class MainForm : AppForm
                 }
             } while (index <= 39);
 
-            var num = (int)frmSsfEditor.ShowDialog();
+            var num = (int)frmSsfEditor.ShowDialog();#1#
         }
 
-        Cursor.Current = current;
+        Cursor.Current = current;*/
+        }
     }
 
     private string GetMdlRoomBaseName(KotorTreeNode node)
@@ -2120,7 +2142,7 @@ public partial class MainForm : AppForm
             ObjectType.ObjTst(selectedNode.Tag, "RIM_Root", false) == 0)
             return;
         var tag = selectedNode.Tag;
-        frmByteViewer frmByteViewer;
+        /*frmByteViewer frmByteViewer;
         if (ObjectType.ObjTst(tag, "BIFF", false) == 0 || ObjectType.ObjTst(tag, "RIM", false) == 0)
             frmByteViewer = new frmByteViewer(selectedNode.FilePath + "\\" + selectedNode.Filename);
         else if (ObjectType.ObjTst(tag, "RIM_Res", false) == 0)
@@ -2139,7 +2161,7 @@ public partial class MainForm : AppForm
             frmByteViewer = new frmByteViewer(GetErfResource(selectedNode.FilePath, selectedNode));
         }
 
-        //frmByteViewer.Show();
+        //frmByteViewer.Show();*/
     }
 
     // TODO : Move to Presenter
@@ -3065,11 +3087,11 @@ public partial class MainForm : AppForm
             var binaryReader = new BinaryReader(input, Encoding.ASCII);
             var a2da = binaryReader.ReadBytes(checked((int)input.Length));
             binaryReader.Close();
-            var frm2DaEditor = new frm2DAEditor(Path.GetFileName(_cmdArgs[0]), a2da);
+            /*var frm2DaEditor = new frm2DAEditor(Path.GetFileName(_cmdArgs[0]), a2da);
             ((Control)frm2DaEditor).Location = new Point(checked(((Control)this).Location.X + Size.Width),
                 ((Control)this).Location.Y);
             frm2DaEditor.Show();
-            return frm2DaEditor;
+            return frm2DaEditor;*/
         }
 
         if (StringType.StrCmp(Path.GetExtension(_cmdArgs[0]).ToLower(), ".tlk", false) != 0)
@@ -3078,9 +3100,10 @@ public partial class MainForm : AppForm
             return form;
         }
 
-        var frmDialogTlk = new frmDialogTlk(_cmdArgs[0]);
+        /*var frmDialogTlk = new frmDialogTlk(_cmdArgs[0]);
         frmDialogTlk.Show();
-        return frmDialogTlk;
+        return frmDialogTlk;*/
+        return null;
     }
 
     public int GetGffFileKotorVersionIndex(string filepath)
@@ -3113,11 +3136,12 @@ public partial class MainForm : AppForm
                 : -1;
         }
 
-        var specifyKotorVersion = new frmSpecifyKotorVersion();
+        /*var specifyKotorVersion = new frmSpecifyKotorVersion();
         specifyKotorVersion.FileName = Path.GetFileName(filepath);
         return specifyKotorVersion.ShowDialog(Mainform) == DialogResult.OK
             ? specifyKotorVersion.KotorVerIndexSelected
-            : -1;
+            : -1;*/
+        return 1;
     }
 
     public Form OpenGffFileInEditor(string filepath, int formLocationOffset = -1)
@@ -3145,6 +3169,7 @@ public partial class MainForm : AppForm
 
         if (kotorVersionIndex != -1)
         {
+            /*
             var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read);
             var sLeft = Strings.LCase(Path.GetExtension(filepath));
             object o;
@@ -3184,8 +3209,9 @@ public partial class MainForm : AppForm
                 ((Control)o).Location = new Point(checked(((Control)o).Location.X + formLocationOffset),
                     checked(((Control)o).Location.Y + formLocationOffset));
             }
-
-            return (Form)o;
+            */
+               return null;
+           // return (Form)o;
         }
 
         label_26:
@@ -3196,9 +3222,9 @@ public partial class MainForm : AppForm
 
     private void OpenConversationEditor()
     {
-        var frmDialogEditor = new frmDialogEditor();
+        /*var frmDialogEditor = new frmDialogEditor();
         frmDialogEditor.SetupForNewDialog();
-        frmDialogEditor.Show();
+        frmDialogEditor.Show();*/
     }
 
     private void ManageMruMainFileList(string filepath, bool delete = false)

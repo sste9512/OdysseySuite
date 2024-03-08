@@ -692,8 +692,8 @@ public sealed class clsMapInfoCreator
             }
         };
         FileStream serializationStream1 = File.Create("MapInfo.bfd");
-        BinaryFormatter binaryFormatter = new BinaryFormatter();
-        binaryFormatter.Serialize(serializationStream1, mi);
+        //BinaryFormatter binaryFormatter = new BinaryFormatter();
+        /*binaryFormatter.Serialize(serializationStream1, mi);
         serializationStream1.Close();
         FileStream serializationStream2 = File.Create(InstalledAppPath + "MapInfo.bfd");
         binaryFormatter.Serialize(serializationStream2, mi);
@@ -713,9 +713,9 @@ public sealed class clsMapInfoCreator
         finally
         {
                
-        }
+        }*/
 
-        arrayList.Sort();
+        /*arrayList.Sort();
         try
         {
             foreach (object obj in arrayList)
@@ -729,6 +729,6 @@ public sealed class clsMapInfoCreator
                
         }
 
-        streamWriter.Close();
+        streamWriter.Close();*/
     }
 }

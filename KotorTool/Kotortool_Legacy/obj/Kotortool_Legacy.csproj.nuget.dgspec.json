@@ -80,6 +80,10 @@
             "Microsoft.Extensions.Logging.Abstractions": {
               "target": "Package",
               "version": "[9.0.0-preview.1.24080.9, )"
+            },
+            "Spectre.Console": {
+              "target": "Package",
+              "version": "[0.48.1-preview.0.34, )"
             }
           },
           "imports": [

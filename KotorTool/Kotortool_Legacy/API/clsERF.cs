@@ -144,7 +144,7 @@ public class ClsErf
 
             binaryWriter.Write(chars1);
             binaryWriter.Write(index3);
-            binaryWriter.Write(FrmMain.GetIdForRsrcType(Strings.Mid(Path.GetExtension(inputFileList[index3]), 2)));
+            //binaryWriter.Write(FrmMain.GetIdForRsrcType(Strings.Mid(Path.GetExtension(inputFileList[index3]), 2)));
             binaryWriter.Write((byte)0);
             binaryWriter.Write((byte)0);
             checked

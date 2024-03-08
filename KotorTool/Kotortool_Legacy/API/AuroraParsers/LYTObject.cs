@@ -4,15 +4,13 @@ namespace Kotortool_Legacy.API.AuroraParsers
 {
     public class LYTObject
     {
-
-
-        AuroraFile file;
-        StreamReader Reader;
+        readonly AuroraFile _file;
+        StreamReader _reader;
 
         public List<Room> Rooms = new List<Room>();
         public List<DoorHook> DoorHooks = new List<DoorHook>();
 
-        public String FileDependancy = "";
+        public String FileDependancy = string.Empty;
 
         public int TrackCount = 0;
         public int ObstacleCount = 0;
@@ -22,19 +20,19 @@ namespace Kotortool_Legacy.API.AuroraParsers
 
         public LYTObject(AuroraFile file)
         {
-            this.file = file;
-            this.file.IsText = true;
+            this._file = file;
+            this._file.IsText = true;
         }
 
         public void Read()
         {
-            file.Open();
-            Reader = file.GetStreamReader();
+            _file.Open();
+            _reader = _file.GetStreamReader();
 
             String line = "";
             Boolean ReadingRooms = false;
             Boolean ReadingDoorHooks = false;
-            while ((line = Reader.ReadLine()) != null)
+            while ((line = _reader.ReadLine()) != null)
             {
                 line = line.Trim();
                 if (line.Contains("MAXLAYOUT"))
@@ -93,7 +91,7 @@ namespace Kotortool_Legacy.API.AuroraParsers
 
             Debug.WriteLine(FileDependancy);
 
-            file.Close();
+            _file.Close();
         }
 
 

@@ -143,7 +143,7 @@ namespace Kotortool_Legacy.Infrastructure.View.MainForm
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            var resourceManager = new ResourceManager(typeof (FrmMain));
+            var resourceManager = new ResourceManager(typeof (MainForm));
       TreeView = new System.Windows.Forms.TreeView();
       BtnHexViewer = new Button();
       BtnExtract = new Button();
@@ -497,7 +497,7 @@ namespace Kotortool_Legacy.Infrastructure.View.MainForm
       //Menu = MainMenu1;
       size1 = new Size(304, 352);
       MinimumSize = size1;
-      Name = nameof (FrmMain);
+      Name = nameof (Mainform);
       SizeGripStyle = SizeGripStyle.Show;
       Text = "Kotor Tool";
       ResumeLayout(false);

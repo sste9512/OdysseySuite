@@ -38,7 +38,7 @@ public class Utils
         string EditingFilePath,
         int KotorVersionIndex)
     {
-            var CtrlName = editButton.Name.Replace("btnEdit", "tb");
+            /*var CtrlName = editButton.Name.Replace("btnEdit", "tb");
             var control = (TextBox)FindControl(editButton.Parent, CtrlName);
             var bifFileHash = FrmMain.KxChitinKey(KotorVersionIndex).GetBifFileHash("scripts");
             var str1 = control.Text.Trim();
@@ -76,6 +76,6 @@ public class Utils
                 return;
             frmTextEditor.Filename = str1 + ".nss";
             var num2 = (int)frmTextEditor.ShowDialog(editButton.TopLevelControl);
-            control.Text = Path.GetFileNameWithoutExtension(frmTextEditor.Filename);
+            control.Text = Path.GetFileNameWithoutExtension(frmTextEditor.Filename);*/
         }
 }

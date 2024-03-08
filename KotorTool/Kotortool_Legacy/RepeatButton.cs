@@ -17,14 +17,14 @@ public class RepeatButton : Button
       MouseUp += new MouseEventHandler(RepeatButton_MouseUp);
       MouseDown += new MouseEventHandler(RepeatButton_MouseDown);
       Timer = new Timer();
-      Timer.Tick += new EventHandler(OnTimer);
+     // Timer.Elapsed += new EventHandler(OnTimer);
       Timer.Interval = 200;
       Timer.Enabled = false;
     }
 
   public int Interval
   {
-    get => Timer.Interval;
+    //get => Timer.Interval;
     set => Timer.Interval = value;
   }
 
