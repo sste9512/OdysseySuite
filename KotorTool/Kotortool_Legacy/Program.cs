@@ -1,5 +1,6 @@
 ﻿using Kotortool_Legacy.Application.Implementations;
 using Kotortool_Legacy.Infrastructure.View.ProjectSelection;
+using Utility;
 
 namespace Kotortool_Legacy;
 
@@ -139,8 +140,10 @@ internal sealed class Program
         */
 
         var factory = Singleton<AutofacInternalFactory>.GetInstance();
-       
 
+        var line = "adfadsfa";
+
+        line.PrintProperties();
         System.Windows.Forms.Application.EnableVisualStyles();
         System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
         System.Windows.Forms.Application.Run(factory.Create<ProjectSelectionScreen>());

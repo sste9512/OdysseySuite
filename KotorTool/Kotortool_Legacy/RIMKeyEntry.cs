@@ -18,7 +18,7 @@ public struct RimKeyEntry
 
     public RimKeyEntry()
     {
-        }
+    }
 
     public RimKeyEntry(
         string ResourceName,
@@ -28,12 +28,12 @@ public struct RimKeyEntry
         int Length,
         int index)
     {
-            _ResourceName = ResourceName;
-            _ResType = ResType;
-            _ResTypeStr = ResourceIdentification.FindResourceTypeForId(ResType);
-            _ResourceID = resourceId;
-            _Offset = Offset;
-            _Length = Length;
-            _Index = index;
-        }
+        _ResourceName = ResourceName;
+        _ResType = ResType;
+        _ResTypeStr = ResourceIdentification.FindResourceTypeForId(ResType);
+        _ResourceID = resourceId;
+        _Offset = Offset;
+        _Length = Length;
+        _Index = index;
+    }
 }

@@ -85,6 +85,9 @@
       <Compile Remove="frmInstanceOrRefPrompt.cs" />
       <Compile Remove="frmItemPropertyEditor.cs" />
       <Compile Remove="frmMain.cs" />
+      <Compile Update="Infrastructure\TreeView\Component1.cs">
+        <SubType>Component</SubType>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -143,6 +146,10 @@
       <EmbeddedResource Remove="frmInstanceOrRefPrompt.resx" />
       <EmbeddedResource Remove="frmItemPropertyEditor.resx" />
       <EmbeddedResource Remove="frmMain.resx" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Utility\Utility.csproj" />
     </ItemGroup>
 
 </Project>

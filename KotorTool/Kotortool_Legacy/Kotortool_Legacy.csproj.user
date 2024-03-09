@@ -1,8 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <ItemGroup>
-        <Compile Update="Form1.cs">
-            <SubType>Form</SubType>
-        </Compile>
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Infrastructure\TreeView\SuperTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Infrastructure\TreeView\UserControl1.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Infrastructure\View\MainForm\AppForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Infrastructure\View\MainForm\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Infrastructure\View\ProjectSelection\ProjectSelectionScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="InventoryPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="RegReminder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="RepeatButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

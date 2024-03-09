@@ -6,23 +6,22 @@ namespace Kotortool_Legacy;
 
 public sealed class ModuleFileEntry
 {
-        
     private string _mModuleName;
     private ArrayList _mModuleFiles;
     private string _mPackageType;
 
     public ModuleFileEntry()
     {
-            _mPackageType = "MOD";
-            _mModuleName = "";
-            _mModuleFiles = new ArrayList();
-        }
+        _mPackageType = "MOD";
+        _mModuleName = "";
+        _mModuleFiles = new ArrayList();
+    }
 
     public ModuleFileEntry(string Name)
         : this()
     {
-            _mModuleName = Name;
-        }
+        _mModuleName = Name;
+    }
 
     public string ModuleName
     {
@@ -41,22 +40,21 @@ public sealed class ModuleFileEntry
     {
         get
         {
-                Hashtable filesHashTable = new Hashtable(ModuleFiles.Count);
-                try
+            Hashtable filesHashTable = new Hashtable(ModuleFiles.Count);
+            try
+            {
+                foreach (object moduleFile in ModuleFiles)
                 {
-                    foreach (object moduleFile in ModuleFiles)
-                    {
-                        string key = StringType.FromObject(moduleFile);
-                        filesHashTable.Add(key, "");
-                    }
+                    string key = StringType.FromObject(moduleFile);
+                    filesHashTable.Add(key, "");
                 }
-                finally
-                {
-                    
-                }
-
-                return filesHashTable;
             }
+            finally
+            {
+            }
+
+            return filesHashTable;
+        }
     }
 
     [XmlArrayItem(typeof(string))]

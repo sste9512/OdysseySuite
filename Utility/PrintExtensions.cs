@@ -5,21 +5,20 @@ namespace Utility;
 
 public static class PrintExtensions
 {
-     public static void PrintProperties(this object obj)
-     {
-         // Render panel borders
-         var type = obj.GetType();
-         
-         HorizontalRule(type.Name);
-         PanelBorders();
+    public static void PrintProperties(this object obj)
+    {
+        // Render panel borders
+        var type = obj.GetType();
 
-         // Render table borders
-         /*HorizontalRule("Properties");
-         TableBorders();*/
-     }
-     
-     
-     private static void PanelBorders()
+        HorizontalRule(type.Name);
+        PanelBorders();
+
+        // Render table borders
+        /*HorizontalRule("Properties");
+        TableBorders();*/
+    }
+
+    private static void PanelBorders()
     {
         static IRenderable CreatePanel(string name, BoxBorder border)
         {
@@ -81,8 +80,8 @@ public static class PrintExtensions
 
         AnsiConsole.Write(new Columns(obj.CreateTable(TableBorder.Ascii)).Collapse());
     }
-    
-    static IRenderable CreateTable(this object obj, TableBorder border)
+
+    private static IRenderable CreateTable(this object obj, TableBorder border)
     {
         var table = new Table().Border(border);
         table.ShowRowSeparators();

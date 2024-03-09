@@ -4,8 +4,8 @@
 // MVID: 0C64B4D3-3B5F-4694-A8DB-D7A0CDE84A5B
 // Assembly location: C:\Program Files (x86)\Kotor Tool\kotor_tool.exe
 
-using System.Xml.Serialization;
 using Microsoft.VisualBasic.CompilerServices;
+using System.Xml.Serialization;
 
 namespace Kotortool_Legacy;
 
@@ -20,7 +20,7 @@ public class RowFilterPart
 
     public RowFilterPart()
     {
-        }
+    }
 
     public RowFilterPart(
         string nativeColName,
@@ -30,13 +30,13 @@ public class RowFilterPart
         string concatOper,
         string dataType)
     {
-            _mNativeColName = nativeColName;
-            _mDisplayColName = displayColName;
-            _mMatchOper = matchOper;
-            _mFilterText = filterText;
-            _mConcatOper = concatOper;
-            _mDatatype = dataType;
-        }
+        _mNativeColName = nativeColName;
+        _mDisplayColName = displayColName;
+        _mMatchOper = matchOper;
+        _mFilterText = filterText;
+        _mConcatOper = concatOper;
+        _mDatatype = dataType;
+    }
 
     public string NativeColumnName
     {
@@ -75,22 +75,21 @@ public class RowFilterPart
     }
 
     [XmlIgnore] public string QuotedFilterText => QuoteFilterText();
-
     [XmlIgnore]
     public string FilterString => _mNativeColName + " " + _mMatchOper + " " + QuoteFilterText() +
                                   " " + _mConcatOper;
 
     private string QuoteFilterText()
     {
-            string str = null;
-            if (StringType.StrCmp(_mMatchOper, "IN", false) == 0 ||
-                StringType.StrCmp(_mMatchOper, "NOT IN", false) == 0 ||
-                StringType.StrCmp(_mDatatype, "Int32", false) == 0)
-                str = _mFilterText;
-            else if (StringType.StrCmp(Datatype, "Date", false) == 0)
-                str = "#" + _mFilterText + "#";
-            else if (StringType.StrCmp(Datatype, "String", false) == 0)
-                str = "'" + _mFilterText + "'";
-            return str;
-        }
+        string str = string.Empty;
+        if (StringType.StrCmp(_mMatchOper, "IN", false) == 0 ||
+            StringType.StrCmp(_mMatchOper, "NOT IN", false) == 0 ||
+            StringType.StrCmp(_mDatatype, "Int32", false) == 0)
+            str = _mFilterText;
+        else if (StringType.StrCmp(Datatype, "Date", false) == 0)
+            str = "#" + _mFilterText + "#";
+        else if (StringType.StrCmp(Datatype, "String", false) == 0)
+            str = "'" + _mFilterText + "'";
+        return str;
+    }
 }

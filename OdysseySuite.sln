@@ -1,14 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OdysseySuite", "OdysseySuite\OdysseySuite.csproj", "{5D52A25F-38CD-475C-BA36-4D5EFEF4A0E3}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OdysseySuite", "OdysseySuite\OdysseySuite.csproj", "{5D52A25F-38CD-475C-BA36-4D5EFEF4A0E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "KotorTool", "KotorTool", "{3215889F-0A81-4CEA-90B6-C6E3EC3F6B74}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{F758958E-8495-4D31-9972-3DCE37A957F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotortool_Legacy", "KotorTool\Kotortool_Legacy\Kotortool_Legacy.csproj", "{77D498AB-B31D-48FB-AEE2-D616E5830739}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotortool_Legacy", "KotorTool\Kotortool_Legacy\Kotortool_Legacy.csproj", "{77D498AB-B31D-48FB-AEE2-D616E5830739}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{FC0DA42B-A13B-4006-ADCE-18FE7C23EDFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{FC0DA42B-A13B-4006-ADCE-18FE7C23EDFF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KotorToolWpf", "KotorToolWpf\KotorToolWpf.csproj", "{0ADA76BF-3F38-48C3-BF8F-A9CAFC51C4AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuroraParsers", "AuroraParsers\AuroraParsers.csproj", "{E6A2F30C-16C2-49B1-ABA7-616D0F0044F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,9 +35,25 @@ Global
 		{FC0DA42B-A13B-4006-ADCE-18FE7C23EDFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC0DA42B-A13B-4006-ADCE-18FE7C23EDFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC0DA42B-A13B-4006-ADCE-18FE7C23EDFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ADA76BF-3F38-48C3-BF8F-A9CAFC51C4AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ADA76BF-3F38-48C3-BF8F-A9CAFC51C4AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ADA76BF-3F38-48C3-BF8F-A9CAFC51C4AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ADA76BF-3F38-48C3-BF8F-A9CAFC51C4AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6A2F30C-16C2-49B1-ABA7-616D0F0044F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6A2F30C-16C2-49B1-ABA7-616D0F0044F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6A2F30C-16C2-49B1-ABA7-616D0F0044F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6A2F30C-16C2-49B1-ABA7-616D0F0044F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{77D498AB-B31D-48FB-AEE2-D616E5830739} = {3215889F-0A81-4CEA-90B6-C6E3EC3F6B74}
 		{FC0DA42B-A13B-4006-ADCE-18FE7C23EDFF} = {F758958E-8495-4D31-9972-3DCE37A957F6}
+		{0ADA76BF-3F38-48C3-BF8F-A9CAFC51C4AD} = {3215889F-0A81-4CEA-90B6-C6E3EC3F6B74}
+		{E6A2F30C-16C2-49B1-ABA7-616D0F0044F1} = {F758958E-8495-4D31-9972-3DCE37A957F6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C23CE55F-B4E3-44E9-A3B1-32B0B68AC0CA}
 	EndGlobalSection
 EndGlobal
