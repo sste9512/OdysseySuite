@@ -41,13 +41,13 @@ public sealed class ModItem : IComparable
 
     public ModItem(int ScreenX, int ScreenY, float X, float Y, string ResRef, string path)
     {
-            _screenX = ScreenX;
-            _screenY = ScreenY;
-            _x = X;
-            _y = Y;
-            _path = path;
-            _ResRef = ResRef;
-        }
+        _screenX = ScreenX;
+        _screenY = ScreenY;
+        _x = X;
+        _y = Y;
+        _path = path;
+        _ResRef = ResRef;
+    }
 
     public ModItem(
         int ScreenX,
@@ -59,8 +59,8 @@ public sealed class ModItem : IComparable
         ModItem parent)
         : this(ScreenX, ScreenY, X, Y, ResRef, path)
     {
-            _Parent = parent;
-        }
+        _Parent = parent;
+    }
 
     public ModItem(
         int ScreenX,
@@ -73,8 +73,8 @@ public sealed class ModItem : IComparable
         string Tag)
         : this(ScreenX, ScreenY, X, Y, ResRef, path)
     {
-            _localTag = Tag;
-        }
+        _localTag = Tag;
+    }
 
     public int ScreenX
     {
@@ -164,31 +164,31 @@ public sealed class ModItem : IComparable
     {
         get
         {
-                switch (_ItemType)
-                {
-                    case 2025:
-                        return ".uti";
-                    case 2027:
-                        return ".utc";
-                    case 2032:
-                        return ".utt";
-                    case 2035:
-                        return ".uts";
-                    case 2040:
-                        return ".ute";
-                    case 2042:
-                        return ".utd";
-                    case 2044:
-                        return ".utp";
-                    case 2051:
-                        return ".utm";
-                    case 2058:
-                        return ".utw";
-                    default:
-                        string fileExtension = string.Empty;
-                        return fileExtension;
-                }
+            switch (_ItemType)
+            {
+                case 2025:
+                    return ".uti";
+                case 2027:
+                    return ".utc";
+                case 2032:
+                    return ".utt";
+                case 2035:
+                    return ".uts";
+                case 2040:
+                    return ".ute";
+                case 2042:
+                    return ".utd";
+                case 2044:
+                    return ".utp";
+                case 2051:
+                    return ".utm";
+                case 2058:
+                    return ".utw";
+                default:
+                    string fileExtension = string.Empty;
+                    return fileExtension;
             }
+        }
     }
 
     public string FileName => _ResRef + FileExtension;

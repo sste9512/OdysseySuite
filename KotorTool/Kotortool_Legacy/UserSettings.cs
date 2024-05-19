@@ -26,16 +26,16 @@ public class UserSettings
                 }
                 else
                 {
-                    options = new Options
+                    /*options = new Options
                     {
                         defaultSaveLocation = StringType.FromObject(Registry.LocalMachine
                             .OpenSubKey(@"software\SCM\Kotor Tool")?.GetValue("path"))
                     };
                     if (!options.defaultSaveLocation.EndsWith("\\"))
-                        options.defaultSaveLocation += "\\";
+                        options.defaultSaveLocation += "\\";*/
                 }
 
-                settings = options;
+                //settings = options;
             }
             catch (Exception ex)
             {
@@ -45,6 +45,7 @@ public class UserSettings
                 ProjectData.ClearProjectError();
             }
 
+            return null;
             return settings;
         }
 

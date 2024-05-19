@@ -143,7 +143,10 @@ internal sealed class Program
 
         var line = "adfadsfa";
 
-        line.PrintProperties();
+        line.PrintProperties("Initialising Program");
+        
+        factory.PrintProperties("This is the factory");
+       
         System.Windows.Forms.Application.EnableVisualStyles();
         System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
         System.Windows.Forms.Application.Run(factory.Create<ProjectSelectionScreen>());

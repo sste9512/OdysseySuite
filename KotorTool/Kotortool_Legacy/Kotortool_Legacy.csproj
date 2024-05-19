@@ -149,6 +149,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\AuroraParsers\AuroraParsers.csproj" />
       <ProjectReference Include="..\..\Utility\Utility.csproj" />
     </ItemGroup>
 

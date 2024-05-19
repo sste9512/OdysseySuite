@@ -154,7 +154,7 @@ namespace AuroraParsers.AuroraParsers
 
         static List<int[]> ListIndiciesArray = new List<int[]>();
 
-        public TreeNode TreeData = new TreeNode();
+        //public TreeNode TreeData = new TreeNode();
 
         private byte[] ByteBuffer;
 
@@ -170,7 +170,7 @@ namespace AuroraParsers.AuroraParsers
 
             FieldArray = new List<_GFFField>(); //Array of all the fields
 
-            TreeData = new TreeNode();
+            //TreeData = new TreeNode();
         }
 
         //Opens the file
@@ -537,7 +537,7 @@ namespace AuroraParsers.AuroraParsers
         }
 
         //Loops through all the retrieved data to see if it can create the data tree correctly. If so that means all the data was gathered correctly
-        public void PrintableData()
+        /*public void PrintableData()
         {
             file.Open();
             Reader = file.GetReader();
@@ -562,9 +562,9 @@ namespace AuroraParsers.AuroraParsers
             }
             file.Close();
 
-        }
+        }*/
 
-        private void printFields(List<_GFFField> fieldList, int indent, TreeNode Node)
+        /*private void printFields(List<_GFFField> fieldList, int indent, TreeNode Node)
         {
 
             for (int i = 0; i != fieldList.Count; i++)
@@ -676,7 +676,7 @@ namespace AuroraParsers.AuroraParsers
                 Node.Nodes.Add(NewNode);
             }
 
-        }
+        }*/
 
         private string ParseIndent(int i)
         {

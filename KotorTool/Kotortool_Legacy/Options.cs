@@ -37,8 +37,8 @@ public class Options
     public string CurrentRimsLocation;
     private string m_defaultKotORLocation2;
     private string m_defaultModuleLocation2;
-    private bool m_bBuildBIFFtreeOnStartup;
-    private bool m_bAlwaysConvertTPC2TGA;
+    private bool _mBBuildBifFtreeOnStartup;
+    private bool _mBAlwaysConvertTpc2Tga;
     private bool m_bDockImageViewer;
     private bool m_bTextEditorWordWrap;
     private bool m_bAlwaysUnknownGFFasText;
@@ -101,9 +101,10 @@ public class Options
     private bool m_bModelExtraction_CleanWorkingDirectoryBeforeExport;
     private bool m_bUseOverrideFiles;
 
-    public Options()
+    public Options(string mDefaultModuleLocation2)
     {
-            _ModuleExtractPath = "";
+        m_defaultModuleLocation2 = mDefaultModuleLocation2;
+        _ModuleExtractPath = "";
             _TextEditorSavePath = "";
             _bProjMgrUseExternTxtEditor = false;
             _bProjMgrUseExternDLGEditor = false;
@@ -318,8 +319,8 @@ public class Options
 
     public bool bBuildBIFFtreeOnStartup
     {
-        get => m_bBuildBIFFtreeOnStartup;
-        set => m_bBuildBIFFtreeOnStartup = value;
+        get => _mBBuildBifFtreeOnStartup;
+        set => _mBBuildBifFtreeOnStartup = value;
     }
 
     public bool bAlwaysUnknownGFFasText
@@ -330,8 +331,8 @@ public class Options
 
     public bool bAlwaysConvertTPC2TGA
     {
-        get => m_bAlwaysConvertTPC2TGA;
-        set => m_bAlwaysConvertTPC2TGA = value;
+        get => _mBAlwaysConvertTpc2Tga;
+        set => _mBAlwaysConvertTpc2Tga = value;
     }
 
     public bool bDockImageViewer

@@ -1,6 +1,6 @@
-﻿using Kotortool_Legacy.API.AuroraParsers;
-using Kotortool_Legacy.API.AuroraParsers.Biff;
-using Kotortool_Legacy.API.AuroraParsers.Chitin;
+﻿using AuroraParsers.AuroraParsers;
+using AuroraParsers.AuroraParsers.Biff;
+using AuroraParsers.AuroraParsers.Chitin;
 using Kotortool_Legacy.Application.Interfaces;
 using Kotortool_Legacy.Infrastructure.View.MainForm;
 using MediatR;

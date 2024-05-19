@@ -7,7 +7,7 @@ namespace Kotortool_Legacy.Infrastructure.View.ProjectSelection;
 
 public partial class ProjectSelectionScreen : Form, IApplicationCache
 {
-    ComponentActions ComponentActions { get; set; } = new ComponentActions();
+    private ComponentActions ComponentActions { get; set; } = new ComponentActions();
 
 
     public ProjectSelectionScreen()
@@ -29,7 +29,6 @@ public partial class ProjectSelectionScreen : Form, IApplicationCache
 
         projectListingBox.Click += (sender, e) =>
         {
-           
             using var scope = ComponentActions.ResolveScoped();
             var store = scope.Resolve<IDocumentStore>();
             var project = store.Projects.FindOne((x => x.Name == projectListingBox.SelectedItem.ToString()));
