@@ -1,0 +1,2 @@
+C:\Users\steve\RiderProjects\MAIN\OdysseyStudio\odysseystudio.client\obj\Debug\odysseystudio.client.esproj.CoreCompileInputs.cache
+C:\Users\Steven\OneDrive\KOTORTOOL\OdysseyStudio\odysseystudio.client\obj\Debug\odysseystudio.client.esproj.CoreCompileInputs.cache

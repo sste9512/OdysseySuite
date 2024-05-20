@@ -1,0 +1,12 @@
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\obj\Debug\net8.0\AuroraParsers.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\obj\Debug\net8.0\AuroraParsers.AssemblyInfoInputs.cache
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\obj\Debug\net8.0\AuroraParsers.AssemblyInfo.cs
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\obj\Debug\net8.0\AuroraParsers.csproj.CoreCompileInputs.cache
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\obj\Debug\net8.0\AuroraParsers.sourcelink.json
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\bin\Debug\net8.0\AuroraParsers.deps.json
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\bin\Debug\net8.0\AuroraParsers.dll
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\bin\Debug\net8.0\AuroraParsers.pdb
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\obj\Debug\net8.0\AuroraParsers.dll
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\obj\Debug\net8.0\refint\AuroraParsers.dll
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\obj\Debug\net8.0\AuroraParsers.pdb
+C:\Users\steve\RiderProjects\OdysseySuite\AuroraParsers\obj\Debug\net8.0\ref\AuroraParsers.dll

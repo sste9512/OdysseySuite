@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AuroraParsers")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4355c2f2e8955b2f7fd6b8873e80be26156e8d69")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+24e34d8f42654eb90b807f551778fd4ff357dce5")]
 [assembly: System.Reflection.AssemblyProductAttribute("AuroraParsers")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AuroraParsers")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

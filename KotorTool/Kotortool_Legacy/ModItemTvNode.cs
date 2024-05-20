@@ -13,10 +13,10 @@ public sealed class ModItemTvNode : TreeNode
 
     public ModItemTvNode()
     {
-        }
+    }
 
     public ModItemTvNode(string text)
         : base(text)
     {
-        }
+    }
 }
