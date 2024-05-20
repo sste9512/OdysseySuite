@@ -1,0 +1,6 @@
+@OdysseyStudio.Server_HostAddress = http://localhost:5090
+
+GET {{OdysseyStudio.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
