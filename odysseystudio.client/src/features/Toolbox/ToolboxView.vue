@@ -10,7 +10,7 @@
       </v-btn>
 
       <v-btn icon size="small">
-        <v-icon>mdi-filter-menu-outline</v-icon>
+        <v-icon>mdi-filter-menu-outline</v-icon> 
       </v-btn>
 
       <v-btn icon size="small">

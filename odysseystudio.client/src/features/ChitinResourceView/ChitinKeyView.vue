@@ -123,6 +123,9 @@
 import BluePrintScaffold from '../../components/ResourceViews/BluePrintScaffold.vue'
 import ChitinView from '../../components/ResourceViews/ChitinView.vue'
 
+
+
+
 export default {
   name: 'ChitinKeyView',
   components: { ChitinView, BluePrintScaffold }

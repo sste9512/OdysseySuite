@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using KotOR_Files;
-using kotor_tool.API.AuroraParsers;
+﻿using kotor_tool.API.AuroraParsers;
+using KotorDotnet.AuroraParsers.Chitin;
 
-namespace KotorDotnet.AuroraParsers.Chitin;
+namespace OdysseyStudio.Server.Domain.AuroraParsers.Chitin;
 
 public sealed class KeyObject
 {

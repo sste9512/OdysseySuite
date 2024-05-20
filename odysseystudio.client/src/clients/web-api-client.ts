@@ -200,6 +200,76 @@ export class ProjectManagementClient implements IProjectManagementClient {
     }
 }
 
+export interface IResourceEndpointsClient {
+    getChitinKey(path: string): Promise<KeyObject>;
+}
+
+export class ResourceEndpointsClient implements IResourceEndpointsClient {
+    protected instance: AxiosInstance;
+    protected baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance || axios.create();
+
+        this.baseUrl = baseUrl ?? "";
+
+    }
+
+    getChitinKey(path: string, cancelToken?: CancelToken): Promise<KeyObject> {
+        let url_ = this.baseUrl + "/api/ResourceEndpoints?";
+        if (path === undefined || path === null)
+            throw new Error("The parameter 'path' must be defined and cannot be null.");
+        else
+            url_ += "path=" + encodeURIComponent("" + path) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: AxiosRequestConfig = {
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetChitinKey(_response);
+        });
+    }
+
+    protected processGetChitinKey(response: AxiosResponse): Promise<KeyObject> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (const k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<KeyObject>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<KeyObject>(null as any);
+    }
+}
+
 export interface IUserManagementClient {
     getUserName(userId: string): Promise<string>;
     deleteUser(userId: string): Promise<Result>;
@@ -563,6 +633,9 @@ export interface Project {
     gameBackupFilePath?: string;
     userId?: string;
     name?: string;
+}
+
+export interface KeyObject {
 }
 
 export interface ValueTupleOfResultAndString {

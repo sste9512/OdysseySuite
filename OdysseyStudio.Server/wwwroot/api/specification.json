@@ -92,6 +92,37 @@
         }
       }
     },
+    "/api/ResourceEndpoints": {
+      "get": {
+        "tags": [
+          "ResourceEndpoints"
+        ],
+        "operationId": "GetChitinKey",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/UserManagement/{userId}": {
       "get": {
         "tags": [
@@ -494,6 +525,10 @@
             "type": "string"
           }
         }
+      },
+      "KeyObject": {
+        "type": "object",
+        "additionalProperties": false
       },
       "ValueTupleOfResultAndString": {
         "type": "object",

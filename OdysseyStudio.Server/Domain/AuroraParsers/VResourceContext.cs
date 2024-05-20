@@ -2,6 +2,7 @@
 using kotor_tool.API.AuroraParsers.Biff;
 using KotorDotnet.AuroraParsers.Biff;
 using KotorDotnet.AuroraParsers.Chitin;
+using OdysseyStudio.Server.Domain.AuroraParsers.Chitin;
 
 namespace kotor_tool.API.AuroraParsers;
 
