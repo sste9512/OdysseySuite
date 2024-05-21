@@ -5,7 +5,8 @@ import {useAuthStore} from "@/state/auth-state";
 import {
     FileExplorationClient,
     type IFileExplorationClient,
-    type IProjectManagementClient, IResourceEndpointsClient,
+    type IProjectManagementClient, 
+    type IResourceEndpointsClient,
     ProjectManagementClient, ResourceEndpointsClient
 } from "@/clients/web-api-client";
 
