@@ -18,7 +18,6 @@ public enum NodeResourceTypes
 
 public sealed class ErfNode : EnhancedTreeNode, IResourceBridge<ClsErf>
 {
-    
     private readonly NodeContext _nodeContext;
 
     public ErfNode(NodeContext nodeContext)
@@ -37,7 +36,7 @@ public sealed class ErfNode : EnhancedTreeNode, IResourceBridge<ClsErf>
             using var fileStream = new FileStream(_nodeContext.FilePath, FileMode.Open);
             var erf = new ClsErf(fileStream);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             _nodeContext.CaptureError(e, new[] { "Error extracting ClsErf from file." });
         }
@@ -76,11 +75,10 @@ public sealed class RimNode : EnhancedTreeNode, IResourceBridge<ClsRim>
 
 public abstract class EnhancedTreeNode : TreeNode, IEnumerable<EnhancedTreeNode>
 {
-    
     private Dictionary<string, object> MetaData { get; } = new();
-    
+
     private WeakReference<EnhancedTreeNode> _parent;
-    
+
     public bool IsRoot { get; set; }
     public bool IsLeaf => Nodes.Count == 0;
 
@@ -97,12 +95,13 @@ public abstract class EnhancedTreeNode : TreeNode, IEnumerable<EnhancedTreeNode>
             new ToolStripMenuItem("Open in Text Editor"),
         });*/
     }
-    
+
     public EnhancedTreeNode Parent
     {
         get => _parent.TryGetTarget(out var parent) ? parent : null;
         set => _parent = new WeakReference<EnhancedTreeNode>(value);
     }
+
     /// <summary>
     /// Traverse all the nodes parent down from the current node and execute the action on each node
     /// </summary>
@@ -131,9 +130,10 @@ public abstract class EnhancedTreeNode : TreeNode, IEnumerable<EnhancedTreeNode>
             var result = item.DispatchQuery(action);
             aggregate.AddRange(result);
         }
+
         return aggregate;
     }
-    
+
     public IEnumerator<EnhancedTreeNode> GetEnumerator()
     {
         return (IEnumerator<EnhancedTreeNode>)Nodes.GetEnumerator();
@@ -143,11 +143,10 @@ public abstract class EnhancedTreeNode : TreeNode, IEnumerable<EnhancedTreeNode>
     {
         return GetEnumerator();
     }
-    
-    
+
+
     public void AddRange(params EnhancedTreeNode[] nodes)
     {
-        
         foreach (var node in nodes)
         {
             node.Parent = this;
@@ -162,7 +161,7 @@ public abstract class EnhancedTreeNode : TreeNode, IEnumerable<EnhancedTreeNode>
     }
 
     public int Count => MetaData.Count;
-    
+
     public void AddMetaData(params (string, object)[] metaData)
     {
         foreach (var (key, value) in metaData)
@@ -177,16 +176,17 @@ public abstract class EnhancedTreeNode : TreeNode, IEnumerable<EnhancedTreeNode>
 public sealed class GenericNode : EnhancedTreeNode
 {
     private readonly NodeContext _nodeContext;
+
     public GenericNode(NodeContext nodeContext)
     {
         _nodeContext = nodeContext;
     }
 }
 
-public sealed class BiffNode: EnhancedTreeNode, IResourceBridge<BIFFArchive>
+public sealed class BiffNode : EnhancedTreeNode, IResourceBridge<BIFFArchive>
 {
-    
     private readonly NodeContext _nodeContext;
+
     public BiffNode(NodeContext nodeContext)
     {
         _nodeContext = nodeContext;
@@ -210,12 +210,9 @@ public sealed class BiffNode: EnhancedTreeNode, IResourceBridge<BIFFArchive>
     }
 }
 
-
-
-
 public sealed class KotorTreeNode : TreeNode
 {
-    public string FilePath { get; set; } 
+    public string FilePath { get; set; }
     public int RiMorErFindex { get; set; }
     public int KotorVerIndex { get; set; }
     private readonly string _resourceReference;
@@ -223,9 +220,9 @@ public sealed class KotorTreeNode : TreeNode
     private string _fileName;
     public string ContainingFileType;
     public override string ToString() => Text;
-        
+
     public const string ErfResourceTag = "ERF_Res";
-        
+
     public const string RimResourceTag = "RIM_Res";
 
     public string Filename
@@ -243,16 +240,14 @@ public sealed class KotorTreeNode : TreeNode
     public int ResId => _mResId;
     public int BiffFileNum => _mResId >> 20;
     public KotorTreeNode() => KotorVerIndex = -1;
-    
-    
+
+
     public KotorTreeNode(string text)
         : base(text)
     {
         KotorVerIndex = -1;
     }
 
-   
-    
 
     public KotorTreeNode(KeyEntry keyEntry)
     {
@@ -278,8 +273,7 @@ public sealed class KotorTreeNode : TreeNode
         Text = _resourceReference + "." + ResTypeStr + " (" + StringType.FromInteger(rimKeyEntry._Length) + ")";
         Tag = RimResourceTag;
     }
-        
-       
+
 
     public KotorTreeNode(RimKeyEntry rimKeyEntry, string sourcePath)
         : this(rimKeyEntry)
@@ -296,7 +290,7 @@ public sealed class KotorTreeNode : TreeNode
         Text = _resourceReference + "." + ResTypeStr;
         Tag = ErfResourceTag;
     }
-     
+
 
     public KotorTreeNode(ERFKeyEntry erfKeyEntry, string sourcePath)
         : this(erfKeyEntry)

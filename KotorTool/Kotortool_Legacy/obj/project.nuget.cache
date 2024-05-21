@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tFa5Ps56RvPaKYqOQ8uv/Nq9H4sGfbS1X4IX8RsUB/1h+O9FAynpUW5JKF3vqVfskcrUCLLCSO+nqdDGv7B7cw==",
+  "dgSpecHash": "avjUoaPX9cCFcBC9F94fa8XkHh49/b0gENEGR1z615l2YqEaVYaoNZW/1+gFs6zxrpYuOZBRZciDhFobF9DfSQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj",
+  "projectFilePath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\steve\\.nuget\\packages\\autofac\\8.0.0\\autofac.8.0.0.nupkg.sha512",
     "C:\\Users\\steve\\.nuget\\packages\\autofac.extensions.dependencyinjection\\9.0.0\\autofac.extensions.dependencyinjection.9.0.0.nupkg.sha512",

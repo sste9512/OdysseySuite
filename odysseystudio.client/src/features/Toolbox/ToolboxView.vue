@@ -82,6 +82,8 @@ export default {
     /*resourceDataStore.findOne({ _id: 'id1' }, function (err, doc) {
           this.resources = doc;
     });*/
+    
+    var client = resolve<IUserCl>
 
 
   }

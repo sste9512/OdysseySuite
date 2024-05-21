@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorToolWpf\\KotorToolWpf.csproj": {}
+    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorToolWpf\\KotorToolWpf.csproj": {}
   },
   "projects": {
-    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorToolWpf\\KotorToolWpf.csproj": {
+    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorToolWpf\\KotorToolWpf.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorToolWpf\\KotorToolWpf.csproj",
+        "projectUniqueName": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorToolWpf\\KotorToolWpf.csproj",
         "projectName": "KotorToolWpf",
-        "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorToolWpf\\KotorToolWpf.csproj",
+        "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorToolWpf\\KotorToolWpf.csproj",
         "packagesPath": "C:\\Users\\steve\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorToolWpf\\obj\\",
+        "outputPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorToolWpf\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -5,7 +5,7 @@ import {useAuthStore} from "@/state/auth-state";
 import {
     FileExplorationClient,
     type IFileExplorationClient,
-    type IProjectManagementClient, IResourceEndpointsClient,
+    type IProjectManagementClient, 
     ProjectManagementClient, ResourceEndpointsClient
 } from "@/clients/web-api-client";
 
@@ -38,11 +38,11 @@ export class InjectionContext {
             }
         })
         
-        container.register<IResourceEndpointsClient>('resources-client', {
+        /*container.register<IResourceEndpointsClient>('resources-client', {
             useFactory:(c) => {
                  return new ResourceEndpointsClient(serverUrl, c.resolve<AxiosInstance>("axios-instance"))
             }
-        })
+        })*/
         
     }
 }
