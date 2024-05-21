@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj": {}
+    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj": {}
   },
   "projects": {
-    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\AuroraParsers\\AuroraParsers.csproj": {
+    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\AuroraParsers\\AuroraParsers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\AuroraParsers\\AuroraParsers.csproj",
+        "projectUniqueName": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\AuroraParsers\\AuroraParsers.csproj",
         "projectName": "AuroraParsers",
-        "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\AuroraParsers\\AuroraParsers.csproj",
+        "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\AuroraParsers\\AuroraParsers.csproj",
         "packagesPath": "C:\\Users\\steve\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\AuroraParsers\\obj\\",
+        "outputPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\AuroraParsers\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -64,14 +64,14 @@
         }
       }
     },
-    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj": {
+    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj",
+        "projectUniqueName": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj",
         "projectName": "Kotortool_Legacy",
-        "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj",
+        "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorTool\\Kotortool_Legacy\\Kotortool_Legacy.csproj",
         "packagesPath": "C:\\Users\\steve\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\KotorTool\\Kotortool_Legacy\\obj\\",
+        "outputPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\KotorTool\\Kotortool_Legacy\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -93,11 +93,11 @@
           "net8.0-windows7.0": {
             "targetAlias": "net8.0-windows",
             "projectReferences": {
-              "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\AuroraParsers\\AuroraParsers.csproj": {
-                "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\AuroraParsers\\AuroraParsers.csproj"
+              "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\AuroraParsers\\AuroraParsers.csproj": {
+                "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\AuroraParsers\\AuroraParsers.csproj"
               },
-              "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\Utility\\Utility.csproj": {
-                "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\Utility\\Utility.csproj"
+              "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\Utility\\Utility.csproj": {
+                "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\Utility\\Utility.csproj"
               }
             }
           }
@@ -176,14 +176,14 @@
         }
       }
     },
-    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\Utility\\Utility.csproj": {
+    "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\Utility\\Utility.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\Utility\\Utility.csproj",
+        "projectUniqueName": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\Utility\\Utility.csproj",
         "projectName": "Utility",
-        "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\Utility\\Utility.csproj",
+        "projectPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\Utility\\Utility.csproj",
         "packagesPath": "C:\\Users\\steve\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\Utility\\obj\\",
+        "outputPath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\Utility\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

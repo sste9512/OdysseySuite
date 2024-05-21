@@ -323,8 +323,6 @@
 
 import ContextMenu from "../../components/ContextMenus/ContextMenu.vue";
 import router from "../../navigation/base-router.ts";
-import {resolve} from "@/injection/injection-context.js";
-import { type IProjectManagementClient} from "@/web-api-client.ts";
 
 export default {
   name: "OuterMainGameNav",
@@ -335,12 +333,8 @@ export default {
     }
   },
   methods: {
-    findResource(){
-      const client = resolve<IProjectManagementClient>("project-client");
-      
-    },
     navigateToResourceView() {
-      router.push({path: '/chitinkeyview'});
+      router.push({path: '/resource'});
     },
     openContextMenu(e) {
       console.log("This worked partially")

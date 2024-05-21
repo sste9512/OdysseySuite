@@ -4,7 +4,6 @@
 import AuroraAppBar from "@/components/AppBarViews/AuroraAppBar.vue";
 import ToolboxView from "@/features/Toolbox/ToolboxView.vue";
 import OuterMainGameNav from "@/components/NavigationDrawerViews/OuterMainGameNav.vue";
-import router from "@/navigation/base-router.js";
 
 
 
@@ -25,11 +24,68 @@ export default {
       icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram']
     }
   },
-  mounted() {},
+  mounted() {
+
+
+    /*drawerService.subscribe((x) => {
+      console.log('this worked')
+      this.drawer = !this.drawer
+    })
+
+    window.aurora.loadChitinKey('blenderFile')
+
+    window.aurora.loadErf('blenderFile')
+
+    window.aurora.loadRim('loading')
+
+    window.aurora.loadBif('asdfaf')*/
+
+    /* window.electron.ipcRenderer.on('loadKeyReply', (event, arg) => {
+       //console.log(arg)
+       const entries = Object.entries(arg)
+       this.bifs = arg.bifs
+       /!*this.keys = arg.keys.first(30)*!/
+       for (const [key, value] of entries) {
+         //console.log(`${key}: ${value}`)
+         if (key.includes('keys')) {
+           continue
+         }
+         if (key.includes('reader')) {
+           continue
+         }
+         if (key.includes('Reserved')) {
+           continue
+         }
+         if (key.includes('bifs')) {
+           continue
+         }
+         // this.entries.push(`${key}: ${value}`)
+         this.entries.push({
+           key: key,
+           value: value
+         })
+       }
+     })
+ 
+     /!*
+      *   Await Call to IPC
+      * *!/
+     window.electron.ipcRenderer.on('loadErfReply', (event, arg) => {
+       //console.log(arg)
+     })
+ 
+     window.electron.ipcRenderer.on('loadRimReply', (event, arg) => {
+       //console.log(arg)
+     })
+ 
+     window.electron.ipcRenderer.on('loadBifReply', (event, arg) => {
+       //console.log(arg)
+     })*/
+  },
   methods: {
     toggleDrawer() {
       console.log('I am being clicked')
-      //drawerService.toggle()
+      drawerService.toggle()
     },
     toggleBottomDrawer() {
       console.log('I am being clicked')
@@ -81,12 +137,12 @@ export default {
             <v-avatar image="./assets/game_icons/kotor-1-icon.png"></v-avatar>
           </v-list-item>
         </v-list>
-        <!------        <DiscordInnerNavView></DiscordInnerNavView>      ------->
+        <!--        <DiscordInnerNavView></DiscordInnerNavView>-->
       </v-navigation-drawer>
 
       <!--      Outer Navigation Drawer     -->
       <v-navigation-drawer permanent v-model="drawer">
-        <v-list style="padding: 0">
+        <v-list style="padding: 0px">
           <OuterMainGameNav></OuterMainGameNav>
         </v-list>
       </v-navigation-drawer>

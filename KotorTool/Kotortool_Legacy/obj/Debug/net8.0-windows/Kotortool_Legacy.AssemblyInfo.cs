@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Kotortool_Legacy")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a084b7a7746c3110895e552bb5f7af443f5a01cb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+24e34d8f42654eb90b807f551778fd4ff357dce5")]
 [assembly: System.Reflection.AssemblyProductAttribute("Kotortool_Legacy")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Kotortool_Legacy")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

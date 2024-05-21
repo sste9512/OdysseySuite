@@ -29,8 +29,7 @@ export default {
     }
   }
 }
-
-async function navigateToProject() {
+async function navigateToProject ()  {
   await router.push({path: '/project'});
 }
 
@@ -46,7 +45,7 @@ const {handleSubmit, handleReset} = useForm({
 
       return 'Name needs to be at least 2 characters.'
     },
-
+   
     checkbox(value) {
       return true;
       /*f (value === '1') return true
@@ -67,7 +66,7 @@ const submit = handleSubmit(async values => {
   console.log("submit")
   const project: Project = {
     name: values.name,
-    gameBackupFilePath: values.phone,
+    gameBackupFilePath: values.phone, 
     filePath: values.checkbox
   }
   //alert(JSON.stringify(project, null, 2))

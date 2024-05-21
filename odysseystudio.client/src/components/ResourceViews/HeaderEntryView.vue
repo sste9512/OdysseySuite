@@ -1,6 +1,7 @@
 <template>
    <v-container>
         <v-divider vertical></v-divider>
+
    </v-container>
 </template>
 

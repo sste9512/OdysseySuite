@@ -23,10 +23,6 @@ const routes = [
                 component: () => import('../navigation/pages/ResourceViewPortalPage.vue')
             },
             {
-                path: '/chitinkeyview',
-                component: () => import('../components/ResourceViews/ChitinView.vue')
-            },
-            {
                 path: '/profile',
                 component: () => import('../navigation/pages/ProfilePage.vue')
             }

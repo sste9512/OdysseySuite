@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2vKToQYGqcZ6DM8kM9H1+tuop/FsxnFHoEtHnenovgELDcaOBAi5E8hGMKzG9a0A8VzGMPrey9Ae3SDQnrj8TA==",
+  "dgSpecHash": "85hi8O9jxArHL/8FB33mqdV0c3REZJ/tRPFtzgGKctsR6s2Mqg6VnMaMy/idXL0x5E5kN4TKekmdbc9IpYceBg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\NEW\\AuroraParsers\\AuroraParsers.csproj",
+  "projectFilePath": "C:\\Users\\steve\\RiderProjects\\OdysseySuite\\AuroraParsers\\AuroraParsers.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

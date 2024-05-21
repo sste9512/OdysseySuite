@@ -12,7 +12,10 @@ public static class PrintExtensions
 
         HorizontalRule(type.Name);
         PanelBorders(type.Name, content);
-        HorizontalRule("End");
+
+        // Render table borders
+        /*HorizontalRule("Properties");
+        TableBorders();*/
     }
 
     private static void PanelBorders(string title, string content)
