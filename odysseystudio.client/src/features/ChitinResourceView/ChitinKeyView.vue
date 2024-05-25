@@ -47,10 +47,10 @@
     >
       <thead>
         <!--    FileSize: 431840,
-  FilenameOffset: 376,
-  FilenameSize: 13,
-  Drives: 1,
-  filename: 'data\\2da.bif'-->
+                FilenameOffset: 376,
+                FilenameSize: 13,
+                Drives: 1,
+                filename: 'data\\2da.bif'-->
         <tr>
           <th class="text-left">FileSize</th>
           <th class="text-left">FileNameOffset</th>

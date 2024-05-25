@@ -6,7 +6,7 @@ using IIdentityService = OdysseyStudio.Server.Application.Interfaces.IIdentitySe
 
 namespace OdysseyStudio.Server.Api.Endpoints;
 
-public class ProjectManagement: EndpointGroupBase
+public sealed class ProjectManagement: EndpointGroupBase
 {
 
     public override void Map(WebApplication app)

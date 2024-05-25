@@ -103,6 +103,7 @@ export default {
 <template>
   <v-card theme="dark">
     <v-layout>
+      <!--   TODO: Move this to its own component, replace with router view    -->
       <!--      Inner Navigation Drawer    -->
       <v-navigation-drawer theme="dark" rail permanent>
         <v-list-item

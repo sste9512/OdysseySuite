@@ -81,7 +81,7 @@ const submit = handleSubmit(async values => {
     <v-container>
       <v-row no-gutters>
 
-
+<!--        List of Projects          -->
         <v-col cols="12"
                sm="8">
           <v-sheet class="ma-1 pa-1">
@@ -97,7 +97,9 @@ const submit = handleSubmit(async values => {
           </v-sheet>
         </v-col>
 
-
+       
+        
+<!--        Project Name Input      -->
         <v-col cols="12"
                sm="8">
           <form @submit.prevent="submit" class="ma-1 pa-1">

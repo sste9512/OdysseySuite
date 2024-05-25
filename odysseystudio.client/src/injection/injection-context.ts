@@ -48,6 +48,11 @@ export class InjectionContext {
     }
 }
 
+/*
+   - Global injection function 
+   - Resolves using tssyringe
+   - Outside the Vue.js function 'provide'
+*/
 export function resolve<T>(key: string) {
     return container.resolve<T>(key);
 }

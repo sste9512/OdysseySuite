@@ -121,7 +121,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "ClientApp/src/projects/data/src/lib/apis/web-api-client.ts",
+      "output": "odysseystudio.client/src/clients",
       "newLineBehavior": "Auto"
     },
     "openApiToTypeScriptClient": {
