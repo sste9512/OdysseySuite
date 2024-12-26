@@ -5,7 +5,7 @@ const routes = [
     {
         path: '/',
         component: async function() {
-            return import('../features/project-selection.vue')
+            return import('../components/ProjectSelectionScreen.vue')
         }}, 
     {
         path: '/project',
