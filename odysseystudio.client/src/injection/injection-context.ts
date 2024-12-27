@@ -2,6 +2,7 @@ import {container} from "tsyringe";
 import type {AxiosInstance} from "axios";
 import axios from "axios";
 import {useAuthStore} from "@/state/auth-state";
+import {appDatabase} from "@/data/app-database";
 import {
     FileExplorationClient,
     type IFileExplorationClient,
@@ -9,7 +10,7 @@ import {
     type IResourceEndpointsClient,
     ProjectManagementClient, ResourceEndpointsClient
 } from "@/clients/web-api-client";
-
+import { AppDatabase } from "@/data/app-database";
 
 // TODO: Add bearer token here
 export class InjectionContext {
@@ -44,6 +45,8 @@ export class InjectionContext {
                  return new ResourceEndpointsClient(serverUrl, c.resolve<AxiosInstance>("axios-instance"))
             }
         })
+
+        container.registerInstance<AppDatabase>('app-database', appDatabase)
         
     }
 }

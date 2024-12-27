@@ -1,17 +1,20 @@
 import {createRouter, createWebHistory} from "vue-router";
 
 const routes = [
-    
+
     {
+        name: 'Login',
         path: '/',
-        component: async function() {
-            return import('../components/ProjectSelectionScreen.vue')
-        }}, 
-    {
-        path: '/project',
         component: async function () {
-            return import('../components/default/Default.vue')
-        } ,
+            return import('./pages/LoginScreen.vue')
+        }
+    },
+    {
+        name: "MainDashboard",
+        path: '/project/maindashboard',
+        component: async function () {
+            return import('./pages/MainDashboard.vue')
+        },
         children: [
             {
                 path: '',

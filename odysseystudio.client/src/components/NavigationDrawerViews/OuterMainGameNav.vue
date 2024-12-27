@@ -7,14 +7,15 @@
 
         <h3 role="header" class="channels-header-name">Game Resources</h3>
         <svg role="button" aria-label="Dropdown" class="channels-header-dropdown">
-          <use xlink:href="#icon-dropdown"/>
+          <use xlink:href="#icon-dropdown" />
         </svg>
       </header>
 
       <!-- Chitin Key Section--->
       <section class="channels-list">
         <header class="channels-list-header focusable">
-          <h5>Chitin Key Resources</h5>
+          <h5 @click.right="openContextMenu">Chitin Key Resources</h5>
+
         </header>
 
 
@@ -24,7 +25,7 @@
 
             <template v-slot:activator="{ props }">
               <li class="channel focusable channel-text" v-bind="props" v-ripple @click="navigateToResourceView"
-                  @click.right="openContextMenu">
+                @click.right="openContextMenu">
                 <span class="channel-name">chitin.key</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -122,12 +123,12 @@
             <span class="channel-name">general</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite"/>
+                <use xlink:href="#icon-invite" />
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings"/>
+                <use xlink:href="#icon-channel-settings" />
               </svg>
             </button>
           </li>
@@ -136,12 +137,12 @@
             <span class="channel-name">help</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite"/>
+                <use xlink:href="#icon-invite" />
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings"/>
+                <use xlink:href="#icon-channel-settings" />
               </svg>
             </button>
           </li>
@@ -160,12 +161,12 @@
             <span class="channel-name">general</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite"/>
+                <use xlink:href="#icon-invite" />
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings"/>
+                <use xlink:href="#icon-channel-settings" />
               </svg>
             </button>
           </li>
@@ -174,12 +175,12 @@
             <span class="channel-name">help</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite"/>
+                <use xlink:href="#icon-invite" />
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings"/>
+                <use xlink:href="#icon-channel-settings" />
               </svg>
             </button>
           </li>
@@ -196,12 +197,12 @@
             <span class="channel-name">general</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite"/>
+                <use xlink:href="#icon-invite" />
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings"/>
+                <use xlink:href="#icon-channel-settings" />
               </svg>
             </button>
           </li>
@@ -210,12 +211,12 @@
             <span class="channel-name">help</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite"/>
+                <use xlink:href="#icon-invite" />
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings"/>
+                <use xlink:href="#icon-channel-settings" />
               </svg>
             </button>
           </li>
@@ -232,7 +233,7 @@
 
             <template v-slot:activator="{ props }">
               <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceView"
-                  @click.right="openContextMenu">
+                @click.right="openContextMenu">
                 <span class="channel-name">chitin.key</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -254,70 +255,105 @@
 
   </main>
 
-  <ContextMenu :display="showContextMenu" ref="menu" class="glass">
+  <ContextMenu :display="showContextMenu" ref="menu">
+    <v-sheet elevation="12" max-width="600" rounded="lg" width="100%" class="pa-4 text-center mx-auto glass">
+      <v-icon class="mb-5" color="success" icon="mdi-check-circle" size="112"></v-icon>
 
+      <h2 class="text-h5 mb-6">You reconciled this account</h2>
 
-      <v-layout style="border-radius: 3px" class="glass">
-        <v-navigation-drawer permanent absolute class="glass" >
+      <p class="mb-4 text-medium-emphasis text-body-2">
+        To see a report on this reconciliation, click <a href="#" class="text-decoration-none text-info">View
+          reconciliation report.</a>
+
+        <br>
+
+        Otherwise, you're done!
+      </p>
+
+      <v-divider class="mb-4"></v-divider>
+
+      <div class="text-end">
+        <v-btn class="text-none" color="success" rounded variant="flat" width="90">
+          Done
+        </v-btn>
+      </div>
+    </v-sheet>
+
+  </ContextMenu>
+
+  <ContextMenu :display="showContextMenu" ref="menu2">
+    <v-sheet elevation="12" max-width="600" rounded="lg" width="100%" class="pa-4 text-center mx-auto glass">
+      <v-row>
+        <v-col cols="12">
+          <h2 class="text-h5 mb-6">Chitin Key Resource</h2>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="6">
           <v-list>
-            <v-list-item
-              prepend-icon="mdi-cog"
-              title="Open this resource"
-              subtitle="john@google.com"
-            >
-              <template v-slot:append>
-                <v-btn
-                  size="small"
-                  variant="text"
-                  icon="mdi-menu-down"
-                ></v-btn>
-              </template>
+            <v-list-item>
+              <v-list-item-title>
+                <v-icon start icon="mdi-file-document-outline"></v-icon>
+                Resource Type: KEY
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>
+                <v-icon start icon="mdi-folder-outline"></v-icon>
+                Location: /data/chitin.key
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>
+                <v-icon start icon="mdi-scale"></v-icon>
+                Size: 2.4 MB
+              </v-list-item-title>
             </v-list-item>
           </v-list>
-
-          <v-divider></v-divider>
-
-          <v-list
-            :lines="false"
-            density="compact"
-            nav
-          >
-            <v-list-item
-              v-for="(item, i) in items3"
-              :key="i"
-              :value="item"
-              active-color="primary"
-            >
-              <template v-slot:prepend>
-                <v-icon :icon="item.icon" size="x-small"></v-icon>
-              </template>
-
-
-              <v-menu :location="location" :close-on-content-click="false">
-                <template v-slot:activator="{ props }">
-                  <v-list-item-title v-text="item.text" v-bind="props"></v-list-item-title>
-                </template>
-
-                <v-list>
-                  <v-list-item
-                    v-for="(item, index) in items"
-                    :key="index"
-                  >
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
+        </v-col>
+        <v-col cols="6">
+          <v-list>
+            <v-list-item>
+              <v-list-item-title>
+                <v-icon start icon="mdi-counter"></v-icon>
+                Resources: 12,403
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>
+                <v-icon start icon="mdi-clock-outline"></v-icon>
+                Last Modified: 2023-10-15
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>
+                <v-icon start icon="mdi-check-circle-outline"></v-icon>
+                Status: Valid
+              </v-list-item-title>
             </v-list-item>
           </v-list>
-        </v-navigation-drawer>
+        </v-col>
+      </v-row>
 
-        <v-main style="height: 280px;"></v-main>
-      </v-layout>
+      <v-divider class="my-4"></v-divider>
+
+      <v-row>
+        <v-col cols="12" class="text-end">
+          <v-btn color="primary" class="mr-2" prepend-icon="mdi-folder-open">
+            Open in Explorer
+          </v-btn>
+          <v-btn color="success" prepend-icon="mdi-export">
+            Export
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-sheet>
 
   </ContextMenu>
 </template>
 
-<script >
+<script>
 
 
 
@@ -326,21 +362,20 @@ import router from "../../navigation/base-router.ts";
 
 export default {
   name: "OuterMainGameNav",
-  components: {ContextMenu},
+  components: { ContextMenu },
   setup() {
-    return {
-      showContextMenu: false
-    }
+
+    return { showContextMenu: false };
   },
   methods: {
     navigateToResourceView() {
-      router.push({path: '/resource'});
+      router.push({ path: '/resource' });
     },
     openContextMenu(e) {
       console.log("This worked partially")
       e.preventDefault()
       this.showContextMenu = true;
-      this.$refs.menu.open(e);
+      this.$refs.menu2.open(e);
     },
   },
 
@@ -404,7 +439,8 @@ $button-bg-active: lighten($button-bg, 5%);
   }
 }
 
-html, body {
+html,
+body {
   height: 100%;
   background: $body-bg;
   color: $body-color;
@@ -477,7 +513,8 @@ html, body {
       }
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background: darken($channels-bg, 2.5%);
     }
 
@@ -487,7 +524,8 @@ html, body {
     }
   }
 
-  .channels-list-text, .channels-list-voice {
+  .channels-list-text,
+  .channels-list-voice {
     margin: 0 -20px 0 -20px;
   }
 
@@ -508,12 +546,15 @@ html, body {
       display: none;
       opacity: 0.2;
 
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         opacity: 1;
       }
     }
 
-    &.active, &:hover, &:focus {
+    &.active,
+    &:hover,
+    &:focus {
       opacity: 1;
 
       .button {
@@ -540,8 +581,11 @@ html, body {
   .channel-text {
     position: relative;
 
-    &.active, &:hover, &:focus {
+    &.active,
+    &:hover,
+    &:focus {
       background: linear-gradient(to right, #282b30 85%, #2e3136);
+
       /* background: linear-gradient(to right, #999999 85%, #000000);*/
       /*the dash on the side of the gradient*/
       &::before {
@@ -556,7 +600,9 @@ html, body {
     }
 
     &:not(.active) {
-      &:focus::before, &:hover::before {
+
+      &:focus::before,
+      &:hover::before {
         opacity: 0.9;
       }
     }
@@ -590,7 +636,8 @@ html, body {
       line-height: 30px;
       position: relative;
 
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         color: $body-color;
 
         &::after {
@@ -640,7 +687,8 @@ html, body {
           width: 16px;
         }
 
-        &:hover svg, &:focus svg {
+        &:hover svg,
+        &:focus svg {
           filter: brightness(200%);
         }
       }
@@ -652,7 +700,8 @@ html, body {
       border-radius: 50%;
     }
 
-    .username, .tag {
+    .username,
+    .tag {
       display: block;
       font-weight: 300;
     }
@@ -713,7 +762,8 @@ html, body {
   &:not(.active) {
     animation: server-hover-out 0.6s ease;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       animation: server-hover-in 0.8s ease forwards;
     }
   }
@@ -727,7 +777,7 @@ html, body {
     justify-content: center;
   }
 
-  .server-icon > img {
+  .server-icon>img {
     border-radius: inherit;
     max-width: 100%;
   }
@@ -803,14 +853,17 @@ html, body {
   appearance: none;
   user-select: none;
 
-  > svg, > img {
+  >svg,
+  >img {
     max-width: 100%;
     max-height: 100%;
   }
 }
 
 .button-group {
-  .button:focus, .button:active {
+
+  .button:focus,
+  .button:active {
     background: $button-bg-active;
   }
 
@@ -818,7 +871,7 @@ html, body {
     border-right: 1px solid $border-accent;
   }
 
-  .button + .button {
+  .button+.button {
     box-shadow: inset 1px 0 0 #393c41;
   }
 }

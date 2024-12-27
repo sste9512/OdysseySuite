@@ -14,7 +14,6 @@
             :key="project.id"
             class="project-item"
             @click="selectProject(project)"
-            @contextmenu.prevent="openContextMenu($event, project)"
         >
           <v-card class="project-card" outlined
                   style="background: linear-gradient(135deg, #0f0f0f, #303030); border-color: #00ffcc; position: relative;"

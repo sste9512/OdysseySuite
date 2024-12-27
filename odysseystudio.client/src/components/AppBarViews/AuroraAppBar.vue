@@ -1,53 +1,44 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
+  <v-app-bar color="teal-darken-4" image="https://picsum.photos/1920/1080?random" @click.right="openContextMenu"
+    density="compact" style="border-bottom: .8px solid white; height: calc(var(--v-app-bar-height) - 12px);">
 
-  <v-app-bar
-    color="teal-darken-4"
-    image="https://picsum.photos/1920/1080?random"
-    @click.right="openContextMenu"
-    density="compact"
-  >
     <template v-slot:image>
-      <v-img
-        gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"
-      ></v-img>
+      <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
     </template>
 
     <template v-slot:prepend>
       <v-app-bar-nav-icon @click.stop="toggle"></v-app-bar-nav-icon>
     </template>
+    <v-text-field v-model="searchQuery" prepend-inner-icon="mdi-magnify" label="Search" single-line hide-details
+      density="compact" class="mx-4" style="max-width: 300px; height: calc(100% - 10px)"
+      bg-color="rgba(255, 255, 255, 0.1)" variant="solo"></v-text-field>
 
-    <v-app-bar-title>Aurora Studio</v-app-bar-title>
+
 
     <v-spacer></v-spacer>
 
-    <v-tabs
-      v-model="currentItem"
-      fixed-tabs
-    >
-      <v-tab
-        v-for="item in items2"
-        :key="item"
-        class="text-caption"
-        :value="'tab-' + item"
-        :ripple="false">
-        <v-divider color="white"></v-divider>
-        {{ item }}
-       <v-btn prepend-icon="mdi-close" size="x-small">
+    <!-- Tabs component that displays open tabs in a JetBrains-style layout -->
+    <v-tabs v-model="currentItem" fixed-tabs class="jetbrains-tabs">
 
-       </v-btn>
+      <!-- Individual tab items -->
+      <v-tab v-for="item in items" :key="item" class="text-caption jetbrains-tab" :value="'tab-' + item"
+        :ripple="false">
+
+        <!-- Visual divider between tabs -->
+        <v-divider color="grey-lighten-1" class="tab-divider"></v-divider>
+        <!-- Tab label text -->
+        <span class="tab-text">{{ item }}</span>
+        <!-- Close button for each tab -->
+        <v-btn class="close-tab-btn" icon size="small" prepend-icon="mdi-close">
+        </v-btn>
+
       </v-tab>
 
-      <v-menu
-        v-if="more.length"
-      >
+      <!-- Overflow menu for additional tabs -->
+      <v-menu v-if="length">
         <template v-slot:activator="{ props }">
-          <v-btn
-            variant="plain"
-            rounded="10"
-            class="align-self-center me-4"
-            height="100%"
-            v-bind="props"
-          >
+          <!-- Button to show more tabs -->
+          <v-btn variant="plain" rounded="10" class="align-self-center me-4 more-btn" height="100%" v-bind="props">
             more
             <v-icon end>
               mdi-menu-down
@@ -55,12 +46,9 @@
           </v-btn>
         </template>
 
+        <!-- Dropdown list of additional tabs -->
         <v-list class="bg-grey-lighten-3">
-          <v-list-item
-            v-for="item in more"
-            :key="item"
-            @click="addItem(item)"
-          >
+          <v-list-item v-for="item in items" :key="item" class="more-list-item" @click="addItem(item)">
             {{ item }}
           </v-list-item>
         </v-list>
@@ -83,25 +71,14 @@
 
   </v-app-bar>
   <ContextMenu :display="showContextMenu" ref="menu">
-    <v-sheet
-      elevation="12"
-      max-width="600"
-      rounded="lg"
-      width="100%"
-      class="pa-4 text-center mx-auto glass"
-    >
-      <v-icon
-        class="mb-5"
-        color="success"
-        icon="mdi-check-circle"
-        size="112"
-      ></v-icon>
+    <v-sheet elevation="12" max-width="600" rounded="lg" width="100%" class="pa-4 text-center mx-auto glass">
+      <v-icon class="mb-5" color="success" icon="mdi-check-circle" size="112"></v-icon>
 
       <h2 class="text-h5 mb-6">You reconciled this account</h2>
 
       <p class="mb-4 text-medium-emphasis text-body-2">
         To see a report on this reconciliation, click <a href="#" class="text-decoration-none text-info">View
-        reconciliation report.</a>
+          reconciliation report.</a>
 
         <br>
 
@@ -111,13 +88,7 @@
       <v-divider class="mb-4"></v-divider>
 
       <div class="text-end">
-        <v-btn
-          class="text-none"
-          color="success"
-          rounded
-          variant="flat"
-          width="90"
-        >
+        <v-btn class="text-none" color="success" rounded variant="flat" width="90">
           Done
         </v-btn>
       </div>
@@ -132,20 +103,33 @@
 
 
 import ContextMenu from "../ContextMenus/ContextMenu.vue";
-import GlowingAuraSpinner from "../LoadingSpinners/GlowingAuraSpinner.vue";
 
 import router from "../../navigation/base-router.ts";
+import * as drawerService from "effect/HashSet";
+import { useTabViewStore } from "@/state/tab-state.ts";
+import { ref } from "vue";
 
 export default {
   name: "AuroraAppBar",
-  components: {ContextMenu},
+  components: { ContextMenu },
   setup() {
-
+    const tabViewStore = useTabViewStore();
+    const items = ref(tabViewStore.tabs);
+    const currentItem = ref(tabViewStore.currentItem);
+    const length = ref(tabViewStore.tabs.length);
     return {
+      length,
+      tabViewStore,
+      items,
+      currentItem,
       showContextMenu: false
     }
   },
   methods: {
+    // Bind the tabViewStore to the tab list in the app bar.
+    addTab(item) {
+      this.tabViewStore.addTab(item);
+    },
     toggle() {
       drawerService.toggle();
     },
@@ -155,7 +139,8 @@ export default {
       this.showContextMenu = true;
       this.$refs.menu.open(e);
     },
-    addItem (item) {
+    addItem(item) {
+      this.tabViewStore.addTab(item);
       const removed = this.items.splice(0, 1)
       this.items.push(
         ...this.more.splice(this.more.indexOf(item), 1),
@@ -174,19 +159,14 @@ export default {
     return {
       showContextMenu: false,
       items: [
-        {title: 'Click Me'},
-        {title: 'Click Me'},
-        {title: 'Click Me'},
-        {title: 'Click Me 2'},
+        {
+          id: 'tab-home',
+          label: 'Home',
+          icon: 'home',
+          closable: false,
+          to: '/'
+        }
       ],
-      currentItem: 'tab-chitin.key',
-      items2: [
-        'chitin.key', 'swpc_tex_gui', 'swpc_tex_gui', 'swpc_tex_gui',
-      ],
-      more: [
-        'swpc_tex_gui', 'swpc_tex_gui', 'swpc_tex_gui', 'swpc_tex_gui', 'swpc_tex_gui',
-      ],
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       locations:
         [
           'top',
@@ -203,10 +183,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .bottom-border-line {
   border-bottom: white;
   border-bottom-width: 10px;
 }
-
 </style>

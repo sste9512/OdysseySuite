@@ -1,9 +1,18 @@
 <template>
   <v-container>
-    
+
     <v-row no-gutters>
-      <v-col v-for="n in 3" :key="n" cols="12" sm="4">
-        <resource-grid-views class="ma-2 pa-2"></resource-grid-views>
+      <v-col cols="12" sm="4">
+        <resource-grid-views class="ma-2 pa-2" title="View Odyssey Suite Documentation"
+          subtitle="View Documentation on features of Odyssey Suite"
+          imageSrc="https://cdn.vuetifyjs.com/images/cards/sunset.jpg" resourceId="1" resourceType="documentation"
+          resourcePath="https://aurora-docs.com" lastModified="2024-01-01" size="100"></resource-grid-views>
+      </v-col>
+      <v-col v-for="n in 2" :key="n" cols="12" sm="4">
+        <resource-grid-views class="ma-2 pa-2" title="View Aurora Documentation"
+          subtitle="View Original Documentation to get started"
+          imageSrc="https://cdn.vuetifyjs.com/images/cards/sunset.jpg" resourceId="1" resourceType="documentation"
+          resourcePath="https://aurora-docs.com" lastModified="2024-01-01" size="100"></resource-grid-views>
       </v-col>
     </v-row>
 
@@ -107,12 +116,12 @@
   </v-container>
 </template>
 
-<script setup >
+<script setup>
 import { onMounted } from 'vue'
 import ResourceGridViews from "@/components/ResourceViews/ResourceGridView.vue";
 
 
-function setup(){
+function setup() {
   const keys = [
     {
       color: 'cyan',
