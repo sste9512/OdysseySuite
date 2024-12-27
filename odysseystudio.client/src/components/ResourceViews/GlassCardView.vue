@@ -1,28 +1,28 @@
 <template>
   <v-row>
-  <v-sheet style="background: rgba(255, 255, 255, 0)">
-    <div>
-      <div class="container">
-        <div class="box">
-          <span></span>
-          <div class="content">
-            <h2>Resource Type</h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua.
-            </p>
-            <a href="#">Read More</a>
+    <v-sheet style="background: rgba(255, 255, 255, 0)">
+      <div>
+        <div class="container">
+          <div class="box">
+            <span></span>
+            <div class="content">
+              <h2>Resource Type</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua.
+              </p>
+              <a href="#">Read More</a>
+            </div>
           </div>
         </div>
       </div>
+    </v-sheet>
+
+    <v-spacer></v-spacer>
+
+    <div class="d-flex align-center pe-4">
+      <slot> </slot>
     </div>
-  </v-sheet>
-
-  <v-spacer></v-spacer>
-
-  <div class="d-flex align-center pe-4">
-    <slot> </slot>
-  </div>
   </v-row>
 </template>
 
@@ -60,8 +60,6 @@ body {
   backdrop-filter: blur(18px);
 }
 
-.container {
-}
 
 .container .box {
   position: relative;
@@ -185,6 +183,7 @@ body {
 }
 
 @keyframes animate {
+
   0%,
   100% {
     transform: translateY(10px);

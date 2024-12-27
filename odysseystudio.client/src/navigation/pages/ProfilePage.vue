@@ -5,7 +5,8 @@
         <v-toolbar-title>User Profile</v-toolbar-title>
       </v-toolbar>
       <div class="d-flex flex-row">
-        <v-tabs v-model="tab" direction="vertical" color="primary">
+
+          <v-tabs v-model="tab" direction="vertical" color="primary" height="40px">
           <v-tab value="option-1">
             <v-icon start> mdi-account </v-icon>
             Account
@@ -22,6 +23,10 @@
             <v-icon start> mdi-access-point </v-icon>
              Integrations
           </v-tab>
+            <v-tab value="option-5">
+              <v-icon start> mdi-access-point </v-icon>
+              Settings
+            </v-tab>
         </v-tabs>
         <v-window v-model="tab">
           <v-window-item value="option-1">
@@ -44,6 +49,11 @@
               <IntegrationsGridView></IntegrationsGridView>
             </v-card>
           </v-window-item>
+          <v-window-item value="option-5">
+            <v-card flat>
+              <Settings></Settings>
+            </v-card>
+          </v-window-item>
         </v-window>
       </div>
     </v-card>
@@ -51,81 +61,38 @@
 </template>
 
 <script lang="ts">
-import ProfileInfoView from '../components/ProfileViews/ProfileInfoView.vue'
-import EditorSettingsView from '../components/ProfileViews/EditorSettingsView.vue'
-import AccountView from '../components/ProfileViews/AccountView.vue'
-import IntegrationsGridView from "../components/ProfileViews/IntegrationsGridView.vue";
+import ProfileInfoView from '../../components/ProfileViews/ProfileInfoView.vue'
+import EditorSettingsView from '../../components/ProfileViews/EditorSettingsView.vue'
+import AccountView from '../../components/ProfileViews/AccountView.vue'
+import IntegrationsGridView from "../../components/ProfileViews/IntegrationsGridView.vue";
+import Settings from "@/components/ProfileViews/Settings.vue";
 
 
 
 export default {
   name: 'ProfilePage',
-  components: { IntegrationsGridView, AccountView, EditorSettingsView, ProfileInfoView },
+  components: {Settings, IntegrationsGridView, AccountView, EditorSettingsView, ProfileInfoView },
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   data: () => ({
     tab: 'option-1'
   })
-
-  /*setup () {
-    const { handleSubmit, handleReset } = useForm({
-      validationSchema: {
-        name (value: string | any[]) {
-          if (value?.length >= 2) return true
-
-          return 'Name needs to be at least 2 characters.'
-        },
-        phone (value) {
-          if (value?.length > 9 && /[0-9-]+/.test(value)) return true
-
-          return 'Phone number needs to be at least 9 digits.'
-        },
-        email (value) {
-          if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
-
-          return 'Must be a valid e-mail.'
-        },
-        select (value) {
-          if (value) return true
-
-          return 'Select an item.'
-        },
-        checkbox (value) {
-          if (value === '1') return true
-
-          return 'Must be checked.'
-        },
-      },
-    })
-    const name = useField('name')
-    const phone = useField('phone')
-    const email = useField('email')
-    const select = useField('select')
-    const checkbox = useField('checkbox')
-
-    const items = ref([
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-    ])
-
-    const submit = handleSubmit((values: any) => {
-      alert(JSON.stringify(values, null, 2))
-    })
-
-    return { name, phone, email, select, checkbox, items, submit, handleReset }
-  },*/
 }
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+@import "src/assets/css/global.scss";
 
 body {
   font-family: 'Nunito', sans-serif;
   color: #676767;
   background-color: #1e1e1e;
 }
+
+
+
+
+
 
 .bg-card {
   background-color: #171717;

@@ -4,14 +4,13 @@ namespace AuroraParsers.AuroraParsers
 {
     public class WaveObject
     {
-
         private byte[] bytes;
         private AudioType audioType = AudioType.Unknown;
 
-        private BinaryReader br;
+        private readonly BinaryReader _binaryReader;
         private AuroraFile file;
 
-        public int offset = 58;
+        public int Offset = 58;
 
         public enum AudioType
         {
@@ -20,69 +19,79 @@ namespace AuroraParsers.AuroraParsers
             MP3
         }
 
+        /// <summary>
+        /// Represents an audio wave object parser that determines the file type of an audio file, extracts its data,
+        /// and provides functionality for external playback. The WaveObject class works with binary data to identify
+        /// file headers and interpret the content appropriately.
+        /// </summary>
+        /// <remarks>
+        /// Validates and supports recognition of audio types such as WAVE and MP3 by checking specific file markers.
+        /// Manages offsets based on the file type and retrieves a playable byte stream.
+        /// The class utilizes an AuroraFile instance to read binary content and interacts with an external player for file playback.
+        /// </remarks>
         public WaveObject(AuroraFile file)
         {
             this.file = file;
             this.file.Open();
-            br = file.GetReader();
+            _binaryReader = file.GetReader();
 
             try
             {
-                //Check for real WAVE file
-                br.BaseStream.Position = 470;
-                string riff = new string(br.ReadChars(4));
-                if (riff == "RIFF")
+                // Check for real WAVE file
+                _binaryReader.BaseStream.Position = 470; // Set position for WAVE check
+                string riff = new string(_binaryReader.ReadChars(4)); // Read 4 characters
+                if (riff == "RIFF") // Validate if WAVE file
                 {
-                    offset = 470;
+                    Offset = 470;
                     audioType = AudioType.WAVE;
-                    Debug.WriteLine("Found: " + riff);
+                    Debug.WriteLine("Found: " + riff); // Log success
                 }
                 else
                 {
-                    Debug.WriteLine(riff);
+                    Debug.WriteLine(riff); // Log unsuccessful detection
                 }
             }
             catch (Exception ex)
             {
-                audioType = AudioType.WAVE;
-                Debug.WriteLine(ex.ToString());
+                audioType = AudioType.WAVE; // Fallback to WAVE type in case of an error
+                Debug.WriteLine(ex.ToString()); // Log exception
             }
 
-            br.BaseStream.Position = 32;
-            string data = new string(br.ReadChars(4));
-            if (data == "data")
+            // Check for 'data' marker in file
+            _binaryReader.BaseStream.Position = 32; // Set position for data check
+            string data = new string(_binaryReader.ReadChars(4)); // Read 4 characters
+            if (data == "data") // Validate 'data' marker
             {
-                offset = 32;
-                //audioType = AudioType.WAVE;
-                Debug.WriteLine("Found: " + data);
+                Offset = 32;
+                // audioType = AudioType.WAVE; // Uncomment if necessary
+                Debug.WriteLine("Found: " + data); // Log success
             }
 
-            //Check for real MP3 file
-            br.BaseStream.Position = 199;
-            string lame = new string(br.ReadChars(4));
-            if (lame == "LAME")
+            // Check for real MP3 file, first position
+            _binaryReader.BaseStream.Position = 199; // Set position for MP3 check
+            string lame = new string(_binaryReader.ReadChars(4)); // Read 4 characters
+            if (lame == "LAME") // Validate if MP3 file
             {
-                offset = 199;
+                Offset = 199;
                 audioType = AudioType.MP3;
-                Debug.WriteLine("Found: " + lame);
+                Debug.WriteLine("Found: " + lame); // Log success
             }
             else
             {
-                Debug.WriteLine(lame);
+                Debug.WriteLine(lame); // Log unsuccessful detection
             }
 
-            //Check for real MP3 file
-            br.BaseStream.Position = 200;
-            lame = new string(br.ReadChars(4));
-            if (lame == "LAME")
+            // Check for real MP3 file, second position
+            _binaryReader.BaseStream.Position = 200; // Set position for secondary MP3 check
+            lame = new string(_binaryReader.ReadChars(4)); // Read 4 characters
+            if (lame == "LAME") // Validate if MP3 file
             {
-                offset = 200;
+                Offset = 200;
                 audioType = AudioType.MP3;
-                Debug.WriteLine(lame);
+                Debug.WriteLine(lame); // Log success
             }
 
-            file.Close(); //Close the file because we are done reading data...
-
+            file.Close(); // Close the file as we are done reading data
         }
 
         public byte[] getPlayableByteStream()
@@ -92,8 +101,8 @@ namespace AuroraParsers.AuroraParsers
             byte[] data;
             using (var br = file.GetReader())
             {
-                br.BaseStream.Position = offset;
-                data = br.ReadBytes((int)br.BaseStream.Length - offset);
+                br.BaseStream.Position = Offset;
+                data = br.ReadBytes((int)br.BaseStream.Length - Offset);
             }
 
             file.Close();
@@ -149,6 +158,5 @@ namespace AuroraParsers.AuroraParsers
                     break;
             }
         }
-
     }
 }

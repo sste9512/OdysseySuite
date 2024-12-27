@@ -7,7 +7,7 @@ interface Resource {
   path: string;
   size: number;
   lastModified: Date;
-  resourceCount?: number;
+  resourceCount?: number; 
   status?: string;
 }
 

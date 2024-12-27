@@ -86,7 +86,7 @@ public class RimObject
         _file.Open();
         _reader = _file.GetReader();
         _reader.BaseStream.Position = _key.Offset;
-        byte[] bytes = _reader.ReadBytes((int)_key.Length);
+        var bytes = _reader.ReadBytes((int)_key.Length);
         _file.Close();
 
         return bytes;
@@ -96,7 +96,7 @@ public class RimObject
     {
 
         Debug.WriteLine("Searching: " + _file.GetFilename());
-        foreach (_RIMKey rimKey in Keys)
+        foreach (var rimKey in Keys)
         {
             //Debug.WriteLine("Resource Name: " + new string(_key.ResRef));
             if (new string(rimKey.ResRef).Replace("\0", string.Empty) == key && rimKey.ResType == (ushort)resourceType)

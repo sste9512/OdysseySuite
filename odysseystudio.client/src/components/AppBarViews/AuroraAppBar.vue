@@ -1,6 +1,6 @@
 <template>
   <v-app-bar color="teal-darken-4" image="https://picsum.photos/1920/1080?random" @click.right="openContextMenu"
-    density="compact" style="border-bottom: .8px solid white; height: calc(var(--v-app-bar-height) - 12px);">
+    density="compact" style="border-bottom: .8px solid white;">
 
     <template v-slot:image>
       <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
@@ -17,43 +17,6 @@
 
     <v-spacer></v-spacer>
 
-    <!-- Tabs component that displays open tabs in a JetBrains-style layout -->
-    <v-tabs v-model="currentItem" fixed-tabs class="jetbrains-tabs">
-
-      <!-- Individual tab items -->
-      <v-tab v-for="item in items" :key="item" class="text-caption jetbrains-tab" :value="'tab-' + item"
-        :ripple="false">
-
-        <!-- Visual divider between tabs -->
-        <v-divider color="grey-lighten-1" class="tab-divider"></v-divider>
-        <!-- Tab label text -->
-        <span class="tab-text">{{ item }}</span>
-        <!-- Close button for each tab -->
-        <v-btn class="close-tab-btn" icon size="small" prepend-icon="mdi-close">
-        </v-btn>
-
-      </v-tab>
-
-      <!-- Overflow menu for additional tabs -->
-      <v-menu v-if="length">
-        <template v-slot:activator="{ props }">
-          <!-- Button to show more tabs -->
-          <v-btn variant="plain" rounded="10" class="align-self-center me-4 more-btn" height="100%" v-bind="props">
-            more
-            <v-icon end>
-              mdi-menu-down
-            </v-icon>
-          </v-btn>
-        </template>
-
-        <!-- Dropdown list of additional tabs -->
-        <v-list class="bg-grey-lighten-3">
-          <v-list-item v-for="item in items" :key="item" class="more-list-item" @click="addItem(item)">
-            {{ item }}
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-tabs>
 
     <v-spacer></v-spacer>
 
@@ -71,28 +34,8 @@
 
   </v-app-bar>
   <ContextMenu :display="showContextMenu" ref="menu">
-    <v-sheet elevation="12" max-width="600" rounded="lg" width="100%" class="pa-4 text-center mx-auto glass">
-      <v-icon class="mb-5" color="success" icon="mdi-check-circle" size="112"></v-icon>
 
-      <h2 class="text-h5 mb-6">You reconciled this account</h2>
-
-      <p class="mb-4 text-medium-emphasis text-body-2">
-        To see a report on this reconciliation, click <a href="#" class="text-decoration-none text-info">View
-          reconciliation report.</a>
-
-        <br>
-
-        Otherwise, you're done!
-      </p>
-
-      <v-divider class="mb-4"></v-divider>
-
-      <div class="text-end">
-        <v-btn class="text-none" color="success" rounded variant="flat" width="90">
-          Done
-        </v-btn>
-      </div>
-    </v-sheet>
+    <CustomContextMenu caller="appnavbar"></CustomContextMenu>
 
   </ContextMenu>
 
@@ -108,28 +51,17 @@ import router from "../../navigation/base-router.ts";
 import * as drawerService from "effect/HashSet";
 import { useTabViewStore } from "@/state/tab-state.ts";
 import { ref } from "vue";
+import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
 
 export default {
   name: "AuroraAppBar",
-  components: { ContextMenu },
+  components: { CustomContextMenu, ContextMenu },
   setup() {
-    const tabViewStore = useTabViewStore();
-    const items = ref(tabViewStore.tabs);
-    const currentItem = ref(tabViewStore.currentItem);
-    const length = ref(tabViewStore.tabs.length);
-    return {
-      length,
-      tabViewStore,
-      items,
-      currentItem,
-      showContextMenu: false
-    }
+
+
   },
   methods: {
-    // Bind the tabViewStore to the tab list in the app bar.
-    addTab(item) {
-      this.tabViewStore.addTab(item);
-    },
+
     toggle() {
       drawerService.toggle();
     },
@@ -183,6 +115,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// Override Vuetify app bar styles
+:deep(.v-app-bar) {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  height: 20px !important;
+}
+
+:deep(.v-toolbar) {
+  box-shadow: none !important;
+}
+
+:deep(.v-app-bar-title) {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+:deep(.v-app-bar-nav-icon) {
+  color: white;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+:deep(.v-btn) {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+:deep(.v-toolbar__content) {
+  padding: 0 16px;
+  min-height: var(--v-app-bar-height) !important;
+}
+
+:deep(.v-toolbar__prepend),
+:deep(.v-toolbar__append) {
+  margin-inline: 0;
+}
+
 .bottom-border-line {
   border-bottom: white;
   border-bottom-width: 10px;

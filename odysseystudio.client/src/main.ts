@@ -10,7 +10,6 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import {InjectionContext} from "@/injection/injection-context";
-import {ResourceEndpointsClient} from "@/clients/web-api-client";
 
 
 
