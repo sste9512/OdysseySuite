@@ -116,7 +116,7 @@ export default {
   border: none;
   box-shadow: none;
   background: transparent;
-  height: 20px !important;
+  height: 10px !important;
 }
 
 :deep(.v-toolbar) {
@@ -129,10 +129,10 @@ export default {
 }
 
 :deep(.v-app-bar-nav-icon) {
-  color: white;
+  color: whitesmoke;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.1) !important;
   }
 }
 
@@ -142,7 +142,7 @@ export default {
 }
 
 :deep(.v-toolbar__content) {
-  padding: 0 16px;
+  padding: 0 10px;
   min-height: var(--v-app-bar-height) !important;
 }
 
