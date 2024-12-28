@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia';
+import {useLoggingStore} from "@/state/logging-store";
 
 
 interface TabViewState {
@@ -11,12 +12,15 @@ interface TabViewState {
 }
 
 export const useTabViewStore = defineStore('tabViewStore', {
+
     state: () => ({
         tabs: [] as TabViewState[], // List of tab states
         currentTab: "" as string,
     }),
     actions: {
         setCurrentTab(id: string) {
+            const loggingStore = useLoggingStore();
+            loggingStore.addAction("tabs", "Set current tab" + id)
             this.currentTab = id;
             const tab = this.tabs.find(tab => tab.id === id);
             this.tabs.map(tab => tab.isSelected = false);
@@ -26,6 +30,8 @@ export const useTabViewStore = defineStore('tabViewStore', {
         },
         // Add a new tab with optional configuration and inner component reference
         addTab(id: string, title: string, isSelected: boolean,  configuration: Record<string, any> = {}, innerComponent?: any) {
+            const loggingStore = useLoggingStore();
+            loggingStore.addAction("tabs", "Add Tab ->" + id)
             this.tabs.push({
                 id,
                 title: title,
