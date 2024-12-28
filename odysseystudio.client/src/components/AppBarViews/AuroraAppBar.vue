@@ -45,7 +45,7 @@ import ContextMenu from "../ContextMenus/ContextMenu.vue";
 
 import router from "../../navigation/base-router.ts";
 import * as drawerService from "effect/HashSet";
-import { useTabViewStore } from "@/state/tab-state.ts";
+import { useTabViewStore } from "@/state/tab-store.ts";
 import { ref } from "vue";
 import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
 

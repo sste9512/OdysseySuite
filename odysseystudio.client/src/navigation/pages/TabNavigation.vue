@@ -3,18 +3,22 @@
 
     <!-- Individual tab items -->
     <v-tab v-for="item in items" :key="item"  :value="'tab-' + item"
-           :ripple="false" @click.right="openContextMenu" >
+           :ripple="false" @click.right="openContextMenu"   @change="onTabSelected(item)" direction="vertical">
+
 
       <!-- Visual divider between tabs -->
       <v-divider color="grey-lighten-1" class="tab-divider"></v-divider>
 
       <!-- Tab label text -->
-      <span class="tab-text">{{ item.id }}</span><!-- Close button for each tab -->
+      <span class="tab-text">{{ item.title }}</span><!-- Close button for each tab -->
 
       <v-btn v-if="item.pinned" class="ms-2" size="small" prepend-icon="mdi-pin" variant="text"></v-btn>
       <v-btn class="ms-auto" size="small" prepend-icon="mdi-close" variant="text" onclick="closeTabClick(e)"></v-btn>
 
+
     </v-tab>
+
+
 
     <!-- Overflow menu for additional tabs -->
     <v-menu v-if="length">
@@ -36,6 +40,17 @@
       </v-list>
     </v-menu>
   </v-tabs>
+
+  <v-window v-model="currentItem" class="tab-content-window">
+    <v-window-item v-for="item in items" :key="item" :value="'tab-' + item">
+      <!-- Tab-specific content goes here -->
+      <div class="p-4">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.content }}</p>
+      </div>
+      <component :is=item.innerComponent></component>
+    </v-window-item>
+  </v-window>
   <ContextMenu :display="showContextMenu" ref="menu">
     <CustomContextMenu caller="tab-navigation"></CustomContextMenu>
   </ContextMenu>
@@ -44,7 +59,7 @@
 <script>
 
 import {ref} from "vue";
-import {useTabViewStore} from "@/state/tab-state.ts";
+import {useTabViewStore} from "@/state/tab-store.ts";
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
 import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
 
@@ -57,6 +72,7 @@ export default {
     const currentItem = ref(tabViewStore.currentItem);
     const length = ref(tabViewStore.tabs.length);
     return {
+      tabViewStore,
       length,
       items,
       currentItem,
@@ -64,6 +80,13 @@ export default {
     }
   },
   methods: {
+    /**
+     * @param {UnwrapRefSimple<UnwrapRefSimple<TabViewState>>|string} e
+     */
+    onTabSelected(e) {
+       console.log("I was clicked")
+       this.tabViewStore.setCurrentTab(e.id)
+    },
     closeTabClick(e) {
        console.log("I was clicked")
        console.log(e)

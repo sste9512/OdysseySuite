@@ -6,7 +6,7 @@ import ToolboxView from "@/features/Toolbox/ToolboxView.vue";
 import OuterMainGameNav from "@/components/NavigationDrawerViews/OuterMainGameNav.vue";
 import router from "@/navigation/base-router.ts";
 import * as drawerService from "effect/HashSet";
-import {useTabViewStore} from "@/state/tab-state.ts";
+import {useTabViewStore} from "@/state/tab-store.ts";
 import {ref} from "vue";
 import TabNavigation from "@/navigation/pages/TabNavigation.vue";
 import Tabs from 'primevue/tabs';
@@ -46,7 +46,7 @@ export default {
     }
   },
   mounted() {
-       this.tabViewStore.addTab('tab-home');
+       this.tabViewStore.addTab('tab-home', "home", true, {icon: 'home', label: 'Home', closable: false, to: '/'},);
        this.tabViewStore.setCurrentTab('tab-home');
 
   },
@@ -125,7 +125,7 @@ export default {
 
 
         <!-- ROUTER -->
-        <router-view/>
+<!--        <router-view/>-->
       </v-main>
     </v-layout>
   </v-card>

@@ -51,7 +51,7 @@
 
           <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
             <template v-slot:activator="{ props }">
-              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceView">
+              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
                 <span class="channel-name">swpc_tex_gui</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -66,7 +66,7 @@
 
           <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
             <template v-slot:activator="{ props }">
-              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceView">
+              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
                 <span class="channel-name">swpc_tex_tpa</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -81,7 +81,7 @@
 
           <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
             <template v-slot:activator="{ props }">
-              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceView">
+              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
                 <span class="channel-name">swpc_tex_tpb</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -96,7 +96,7 @@
 
           <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
             <template v-slot:activator="{ props }">
-              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceView">
+              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
                 <span class="channel-name">swpc_tex_tpc</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -359,7 +359,7 @@
 
 import ContextMenu from "../../components/ContextMenus/ContextMenu.vue";
 import router from "../../navigation/base-router.ts";
-import {useTabViewStore} from "@/state/tab-state.ts";
+import {useTabViewStore} from "@/state/tab-store.ts";
 
 export default {
   name: "OuterMainGameNav",
@@ -372,16 +372,14 @@ export default {
   },
   methods: {
     navigateToResourceView() {
-      //router.push({ path: '/resource' });
-      this.tabStore.addTab({
-        title: "Chitin Key Resource",
-        icon: "mdi-file-document-outline",
-        component: "ResourceView",
-        active: true,
-        id: "resource-view",
-      });
       this.showContextMenu = false;
       this.$refs.menu.close();
+      this.tabStore.addTab('chitin-tab', "chitin", true, "ChitinView", "ChitinView");
+    },
+    navigateToResourceViewERF() {
+      this.showContextMenu = false;
+      this.$refs.menu.close();
+      this.tabStore.addTab('erf-tab', "erf", true, "ErfView", "ERFView");
     },
     openContextMenu(e) {
       console.log("This worked partially")
