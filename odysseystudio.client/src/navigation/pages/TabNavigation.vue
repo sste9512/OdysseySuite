@@ -11,10 +11,8 @@
       <!-- Tab label text -->
       <span class="tab-text">{{ item.id }}</span><!-- Close button for each tab -->
 
-      <v-btn v-if="item.pinned" class="ms-2" size="small" prepend-icon="mdi-pin" variant="text">
-      </v-btn>
-      <v-btn class="ms-auto" size="small" prepend-icon="mdi-close" variant="text">
-      </v-btn>
+      <v-btn v-if="item.pinned" class="ms-2" size="small" prepend-icon="mdi-pin" variant="text"></v-btn>
+      <v-btn class="ms-auto" size="small" prepend-icon="mdi-close" variant="text" onclick="closeTabClick(e)"></v-btn>
 
     </v-tab>
 
@@ -44,6 +42,7 @@
 </template>
 
 <script>
+
 import {ref} from "vue";
 import {useTabViewStore} from "@/state/tab-state.ts";
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
@@ -65,6 +64,10 @@ export default {
     }
   },
   methods: {
+    closeTabClick(e) {
+       console.log("I was clicked")
+       console.log(e)
+    },
     openContextMenu(e) {
       console.log("This worked partially")
       e.preventDefault()

@@ -9,6 +9,11 @@ import * as drawerService from "effect/HashSet";
 import {useTabViewStore} from "@/state/tab-state.ts";
 import {ref} from "vue";
 import TabNavigation from "@/navigation/pages/TabNavigation.vue";
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
 
 
 export default {
@@ -114,7 +119,10 @@ export default {
 
       <!--      Main Content     -->
       <v-main style="min-height: 300px">
+
+
         <TabNavigation></TabNavigation>
+
 
         <!-- ROUTER -->
         <router-view/>

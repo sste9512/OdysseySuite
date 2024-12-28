@@ -1,9 +1,18 @@
-<template></template>
+<template>
+
+
+     <BluePrintScaffold></BluePrintScaffold>
+
+
+</template>
 
 <script>
 
+import BluePrintScaffold from "@/components/ResourceViews/BluePrintScaffold.vue";
+
 export default {
    name: "ChitinView",
+  components: {BluePrintScaffold},
    async setup() {
 
    },

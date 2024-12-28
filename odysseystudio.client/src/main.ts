@@ -10,14 +10,41 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import {InjectionContext} from "@/injection/injection-context";
-
+import PrimeVue from 'primevue/config';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
 
 
 
 const pinia = createPinia()
 const context = new InjectionContext();
 const app = createApp(App)
+
+const customTheme = {
+    dark: false,
+    colors: {
+        primary: '#1E88E5',  // Blue
+        secondary: '#43A047',  // Green
+        accent: '#FF5722',  // Orange
+        error: '#E53935',  // Red
+        info: '#1E88E5',  // Blue
+        success: '#4CAF50',  // Green
+        warning: '#FB8C00',  // Amber
+        background: '#F5F5F5',  // Light grey
+        surface: '#FFFFFF',  // White
+    },
+};
+
 const vuetify = createVuetify({
+    theme: {
+        defaultTheme: 'customTheme',
+        themes: {
+            customTheme,
+        },
+    },
     icons: {
         defaultSet: 'mdi',
         aliases,
@@ -27,7 +54,7 @@ const vuetify = createVuetify({
     },
     components,
     directives,
-})
+});
 
 
 app.use(pinia)

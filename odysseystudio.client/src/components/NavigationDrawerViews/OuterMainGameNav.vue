@@ -359,17 +359,29 @@
 
 import ContextMenu from "../../components/ContextMenus/ContextMenu.vue";
 import router from "../../navigation/base-router.ts";
+import {useTabViewStore} from "@/state/tab-state.ts";
 
 export default {
   name: "OuterMainGameNav",
   components: { ContextMenu },
   setup() {
-
-    return { showContextMenu: false };
+    const tabStore = useTabViewStore();
+    return {
+      tabStore,
+      showContextMenu: false };
   },
   methods: {
     navigateToResourceView() {
-      router.push({ path: '/resource' });
+      //router.push({ path: '/resource' });
+      this.tabStore.addTab({
+        title: "Chitin Key Resource",
+        icon: "mdi-file-document-outline",
+        component: "ResourceView",
+        active: true,
+        id: "resource-view",
+      });
+      this.showContextMenu = false;
+      this.$refs.menu.close();
     },
     openContextMenu(e) {
       console.log("This worked partially")

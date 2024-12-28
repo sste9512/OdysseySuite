@@ -1,7 +1,11 @@
 import {defineStore} from 'pinia';
+import {tr} from "vuetify/locale";
+import {is} from "effect/Match";
 
 interface TabViewState {
     id: string; // Unique identifier for each tab
+    title: string,
+    isSelected: boolean,
     pinned: boolean; // State for tab pinning
     configuration: Record<string, any>; // Stores configuration settings for the tab
     innerComponent?: any; // Reference to an inner component (optional, can be typed further if needed)
@@ -14,12 +18,19 @@ export const useTabViewStore = defineStore('tabViewStore', {
     }),
     actions: {
         setCurrentTab(id: string) {
-             this.currentTab = id;
+            this.currentTab = id;
+            const tab = this.tabs.find(tab => tab.id === id);
+            this.tabs.map(tab => tab.isSelected = false);
+            if (tab != null) {
+                tab.isSelected = true;
+            }
         },
         // Add a new tab with optional configuration and inner component reference
-        addTab(id: string, configuration: Record<string, any> = {}, innerComponent?: any) {
+        addTab(id: string, title: string, isSelected: boolean,  configuration: Record<string, any> = {}, innerComponent?: any) {
             this.tabs.push({
                 id,
+                title: title,
+                isSelected: isSelected,
                 pinned: false,
                 configuration,
                 innerComponent,
@@ -51,7 +62,8 @@ export const useTabViewStore = defineStore('tabViewStore', {
             this.tabs = this.tabs.filter(tab => tab.id !== id);
         },
         closeAllTabs() {
-             this.tabs = [];
+            this.tabs = [];
+            this.currentTab = "";
         }
     },
 });

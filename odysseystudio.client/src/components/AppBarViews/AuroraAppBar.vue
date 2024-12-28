@@ -9,21 +9,17 @@
     <template v-slot:prepend>
       <v-app-bar-nav-icon @click.stop="toggle"></v-app-bar-nav-icon>
     </template>
+
     <v-text-field v-model="searchQuery" prepend-inner-icon="mdi-magnify" label="Search" single-line hide-details
       density="compact" class="mx-4" style="max-width: 300px; height: calc(100% - 10px)"
       bg-color="rgba(255, 255, 255, 0.1)" variant="solo"></v-text-field>
 
-
-
     <v-spacer></v-spacer>
-
-
-    <v-spacer></v-spacer>
-
 
     <v-btn icon class="target-light target" @click="navigateHome">
       <v-icon>mdi-home</v-icon>
     </v-btn>
+
     <v-btn icon>
       <v-icon>mdi-magnify</v-icon>
     </v-btn>
