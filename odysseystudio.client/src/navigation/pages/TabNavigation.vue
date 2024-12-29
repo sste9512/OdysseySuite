@@ -1,9 +1,14 @@
 <template>
-  <v-tabs v-model="currentItem" fixed-tabs >
+  <v-tabs v-model="current" fixed-tabs>
 
     <!-- Individual tab items -->
-    <v-tab v-for="item in items" :key="item"  :value="'tab-' + item"
-           :ripple="false" @click.right="openContextMenu"   @change="onTabSelected(item)" direction="vertical">
+    <v-tab v-for="item in items" :key="item" :value="item.id" :ripple="false" @click.right="openContextMenu"
+           @click="onTabSelected(item)"
+           @mouseenter="onTabHover(item)"
+           @mouseleave="onTabLeave(item)" @dragstart="onTabDragStart(item, $event)"
+           @dragend="onTabDragEnd(item, $event)"
+           @dragover="onTabDragOver(item, $event)" @drop="onTabDrop(item, $event)" draggable="true"
+           direction="vertical">
 
 
       <!-- Visual divider between tabs -->
@@ -17,7 +22,6 @@
 
 
     </v-tab>
-
 
 
     <!-- Overflow menu for additional tabs -->
@@ -41,20 +45,18 @@
     </v-menu>
   </v-tabs>
 
-  <v-window v-model="currentItem" class="tab-content-window">
-    <v-window-item v-for="item in items" :key="item" :value="'tab-' + item">
-      <!-- Tab-specific content goes here -->
-      <div class="p-4">
-        <h3>{{ item.title }}</h3>
-        <p>{{ item.content }}</p>
-      </div>
-      <component :is=item.innerComponent></component>
-    </v-window-item>
-  </v-window>
+  <v-tabs-window v-model="current" height="100%">
+    <v-tabs-window-item :value="item.id" v-for="item in items" :key="item">
+
+      <component :is="item.innerComponent"/>
+
+    </v-tabs-window-item>
+  </v-tabs-window>
   <ContextMenu :display="showContextMenu" ref="menu">
     <CustomContextMenu caller="tab-navigation"></CustomContextMenu>
   </ContextMenu>
 </template>
+
 
 <script>
 
@@ -62,21 +64,21 @@ import {ref} from "vue";
 import {useTabViewStore} from "@/state/tab-store.ts";
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
 import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
+import ChitinKeyView from "@/features/ChitinResourceView/ChitinKeyView.vue";
 
 export default {
   name: 'TabNavigation',
-  components: {CustomContextMenu, ContextMenu},
+  components: {ChitinKeyView, CustomContextMenu, ContextMenu},
   setup() {
     const tabViewStore = useTabViewStore();
     const items = ref(tabViewStore.tabs);
-    const currentItem = ref(tabViewStore.currentItem);
+    const current = ref(null);
     const length = ref(tabViewStore.tabs.length);
     return {
       tabViewStore,
       length,
       items,
-      currentItem,
-      addItem: tabViewStore.addTab
+      current,
     }
   },
   methods: {
@@ -84,12 +86,11 @@ export default {
      * @param {UnwrapRefSimple<UnwrapRefSimple<TabViewState>>|string} e
      */
     onTabSelected(e) {
-       console.log("I was clicked")
-       this.tabViewStore.setCurrentTab(e.id)
+
     },
     closeTabClick(e) {
-       console.log("I was clicked")
-       console.log(e)
+      console.log("I was clicked")
+      console.log(e)
     },
     openContextMenu(e) {
       console.log("This worked partially")
@@ -97,11 +98,39 @@ export default {
       this.showContextMenu = true;
       this.$refs.menu.open(e);
     },
+
+    onTabClick(item) {
+      console.log("Tab clicked:", item);
+    },
+    onTabHover(item) {
+      console.log("Tab hovered:", item);
+    },
+    onTabLeave(item) {
+      console.log("Tab left:", item);
+    },
+    onTabDragStart(item, event) {
+      console.log("Drag start on tab:", item);
+      event.dataTransfer.setData("text/plain", JSON.stringify(item));
+    },
+    onTabDragEnd(item, event) {
+      console.log("Drag end on tab:", item);
+      event.preventDefault();
+    },
+    onTabDragOver(item, event) {
+      console.log("Drag over on tab:", item);
+      event.preventDefault(); // Necessary for allowing drop
+    },
+    onTabDrop(item, event) {
+      event.preventDefault();
+      const droppedData = event.dataTransfer.getData("text/plain");
+      const droppedItem = JSON.parse(droppedData);
+      console.log("Item dropped on tab:", item, "Dropped item:", droppedItem);
+    }
   },
   data() {
-      return {
-        showContextMenu: false
-      }
+    return {
+      showContextMenu: false
+    }
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
 
 
-     <BluePrintScaffold></BluePrintScaffold>
+  <BluePrintScaffold></BluePrintScaffold>
 
 
 </template>
@@ -11,12 +11,12 @@
 import BluePrintScaffold from "@/components/ResourceViews/BluePrintScaffold.vue";
 
 export default {
-   name: "ChitinView",
+  name: "ChitinView",
   components: {BluePrintScaffold},
-   async setup() {
+  async setup() {
 
-   },
-   mounted() {
+  },
+  mounted() {
 
   }
 };
@@ -31,6 +31,7 @@ export default {
   transform: translate(5px, -5px);
   cursor: pointer;
 }
+
 .games-carousel .game .game-cover img {
   height: 100%;
   width: 100%;

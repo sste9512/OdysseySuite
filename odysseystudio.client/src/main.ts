@@ -1,67 +1,54 @@
-
 import "reflect-metadata";
-import { createApp } from 'vue'
-import App from './App.vue'
-import {createPinia} from "pinia";
+import { createApp } from "vue";
+import App from "./App.vue";
+import { createPinia } from "pinia";
 import router from "@/navigation/base-router";
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-import { aliases, mdi } from 'vuetify/iconsets/mdi'
-import {InjectionContext} from "@/injection/injection-context";
-import PrimeVue from 'primevue/config';
-import Tabs from 'primevue/tabs';
-import TabList from 'primevue/tablist';
-import Tab from 'primevue/tab';
-import TabPanels from 'primevue/tabpanels';
-import TabPanel from 'primevue/tabpanel';
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+import { aliases, mdi } from "vuetify/iconsets/mdi";
+import { InjectionContext } from "@/injection/injection-context";
 
-
-
-const pinia = createPinia()
+const pinia = createPinia();
 const context = new InjectionContext();
-const app = createApp(App)
+const app = createApp(App);
 
 const customTheme = {
-    dark: false,
-    colors: {
-        primary: '#1E88E5',  // Blue
-        secondary: '#43A047',  // Green
-        accent: '#FF5722',  // Orange
-        error: '#E53935',  // Red
-        info: '#1E88E5',  // Blue
-        success: '#4CAF50',  // Green
-        warning: '#FB8C00',  // Amber
-        background: '#F5F5F5',  // Light grey
-        surface: '#FFFFFF',  // White
-    },
+  dark: false,
+  colors: {
+    primary: "#1E88E5", // Blue
+    secondary: "#43A047", // Green
+    accent: "#FF5722", // Orange
+    error: "#E53935", // Red
+    info: "#1E88E5", // Blue
+    success: "#4CAF50", // Green
+    warning: "#FB8C00", // Amber
+    background: "#F5F5F5", // Light grey
+    surface: "#FFFFFF", // White
+  },
 };
 
 const vuetify = createVuetify({
-    theme: {
-        defaultTheme: 'customTheme',
-        themes: {
-            customTheme,
-        },
+  theme: {
+    defaultTheme: "customTheme",
+    themes: {
+      customTheme,
     },
-    icons: {
-        defaultSet: 'mdi',
-        aliases,
-        sets: {
-            mdi,
-        },
+  },
+  icons: {
+    defaultSet: "mdi",
+    aliases,
+    sets: {
+      mdi,
     },
-    components,
-    directives,
+  },
+  components,
+  directives,
 });
 
+app.use(pinia);
+app.use(router);
+app.use(vuetify);
 
-app.use(pinia)
-app.use(router)
-app.use(vuetify)
-
-
-
-app.mount('#app')
-
+app.mount("#app");

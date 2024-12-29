@@ -36,20 +36,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/** {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: consolas;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: #1d061a
-}*/
 .v-card {
   width: 100%;
   height: auto;

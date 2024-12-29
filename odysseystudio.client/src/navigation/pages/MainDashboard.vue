@@ -6,14 +6,10 @@ import ToolboxView from "@/features/Toolbox/ToolboxView.vue";
 import OuterMainGameNav from "@/components/NavigationDrawerViews/OuterMainGameNav.vue";
 import router from "@/navigation/base-router.ts";
 import * as drawerService from "effect/HashSet";
-import {useTabViewStore} from "@/state/tab-store.ts";
-import {ref} from "vue";
+import { useTabViewStore } from "@/state/tab-store.ts";
+import { ref } from "vue";
 import TabNavigation from "@/navigation/pages/TabNavigation.vue";
-import Tabs from 'primevue/tabs';
-import TabList from 'primevue/tablist';
-import Tab from 'primevue/tab';
-import TabPanels from 'primevue/tabpanels';
-import TabPanel from 'primevue/tabpanel';
+
 
 
 export default {
@@ -46,9 +42,8 @@ export default {
     }
   },
   mounted() {
-       this.tabViewStore.addTab('tab-home', "home", true, {icon: 'home', label: 'Home', closable: false, to: '/'},);
-       this.tabViewStore.setCurrentTab('tab-home');
-
+    this.tabViewStore.addTab('tab-home', "home", true, { icon: 'home', label: 'Home', closable: false, to: '/' },);
+    this.tabViewStore.setCurrentTab('tab-home');
   },
   methods: {
     // Bind the tabViewStore to the tab list in the app bar.
@@ -66,7 +61,7 @@ export default {
     },
 
     navigateToProfile() {
-      router.push({path: '/profile'})
+      router.push({ path: '/profile' })
     }
   }
 }
@@ -87,7 +82,7 @@ export default {
           <v-list-item prepend-icon="mdi-plus" @click="dialogGameSetup = true" value="plus"></v-list-item>
           <v-divider></v-divider>
           <v-list-item prepend-icon="mdi-gamepad-square-outline" value="dashboard"
-                       @click="toggleBottomDrawer"></v-list-item>
+            @click="toggleBottomDrawer"></v-list-item>
           <v-list-item prepend-icon="mdi-gamepad-square-outline" value="messages"></v-list-item>
         </v-list>
       </v-navigation-drawer>
@@ -125,7 +120,7 @@ export default {
 
 
         <!-- ROUTER -->
-<!--        <router-view/>-->
+        <!--        <router-view/>-->
       </v-main>
     </v-layout>
   </v-card>
@@ -154,7 +149,7 @@ export default {
           <v-text-field color="white" label="Name" variant="solo"></v-text-field>
 
           <v-autocomplete :disabled="!isEditing" :items="states" :custom-filter="customFilter" color="white"
-                          item-title="name" item-value="abbr" label="State" variant="solo"></v-autocomplete>
+            item-title="name" item-value="abbr" label="State" variant="solo"></v-autocomplete>
         </v-card-text>
 
         <v-divider></v-divider>
@@ -186,18 +181,8 @@ export default {
 }
 
 
-//.v-main {
-//  padding: 0 !important;
-//  display: block;
-//  align-items: center;
-//  justify-content: end;
-//  margin-left: 30%;
-//}
-
 .dark-glass {
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(28px) !important;
 }
-
-
 </style>

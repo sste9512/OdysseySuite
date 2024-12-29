@@ -7,8 +7,7 @@ interface TabViewState {
     title: string,
     isSelected: boolean,
     pinned: boolean; // State for tab pinning
-    configuration: Record<string, any>; // Stores configuration settings for the tab
-    innerComponent?: string; // Reference to an inner component (optional, can be typed further if needed)
+    innerComponent?: string; // Reference to a Vue component
 }
 
 export const useTabViewStore = defineStore('tabViewStore', {
@@ -29,7 +28,7 @@ export const useTabViewStore = defineStore('tabViewStore', {
             }
         },
         // Add a new tab with optional configuration and inner component reference
-        addTab(id: string, title: string, isSelected: boolean,  configuration: Record<string, any> = {}, innerComponent?: any) {
+        addTab(id: string, title: string, isSelected: boolean, innerComponent?: string) {
             const loggingStore = useLoggingStore();
             loggingStore.addAction("tabs", "Add Tab ->" + id)
             this.tabs.push({
@@ -37,17 +36,10 @@ export const useTabViewStore = defineStore('tabViewStore', {
                 title: title,
                 isSelected: isSelected,
                 pinned: false,
-                configuration,
-                innerComponent,
+                innerComponent : innerComponent,
             });
         },
-        // Update the configuration state of a specific tab
-        updateTabConfiguration(id: string, newConfig: Record<string, any>) {
-            const tab = this.tabs.find(tab => tab.id === id);
-            if (tab) {
-                tab.configuration = {...tab.configuration, ...newConfig};
-            }
-        },
+
         // Set the pinned state of a specific tab
         setTabPinned(id: string, pinned: boolean) {
             const tab = this.tabs.find(tab => tab.id === id);

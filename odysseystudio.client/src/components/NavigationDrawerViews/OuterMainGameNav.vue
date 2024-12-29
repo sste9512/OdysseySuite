@@ -7,7 +7,7 @@
 
         <h3 role="header" class="channels-header-name">Game Resources</h3>
         <svg role="button" aria-label="Dropdown" class="channels-header-dropdown">
-          <use xlink:href="#icon-dropdown" />
+          <use xlink:href="#icon-dropdown"/>
         </svg>
       </header>
 
@@ -25,7 +25,7 @@
 
             <template v-slot:activator="{ props }">
               <li class="channel focusable channel-text" v-bind="props" v-ripple @click="navigateToResourceView"
-                @click.right="openContextMenu">
+                  @click.right="openContextMenu">
                 <span class="channel-name">chitin.key</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -123,12 +123,12 @@
             <span class="channel-name">general</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite" />
+                <use xlink:href="#icon-invite"/>
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings" />
+                <use xlink:href="#icon-channel-settings"/>
               </svg>
             </button>
           </li>
@@ -137,12 +137,12 @@
             <span class="channel-name">help</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite" />
+                <use xlink:href="#icon-invite"/>
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings" />
+                <use xlink:href="#icon-channel-settings"/>
               </svg>
             </button>
           </li>
@@ -161,12 +161,12 @@
             <span class="channel-name">general</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite" />
+                <use xlink:href="#icon-invite"/>
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings" />
+                <use xlink:href="#icon-channel-settings"/>
               </svg>
             </button>
           </li>
@@ -175,12 +175,12 @@
             <span class="channel-name">help</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite" />
+                <use xlink:href="#icon-invite"/>
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings" />
+                <use xlink:href="#icon-channel-settings"/>
               </svg>
             </button>
           </li>
@@ -197,12 +197,12 @@
             <span class="channel-name">general</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite" />
+                <use xlink:href="#icon-invite"/>
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings" />
+                <use xlink:href="#icon-channel-settings"/>
               </svg>
             </button>
           </li>
@@ -211,12 +211,12 @@
             <span class="channel-name">help</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite" />
+                <use xlink:href="#icon-invite"/>
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings" />
+                <use xlink:href="#icon-channel-settings"/>
               </svg>
             </button>
           </li>
@@ -233,7 +233,7 @@
 
             <template v-slot:activator="{ props }">
               <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceView"
-                @click.right="openContextMenu">
+                  @click.right="openContextMenu">
                 <span class="channel-name">chitin.key</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -263,7 +263,7 @@
 
       <p class="mb-4 text-medium-emphasis text-body-2">
         To see a report on this reconciliation, click <a href="#" class="text-decoration-none text-info">View
-          reconciliation report.</a>
+        reconciliation report.</a>
 
         <br>
 
@@ -356,25 +356,25 @@
 <script>
 
 
-
 import ContextMenu from "../../components/ContextMenus/ContextMenu.vue";
-import router from "../../navigation/base-router.ts";
 import {useTabViewStore} from "@/state/tab-store.ts";
 
 export default {
   name: "OuterMainGameNav",
-  components: { ContextMenu },
+  components: {ContextMenu},
   setup() {
     const tabStore = useTabViewStore();
     return {
       tabStore,
-      showContextMenu: false };
+      showContextMenu: false
+    };
   },
   methods: {
     navigateToResourceView() {
       this.showContextMenu = false;
       this.$refs.menu.close();
-      this.tabStore.addTab('chitin-tab', "chitin", true, "ChitinView", "ChitinView");
+      this.tabStore.addTab('chitin-tab', "chitin", true, "ChitinKeyView");
+      //this.tabStore.setCurrentTab('chitin-tab');
     },
     navigateToResourceViewERF() {
       this.showContextMenu = false;
@@ -393,22 +393,22 @@ export default {
     return {
       showContextMenu: false,
       items3: [
-        { text: 'Open in Explorer', icon: 'mdi-folder' },
-        { text: 'View Data', icon: 'mdi-account-multiple' },
-        { text: 'Open in Editor', icon: 'mdi-star' },
-        { text: 'Export', icon: 'mdi-history' },
-        { text: 'Extract', icon: 'mdi-check-circle' },
+        {text: 'Open in Explorer', icon: 'mdi-folder'},
+        {text: 'View Data', icon: 'mdi-account-multiple'},
+        {text: 'Open in Editor', icon: 'mdi-star'},
+        {text: 'Export', icon: 'mdi-history'},
+        {text: 'Extract', icon: 'mdi-check-circle'},
       ],
       storageOptions: [
-        { text: 'Google Drive', icon: 'mdi-clock' },
-        { text: 'One Drive', icon: 'mdi-account' },
-        { text: 'Local Files', icon: 'mdi-flag' },
+        {text: 'Google Drive', icon: 'mdi-clock'},
+        {text: 'One Drive', icon: 'mdi-account'},
+        {text: 'Local Files', icon: 'mdi-flag'},
       ],
       items: [
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me 2' },
+        {title: 'Click Me'},
+        {title: 'Click Me'},
+        {title: 'Click Me'},
+        {title: 'Click Me 2'},
       ],
     }
   },
@@ -787,7 +787,7 @@ body {
     justify-content: center;
   }
 
-  .server-icon>img {
+  .server-icon > img {
     border-radius: inherit;
     max-width: 100%;
   }
@@ -863,8 +863,8 @@ body {
   appearance: none;
   user-select: none;
 
-  >svg,
-  >img {
+  > svg,
+  > img {
     max-width: 100%;
     max-height: 100%;
   }
@@ -881,7 +881,7 @@ body {
     border-right: 1px solid $border-accent;
   }
 
-  .button+.button {
+  .button + .button {
     box-shadow: inset 1px 0 0 #393c41;
   }
 }
