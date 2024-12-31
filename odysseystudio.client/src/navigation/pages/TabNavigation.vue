@@ -3,12 +3,9 @@
 
     <!-- Individual tab items -->
     <v-tab v-for="item in items" :key="item" :value="item.id" :ripple="false" @click.right="openContextMenu"
-           @click="onTabSelected(item)"
-           @mouseenter="onTabHover(item)"
-           @mouseleave="onTabLeave(item)" @dragstart="onTabDragStart(item, $event)"
-           @dragend="onTabDragEnd(item, $event)"
-           @dragover="onTabDragOver(item, $event)" @drop="onTabDrop(item, $event)" draggable="true"
-           direction="vertical">
+      @click="onTabSelected(item)" @mouseenter="onTabHover(item)" @mouseleave="onTabLeave(item)"
+      @dragstart="onTabDragStart(item, $event)" @dragend="onTabDragEnd(item, $event)"
+      @dragover="onTabDragOver(item, $event)" @drop="onTabDrop(item, $event)" draggable="true" direction="vertical">
 
 
       <!-- Visual divider between tabs -->
@@ -48,10 +45,13 @@
   <v-tabs-window v-model="current" height="100%">
     <v-tabs-window-item :value="item.id" v-for="item in items" :key="item">
 
-      <component :is="item.innerComponent"/>
+      <component :is="item.innerComponent" />
 
     </v-tabs-window-item>
   </v-tabs-window>
+
+
+
   <ContextMenu :display="showContextMenu" ref="menu">
     <CustomContextMenu caller="tab-navigation"></CustomContextMenu>
   </ContextMenu>
@@ -60,15 +60,15 @@
 
 <script>
 
-import {ref} from "vue";
-import {useTabViewStore} from "@/state/tab-store.ts";
+import { ref } from "vue";
+import { useTabViewStore } from "@/state/tab-store.ts";
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
 import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
 import ChitinKeyView from "@/features/ChitinResourceView/ChitinKeyView.vue";
 
 export default {
   name: 'TabNavigation',
-  components: {ChitinKeyView, CustomContextMenu, ContextMenu},
+  components: { ChitinKeyView, CustomContextMenu, ContextMenu },
   setup() {
     const tabViewStore = useTabViewStore();
     const items = ref(tabViewStore.tabs);

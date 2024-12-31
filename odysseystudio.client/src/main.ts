@@ -9,11 +9,13 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import { aliases, mdi } from "vuetify/iconsets/mdi";
 import { InjectionContext } from "@/injection/injection-context";
+import Vue3EasyDataTable from "vue3-easy-data-table";
+import "vue3-easy-data-table/dist/style.css";
 
 const pinia = createPinia();
 const context = new InjectionContext();
 const app = createApp(App);
-
+app.component("EasyDataTable", Vue3EasyDataTable);
 const customTheme = {
   dark: false,
   colors: {
