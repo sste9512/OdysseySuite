@@ -171,11 +171,6 @@ export default {
 </template>
 
 <style lang="scss">
-@import "@/assets/css/global.scss";
-@import "@/assets/css/settings.scss";
-
-
-
 .v-dialog {
   background: rgba(0, 0, 0, 0);
 }

@@ -21,28 +21,11 @@
     </v-tab>
 
 
-    <!-- Overflow menu for additional tabs -->
-    <v-menu v-if="length">
-      <template v-slot:activator="{ props }">
-        <!-- Button to show more tabs -->
-        <v-btn variant="plain" rounded="10" class="align-self-center me-4 more-btn" height="100%" v-bind="props">
-          more
-          <v-icon end>
-            mdi-menu-down
-          </v-icon>
-        </v-btn>
-      </template>
 
-      <!-- Dropdown list of additional tabs -->
-      <v-list class="bg-grey-lighten-3">
-        <v-list-item v-for="item in items" :key="item" class="more-list-item" @click="addItem(item)">
-          {{ item }}
-        </v-list-item>
-      </v-list>
-    </v-menu>
+
   </v-tabs>
 
-  <v-tabs-window v-model="current" height="100%">
+  <v-tabs-window v-model="current" height="100%" class="pa-0" style="margin: 0px 0px 0px 0px !important;">
     <v-tabs-window-item :value="item.id" v-for="item in items" :key="item">
 
       <component :is="item.innerComponent" />
@@ -136,5 +119,94 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/css/global.scss";
+/* Deep selector to override Vuetify tab styles */
+::v-deep(.v-tab) {
+  background-color: #181818;
+  /* Custom background for tabs */
+  color: #4b367c;
+  /* Text color for tabs */
+  font-weight: lighter;
+  /* Light text for tabs */
+  font-size: 10px;
+  transition: all 0.1s ease;
+  /* Smooth transition for hover effects */
+  height: 35px !important;
+  min-width: 50px !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  border-bottom: none !important;
+
+  // /* Augmented UI shape */
+  // --aug-border: 2px !important;
+  // --aug-inlay: 2px !important;
+  // --aug-inlay-bg: #181818 !important;
+  // --aug-border-bg: #4b367c !important;
+  // --aug-tl: 12px !important;
+  // --aug-tr: 12px !important;
+  // --aug-br: 12px !important;
+  // --aug-bl: 12px !important;
+  // --aug-border-opacity: 0.3 !important;
+
+  // /* Required for augmented-ui */
+  // position: relative;
+  // --aug-clip-tl1: initial !important;
+  // --aug-round-tl1: 10px !important;
+  // --aug-clip-tr1: initial !important;
+  // --aug-round-tr1: 10px !important;
+  // --aug-clip-br1: initial !important;
+  // --aug-round-br1: 10px !important;
+  // --aug-clip-bl1: initial !important;
+  // --aug-round-bl1: 10px !important;
+
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   inset: 0;
+  //   border-radius: inherit;
+  //   padding: 2px;
+  //   background: linear-gradient(45deg, #4b367c, #2e1e4e);
+  //   -webkit-mask:
+  //     linear-gradient(#fff 0 0) content-box,
+  //     linear-gradient(#fff 0 0);
+  //   -webkit-mask-composite: xor;
+  //   mask-composite: exclude;
+  //   pointer-events: none;
+  // }
+}
+
+::v-deep(.v-slide-group__content) {
+  background-color: #181818;
+  padding: 0px 0px 0px 0px !important;
+}
+
+
+::v-deep(.v-tab:hover) {
+  background-color: #1e1e1e;
+  /* Slightly lighter background on hover */
+  color: white;
+  /* Text color on hover */
+}
+
+::v-deep(.v-tab--selected) {
+  background-color: #353535;
+  /* Background color for selected tabs */
+  color: #ffffff;
+  /* Text color for selected tabs */
+}
+
+::v-deep(.v-tab__icon) {
+  color: #4b367c;
+  /* Icon color for tabs */
+  margin-right: 8px;
+  /* Spacing between icon and text */
+}
+
+::v-deep(.v-tabs) {
+  background-color: #121212;
+  /* Background for the tabs container */
+  border-bottom: 1px solid #2e2e2e;
+  /* Optional border for separation */
+  padding: 2px 2px 2px 2px !important;
+  /* Padding around tabs */
+}
 </style>

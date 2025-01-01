@@ -2,35 +2,37 @@
 import {resolve} from "@/injection/injection-context";
 import type {IProjectManagementClient} from "@/clients/web-api-client";
 import type {DirectoryInfo} from "@/web-api-client";
+import {ref, computed} from 'vue';
 
 export const useProjectStore = defineStore('project', () => {
-    
-    // Value containers
-    // const projects = ref(String[]{""})
-    // const name = ref('Eduardo')
-    // const bearerToken = ref('');
-
-    const directories: DirectoryInfo[] = [];
-
-
-    let client: IProjectManagementClient = resolve<IProjectManagementClient>('project-management');
 
 
 
 
-    // function setBearer(bearer: string) {
-    //     bearerToken.value = bearer;
-    // }
+    const projectClient = resolve<IProjectManagementClient>('IProjectManagementClient'); // Resolving dependency
 
-    // async function signin(username: string, password: string): Promise<boolean> {
-    //     const authClient = resolve<IUserManagementClient>("");
-    //     const result = await authClient.authorize(username, password);
-    //     if (result) {
-    //         return result
-    //     } else {
-    //         return result
-    //     }
-    // }
+    const projects = ref<DirectoryInfo[]>([]); // Stores the list of projects
+    const selectedProject = ref<DirectoryInfo | null>(null); // Currently selected project
 
-    return {directories}
+    // const loadProjects = async () => {
+    //     projects.value = await projectClient; // Fetch projects from the API
+    // };
+
+    const selectProject = (project: DirectoryInfo) => {
+        selectedProject.value = project; // Update selected project
+    };
+
+    const clearSelectedProject = () => {
+        selectedProject.value = null; // Clears the selected project
+    };
+
+    const totalProjects = computed(() => projects.value.length); // Computes total projects
+
+    return {
+        projects,
+        selectedProject,
+        selectProject,
+        clearSelectedProject,
+        totalProjects,
+    };
 })

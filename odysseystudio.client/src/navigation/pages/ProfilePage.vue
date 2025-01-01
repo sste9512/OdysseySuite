@@ -6,7 +6,7 @@
       </v-toolbar>
       <div class="d-flex flex-row">
 
-          <v-tabs v-model="tab" direction="vertical" color="primary" height="40px">
+        <v-tabs v-model="tab" direction="vertical" color="primary" height="40px">
           <v-tab value="option-1">
             <v-icon start> mdi-account </v-icon>
             Account
@@ -21,12 +21,12 @@
           </v-tab>
           <v-tab value="option-4">
             <v-icon start> mdi-access-point </v-icon>
-             Integrations
+            Integrations
           </v-tab>
-            <v-tab value="option-5">
-              <v-icon start> mdi-access-point </v-icon>
-              Settings
-            </v-tab>
+          <v-tab value="option-5">
+            <v-icon start> mdi-access-point </v-icon>
+            Settings
+          </v-tab>
         </v-tabs>
         <v-window v-model="tab">
           <v-window-item value="option-1">
@@ -71,7 +71,7 @@ import Settings from "@/components/ProfileViews/Settings.vue";
 
 export default {
   name: 'ProfilePage',
-  components: {Settings, IntegrationsGridView, AccountView, EditorSettingsView, ProfileInfoView },
+  components: { Settings, IntegrationsGridView, AccountView, EditorSettingsView, ProfileInfoView },
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   data: () => ({
     tab: 'option-1'
@@ -81,7 +81,7 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
-@import "src/assets/css/global.scss";
+
 
 body {
   font-family: 'Nunito', sans-serif;

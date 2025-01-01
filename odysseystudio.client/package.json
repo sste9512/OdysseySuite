@@ -12,6 +12,8 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@surely-vue/table": "^4.3.17",
+    "ant-design-vue": "^4.2.6",
     "axios": "^1.6.7",
     "dexie": "^3.2.4",
     "effect": "^3.2.5",
@@ -22,6 +24,7 @@
     "vee-validate": "^4.12.5",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5",
+    "vue3-easy-data-table": "^1.5.47",
     "vuetify": "^3.7.6"
   },
   "devDependencies": {

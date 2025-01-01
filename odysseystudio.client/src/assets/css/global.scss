@@ -20,6 +20,9 @@
   transition: all 0.1s ease; /* Smooth transition for hover effects */
   height: 35px !important;
   min-width: 50px !important;
+  // margin-bottom: 0 !important;
+  // padding-bottom: 0 !important;
+  // border-bottom: none !important;
 }
 
 ::v-deep(.v-tab:hover) {
