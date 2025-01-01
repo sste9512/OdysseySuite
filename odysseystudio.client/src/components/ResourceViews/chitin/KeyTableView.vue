@@ -1,14 +1,20 @@
 <template>
+
+
   <!--  Key Container  -->
   <v-container padding="2px">
+    <easy-data-table :headers="headers" :items="items" @click-row="onRowClick" @dblclick-row="onRowDblClick"
+      @click-cell="onCellClick" @hover-row="onRowHover" @sort="onSort" @page-change="onPageChange"
+      table-class-name="customize-table">
 
+      <template #item-team="{ value }">
+        <v-img :src="value" width="40" height="40" class="rounded-circle" />
+      </template>
 
-
-
-    <EasyDataTable table-class-name="customize-table" :headers="headers" :items="items" header-text-direction="center"
-      body-text-direction="center" :rows-per-page="5" @click-row="onRowClick" @sort="onSort" @row-click="onRowClick"
-      @row-dblclick="onRowDblClick" @cell-click="onCellClick" @row-hover="onRowHover" @page-change="onPageChange"
-      border-cell />
+      <template #item-indicator-weight="item">
+        {{ item.indicator.weight }} (lbs)
+      </template>
+    </easy-data-table>
   </v-container>
 
 </template>
@@ -17,155 +23,41 @@
 
 
 import type { Header, Item } from "vue3-easy-data-table";
-import { defineComponent } from "vue";
-import TableHeaderWithActions from "./TableHeaderWithActions.vue";
+import { defineComponent, ref } from "vue";
+
 
 export default defineComponent({
   name: "DataTableComponent",
-  components: { TableHeaderWithActions },
+  components: {},
+  setup() {
+
+  },
   data() {
     return {
+
+      rows: [{
+        name: "1",
+        details: "Item 1",
+      }],
       exportOptions: [
         "Excel",
         "Word", "XML",
       ],
       headers: [
-        { text: "PLAYER", value: "player" },
-        { text: "TEAM", value: "team" },
-        { text: "NUMBER", value: "number" },
-        { text: "POSITION", value: "position" },
-        { text: "HEIGHT", value: "indicator.height" },
-        { text: "WEIGHT (lbs)", value: "indicator.weight", sortable: true },
-        { text: "LAST ATTENDED", value: "lastAttended", width: 200 },
-        { text: "COUNTRY", value: "country" },
+        { text: "RESOURCE NAME", value: "resourceName" },
+        { text: "RESOURCE TYPE", value: "resourceType" },
+        { text: "FILE SIZE", value: "fileSize" },
+        { text: "LOCATION", value: "location" },
+        { text: "CONTAINER", value: "container" },
+        { text: "LAST MODIFIED", value: "lastModified", sortable: true },
+        { text: "CHECKSUM", value: "checksum" },
+        { text: "Operation", value: "operation" },
       ] as Header[],
       items: [
-        {
-          player: "Stephen Curry",
-          team: "GSW",
-          number: 30,
-          position: "G",
-          indicator: { height: "6-2", weight: 185 },
-          lastAttended: "Davidson",
-          country: "USA",
-        },
-        {
-          player: "Lebron James",
-          team: "LAL",
-          number: 6,
-          position: "F",
-          indicator: { height: "6-9", weight: 250 },
-          lastAttended: "St. Vincent-St. Mary HS (OH)",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Kevin Durant",
-          team: "BKN",
-          number: 7,
-          position: "F",
-          indicator: { height: "6-10", weight: 240 },
-          lastAttended: "Texas-Austin",
-          country: "USA",
-        },
-        {
-          player: "Giannis Antetokounmpo",
-          team: "MIL",
-          number: 34,
-          position: "F",
-          indicator: { height: "6-11", weight: 242 },
-          lastAttended: "Filathlitikos",
-          country: "Greece",
-        },
+        { "id": 1, "resourceName": "nwn_base.bif", "resourceType": "BIF", "fileSize": "1.2GB", "location": "/data/bifs/", "container": "chitin.key", "lastModified": "2023-10-15", "checksum": "a1b2c3d4" },
+        { "id": 2, "resourceName": "dialog.tlk", "resourceType": "TLK", "fileSize": "45MB", "location": "/data/", "container": "chitin.key", "lastModified": "2023-10-15", "checksum": "e5f6g7h8" },
+        { "id": 3, "resourceName": "textures.bif", "resourceType": "BIF", "fileSize": "2.1GB", "location": "/data/bifs/", "container": "chitin.key", "lastModified": "2023-10-15", "checksum": "i9j0k1l2" },
+        { "id": 4, "resourceName": "scripts.bif", "resourceType": "BIF", "fileSize": "156MB", "location": "/data/bifs/", "container": "chitin.key", "lastModified": "2023-10-15", "checksum": "m3n4o5p6" },
       ] as Item[],
     };
   },
@@ -194,14 +86,13 @@ export default defineComponent({
 
 
 <style scoped lang="scss">
+@import "@/assets/css/vuetify-overrides/vuetify-breadcrumb.scss";
+
 .v-data-table {
   border: 0px solid #ccc !important;
   border-radius: 0px !important;
   overflow: hidden !important;
 }
-
-
-
 
 
 .v-data-table__wrapper {
@@ -236,32 +127,35 @@ export default defineComponent({
 $easy-table-border: 1px solid #445269;
 
 .customize-table {
+  font-family: 'Inter', sans-serif;
+  font-weight: lighter !important;
+  border-radius: 8px !important;
 
-  --easy-table-border: 1px solid #3d3d3d;
-  --easy-table-row-border: 1px solid #3d3d3d;
+  --easy-table-border: 1px solid #1a192b;
+  --easy-table-row-border: 1px solid #1a192b;
 
   --easy-table-header-font-size: 14px;
   --easy-table-header-height: 50px;
-  --easy-table-header-font-color: #00ff87;
-  --easy-table-header-background-color: #1a1a1a;
+  --easy-table-header-font-color: rgba(255, 255, 255, 0.9);
+  --easy-table-header-background-color: #1a192b;
 
-  --easy-table-header-item-padding: 10px 15px;
+  --easy-table-header-item-padding: 10px 12px;
 
-  --easy-table-body-even-row-font-color: #00ffe1;
-  --easy-table-body-even-row-background-color: #242424;
+  --easy-table-body-even-row-font-color: rgba(255, 255, 255, 0.7);
+  --easy-table-body-even-row-background-color: #1a192b;
 
-  --easy-table-body-row-font-color: #00aaff;
-  --easy-table-body-row-background-color: #121212;
+  --easy-table-body-row-font-color: rgba(255, 255, 255, 0.7);
+  --easy-table-body-row-background-color: black;
   --easy-table-body-row-height: 42px;
   --easy-table-body-row-font-size: 12px;
 
-  --easy-table-body-row-hover-font-color: #ff00e1;
-  --easy-table-body-row-hover-background-color: #292929;
+  --easy-table-body-row-hover-font-color: rgba(255, 255, 255, 0.9);
+  --easy-table-body-row-hover-background-color: #2a2941;
 
   --easy-table-body-item-padding: 2px 15px;
 
-  --easy-table-footer-background-color: #1a1a1a;
-  --easy-table-footer-font-color: #00afff;
+  --easy-table-footer-background-color: #1a192b;
+  --easy-table-footer-font-color: rgba(255, 255, 255, 0.7);
   --easy-table-footer-font-size: 13px;
   --easy-table-footer-padding: 0px 10px;
   --easy-table-footer-height: 50px;
@@ -270,16 +164,13 @@ $easy-table-border: 1px solid #445269;
   --easy-table-rows-per-page-selector-option-padding: 10px;
   --easy-table-rows-per-page-selector-z-index: 1;
 
-  --easy-table-scrollbar-track-color: #242424;
-  --easy-table-scrollbar-color: #121212;
-  --easy-table-scrollbar-thumb-color: #00ff87;
-  --easy-table-scrollbar-corner-color: #242424;
+  --easy-table-scrollbar-track-color: #1a192b;
+  --easy-table-scrollbar-color: black;
+  --easy-table-scrollbar-thumb-color: rgba(255, 255, 255, 0.3);
+  --easy-table-scrollbar-corner-color: #1a192b;
 
   --easy-table-loading-mask-background-color: rgba(0, 0, 0, 0.8);
 }
-
-
-
 
 
 .v-toolbar {
