@@ -27,9 +27,7 @@
 
   <v-tabs-window v-model="current" height="100%" class="pa-0" style="margin: 0px 0px 0px 0px !important;">
     <v-tabs-window-item :value="item.id" v-for="item in items" :key="item">
-
       <component :is="item.innerComponent" />
-
     </v-tabs-window-item>
   </v-tabs-window>
 

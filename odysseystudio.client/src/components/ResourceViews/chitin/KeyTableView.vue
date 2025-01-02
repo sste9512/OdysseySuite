@@ -11,13 +11,13 @@
                      @hover-row="onRowHover"
                      @sort="onSort"
                      @page-change="onPageChange"
-      table-class-name="customize-table">
+                     table-class-name="customize-table">
 
-      <template #item-team="{ value }">
-        <v-img :src="value" width="40" height="40" class="rounded-circle" />
+      <template #operation="{ resourceName }">
+        <v-btn> {{ resourceName }} </v-btn>
       </template>
 
-      <template #item-indicator-weight="item">
+      <template #item-indicator-weight="{ item }">
         {{ item.indicator.weight }} (lbs)
       </template>
     </easy-data-table>

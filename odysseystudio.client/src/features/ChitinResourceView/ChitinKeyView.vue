@@ -1,19 +1,19 @@
 <template>
   <v-container fluid style="background: radial-gradient(#1a192b, black); ">
 
-    <div class="components-page-header-demo-content">
+    <div class="components-page-header-demo-content" style="padding: 5%">
 
-      <a-page-header style="color: white" title="Title" class="site-page-header" sub-title="This is a subtitle"
+      <a-page-header title="Title" class="site-page-header" sub-title="This is a subtitle"
         :avatar="{ src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4' }" :breadcrumb="{ routes }">
         <template #tags>
-          <v-breadcrumbs :items="items" divider="-"></v-breadcrumbs>
+          <v-breadcrumbs style="color: white" :items="items" divider="-"></v-breadcrumbs>
         </template>
         <template #extra>
 
           <v-btn-group>
-            <v-btn> Export</v-btn>
-            <v-btn> View Documentation</v-btn>
-            <v-btn> Save</v-btn>
+            <v-btn prepend-icon="mdi-export"> Export</v-btn>
+            <v-btn prepend-icon="mdi-book-open-variant"> View Documentation</v-btn>
+            <v-btn prepend-icon="mdi-content-save"> Save</v-btn>
           </v-btn-group>
 
 
@@ -62,12 +62,12 @@
             </div>
           </div>
           <div>
-            <a-row>
+            <a-row style="color: white">
               <a-col :span="12">
-                <a-statistic title="Active Users" :value="112893" style="margin-right: 50px" />
+                <a-statistic title="File Size" :value="112893" style="margin-right: 60px; color: white" />
               </a-col>
               <a-col :span="12">
-                <a-statistic title="Account Balance (CNY)" :precision="2" :value="112893" />
+                <a-statistic title="Asc Files" :precision="2" :value="112893" />
               </a-col>
             </a-row>
           </div>
@@ -75,67 +75,102 @@
       </a-page-header>
     </div>
 
-    <!--    <a-descriptions title="Responsive Descriptions" bordered :column="2">-->
-    <!--      <a-descriptions-item label="Product">-->
-    <!--        <a-select-->
-    <!--            v-model:value="c1"-->
-    <!--            :size="small"-->
-    <!--            style="width: 200px"-->
-    <!--        ></a-select>-->
-    <!--      </a-descriptions-item>-->
-    <!--      <a-descriptions-item label="Billing">Prepaid</a-descriptions-item>-->
-    <!--      <a-descriptions-item label="Time">18:00:00</a-descriptions-item>-->
-    <!--      <a-descriptions-item label="Amount">$80.00</a-descriptions-item>-->
-    <!--      <a-descriptions-item label="Discount">$20.00</a-descriptions-item>-->
-    <!--      <a-descriptions-item label="Official"> ASDfaf</a-descriptions-item>-->
-    <!--      <a-descriptions-item label="Config Info">-->
-    <!--        Data disk type: MongoDB-->
-    <!--        <br/>-->
-    <!--        Database version: 3.4-->
-    <!--        <br/>-->
-    <!--        Package: dds.mongo.mid-->
-    <!--        <br/>-->
-    <!--        Storage space: 10 GB-->
-    <!--        <br/>-->
-    <!--        Replication factor: 3-->
-    <!--        <br/>-->
-    <!--        Region: East China 1-->
-    <!--      </a-descriptions-item>-->
-    <!--    </a-descriptions>-->
 
 
 
 
+    <!-- 
+    Key Data Section
+    This section displays a searchable data table for viewing and filtering key file contents.
+    
+    Components:
+    - v-container: Wrapper with dark gradient background
+    - a-page-header: Header component showing "Key Data" title and avatar
+    - a-row: Contains the search filters and content
+    - a-select (3x): Multiple-select dropdown filters for resource types
+      Available filters: Texture, Scripts, Maps, Lighting, Meshes, Sounds, Dialogue
+    - KeyTableCollection: Data table component displaying the key file entries
+      Props:
+        - key-table-items: Binds to "keys" data source
+        
+    Styling:
+    - Background uses radial gradient from #1a192b to black
+    - 5% padding around container
+    - White text color
+    - Flexbox layout for filter row
+    
+    Usage:
+    This section allows users to:
+    1. View the contents of the key file in a tabular format
+    2. Filter resources by multiple types using the dropdown selectors
+    3. Search and sort through key file entries
+    -->
     <v-container fluid style="background: radial-gradient(#1a192b, black); padding: 5%">
-      <v-row>
-        <v-col cols="12">
-          <h2>Key Data</h2>
-        </v-col>
-      </v-row>
+      <a-page-header title="Key Data" class="site-page-header" sub-title="Search for ids of resources in other files"
+        :avatar="{ src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4' }" :breadcrumb="{ routes }">
+        <template #tags>
 
-      <v-row class="d-flex flex-wrap">
-        <v-col cols="12" sm="6" md="6" lg="6" class="d-flex">
-          <a-select mode="multiple" allow-clear class="flex-grow-1" placeholder="Search Filters">
-            <a-select-option value="Texture">Texture</a-select-option>
-            <a-select-option value="Scripts">Scripts</a-select-option>
-            <a-select-option value="Maps">Maps</a-select-option>
-            <a-select-option value="Lighting">Lighting</a-select-option>
-            <a-select-option value="Meshes">Meshes</a-select-option>
-            <a-select-option value="Sounds">Sounds</a-select-option>
-            <a-select-option value="Dialogue">Dialogue</a-select-option>
-          </a-select>
-        </v-col>
+        </template>
+        <template #extra>
+          <!-- Search Bar -->
+          <v-text-field :loading="loading" append-inner-icon="mdi-magnify" density="compact" label="Search templates"
+            variant="solo" hide-details single-line @click:append-inner="onClick" style="width: 500px;"></v-text-field>
+        </template>
 
-      </v-row>
-      <v-row>
-        <v-col cols="12">
-          <KeyTableCollection key-table-items="keys"></KeyTableCollection>
-        </v-col>
-      </v-row>
+
+        <a-row class="content" style="color: white">
+          <div style="flex: 1">
+            <div class="d-flex flex-row gap-4">
+              <a-select mode="multiple" allow-clear class="flex-grow-1" placeholder="Search Filters">
+                <a-select-option value="Texture">Texture</a-select-option>
+                <a-select-option value="Scripts">Scripts</a-select-option>
+                <a-select-option value="Maps">Maps</a-select-option>
+                <a-select-option value="Lighting">Lighting</a-select-option>
+                <a-select-option value="Meshes">Meshes</a-select-option>
+                <a-select-option value="Sounds">Sounds</a-select-option>
+                <a-select-option value="Dialogue">Dialogue</a-select-option>
+              </a-select>
+              <a-select mode="multiple" allow-clear class="flex-grow-1" placeholder="Search Filters">
+                <a-select-option value="Texture">Texture</a-select-option>
+                <a-select-option value="Scripts">Scripts</a-select-option>
+                <a-select-option value="Maps">Maps</a-select-option>
+                <a-select-option value="Lighting">Lighting</a-select-option>
+                <a-select-option value="Meshes">Meshes</a-select-option>
+                <a-select-option value="Sounds">Sounds</a-select-option>
+                <a-select-option value="Dialogue">Dialogue</a-select-option>
+              </a-select>
+              <a-select mode="multiple" allow-clear class="flex-grow-1" placeholder="Search Filters">
+                <a-select-option value="Texture">Texture</a-select-option>
+                <a-select-option value="Scripts">Scripts</a-select-option>
+                <a-select-option value="Maps">Maps</a-select-option>
+                <a-select-option value="Lighting">Lighting</a-select-option>
+                <a-select-option value="Meshes">Meshes</a-select-option>
+                <a-select-option value="Sounds">Sounds</a-select-option>
+                <a-select-option value="Dialogue">Dialogue</a-select-option>
+              </a-select>
+            </div>
+            <div>
+              <template v-for="item in iconLinks" :key="item.src">
+                <a class="example-link">
+                  <img class="example-link-icon" :src="item.src" :alt="item.text" /> {{ item.text }}
+                </a>
+              </template>
+            </div>
+          </div>
+          <div>
+
+          </div>
+        </a-row>
+      </a-page-header>
+
+
+      <KeyTableCollection key-table-items="keys"></KeyTableCollection>
+
+
     </v-container>
 
 
-    <v-container fluid style="background: radial-gradient(#1a192b, black); padding: 5%">
+    <v-container fluid style="background: radial-gradient(ellipse at bottom, #1a192b, black); padding: 5%">
       <v-row>
         <v-col cols="12">
           <v-container fluid class="border-bottom">
@@ -159,7 +194,6 @@ import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
 import { ref } from 'vue';
 
 
-
 export default {
   name: 'ChitinKeyView',
   components: { KeyTableCollection, BluePrintScaffold, ContextMenu },
@@ -175,8 +209,6 @@ export default {
       this.showContextMenu = true;
       console.log(event);
       this.$refs.menu.setPosition(event.clientX, event.clientY);
-
-
     },
   },
   data: () => ({
@@ -204,6 +236,65 @@ export default {
 <style scoped lang="scss">
 @import "@/assets/css/vuetify.scss";
 
+::v-deep(.ant-statistic) {
+  .ant-statistic-title {
+    color: rgb(226, 210, 241);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .ant-statistic-content {
+    color: rgb(226, 210, 241);
+
+    .ant-statistic-content-value {
+      font-size: 24px;
+      font-weight: 500;
+    }
+
+    .ant-statistic-content-suffix {
+      font-size: 16px;
+      color: rgba(226, 210, 241, 0.65);
+    }
+  }
+}
+
+
+::v-deep(.ant-page-header) {
+  padding: 16px 24px;
+  background-color: rgb(43, 37, 37);
+  border-bottom: 1px solid rebeccapurple;
+  border-radius: 4px;
+
+  .ant-page-header-heading {
+    .ant-page-header-heading-title {
+      color: rgb(226, 210, 241);
+      font-weight: 500;
+    }
+
+    .ant-page-header-heading-sub-title {
+      color: rgba(226, 210, 241, 0.65);
+    }
+  }
+
+  .ant-page-header-content {
+    padding-top: 12px;
+    color: rgb(226, 210, 241);
+  }
+
+  .ant-page-header-back {
+    color: rgb(226, 210, 241);
+
+    &:hover {
+      color: rebeccapurple;
+    }
+  }
+
+  .ant-page-header-footer {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rebeccapurple;
+  }
+}
 
 
 ::v-deep(.ant-select) {
@@ -213,6 +304,7 @@ export default {
   border: 1px solid rebeccapurple !important;
   overflow: hidden !important;
   color: rgb(226, 210, 241) !important;
+  margin-right: 10px;
 
   .ant-select-selector {
     border: 1px solid var(--v-border-color);
