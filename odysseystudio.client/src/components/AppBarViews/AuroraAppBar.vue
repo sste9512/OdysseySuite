@@ -1,6 +1,6 @@
 <template>
-  <v-app-bar color="teal-darken-4" image="https://picsum.photos/1920/1080?random" @click.right="openContextMenu"
-    density="compact" style="border-bottom: .8px solid white;">
+  <v-app-bar color="teal-darken-4" @click.right="openContextMenu" density="compact"
+    style="border-bottom: .8px solid white;">
 
     <template v-slot:image>
       <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
@@ -45,8 +45,6 @@ import ContextMenu from "../ContextMenus/ContextMenu.vue";
 
 import router from "../../navigation/base-router.ts";
 import * as drawerService from "effect/HashSet";
-import { useTabViewStore } from "@/state/tab-store.ts";
-import { ref } from "vue";
 import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
 
 export default {
@@ -111,24 +109,74 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/css/animations.scss";
+
+
+
+// Override Vuetify text field styles
+::v-deep(.v-text-field) {
+  .v-field {
+    border-radius: 3px !important;
+    background: rgba(44, 39, 39, 0.911) !important;
+    font-weight: lighter !important;
+    width: 400px;
+
+    &--focused {
+
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+
+    &__input {
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: lighter !important;
+
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5) !important;
+      }
+    }
+
+    &__outline {
+      border-color: rgba(255, 255, 255, 0.1) !important;
+
+      &--focused {
+        border-color: var(--v-primary-base) !important;
+      }
+    }
+  }
+
+  .v-input__details {
+    color: rgba(255, 255, 255, 0.6) !important;
+    font-size: 0.75rem;
+    margin-top: 2px;
+  }
+
+  .v-input__append,
+  .v-input__prepend {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+}
+
+
 // Override Vuetify app bar styles
-:deep(.v-app-bar) {
+::v-deep(.v-app-bar) {
   border: none;
   box-shadow: none;
   background: transparent;
-  height: 10px !important;
+  height: 15px !important;
 }
 
-:deep(.v-toolbar) {
+::v-deep(.v-toolbar) {
   box-shadow: none !important;
 }
 
-:deep(.v-app-bar-title) {
+::v-deep(.v-app-bar-title) {
   font-size: 1.1rem;
   font-weight: 500;
 }
 
-:deep(.v-app-bar-nav-icon) {
+::v-deep(.v-app-bar-nav-icon) {
   color: whitesmoke;
 
   &:hover {
@@ -136,18 +184,18 @@ export default {
   }
 }
 
-:deep(.v-btn) {
+::v-deep(.v-btn) {
   text-transform: none;
   letter-spacing: normal;
 }
 
-:deep(.v-toolbar__content) {
+::v-deep(.v-toolbar__content) {
   padding: 0 10px;
   min-height: var(--v-app-bar-height) !important;
 }
 
-:deep(.v-toolbar__prepend),
-:deep(.v-toolbar__append) {
+::v-deep(.v-toolbar__prepend),
+::v-deep(.v-toolbar__append) {
   margin-inline: 0;
 }
 

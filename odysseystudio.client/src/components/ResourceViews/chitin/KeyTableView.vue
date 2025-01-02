@@ -3,15 +3,9 @@
 
   <!--  Key Container  -->
   <v-container padding="2px">
-    <easy-data-table :headers="headers"
-                     :items="items"
-                     @click-row="onRowClick"
-                     @dblclick-row="onRowDblClick"
-                     @click-cell="onCellClick"
-                     @hover-row="onRowHover"
-                     @sort="onSort"
-                     @page-change="onPageChange"
-                     table-class-name="customize-table">
+    <easy-data-table :headers="headers" :items="items" @click-row="onRowClick" @dblclick-row="onRowDblClick"
+      @click-cell="onCellClick" @hover-row="onRowHover" @sort="onSort" @page-change="onPageChange"
+      table-class-name="customize-table">
 
       <template #operation="{ resourceName }">
         <v-btn> {{ resourceName }} </v-btn>
