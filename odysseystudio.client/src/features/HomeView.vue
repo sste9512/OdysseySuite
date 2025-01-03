@@ -1,18 +1,62 @@
+<script setup lang="ts">
+
+import ResourceGridViews from "@/components/Shared/ResourceGridView.vue";
+import { onMounted } from 'vue'
+
+
+function setup() {
+  const keys = [
+    {
+      color: 'cyan',
+      year: '1960'
+    },
+    {
+      color: 'green',
+      year: '1970'
+    },
+    {
+      color: 'pink',
+      year: '1980'
+    },
+    {
+      color: 'amber',
+      year: '1990'
+    },
+    {
+      color: 'orange',
+      year: '2000'
+    }
+  ]
+  return {
+    keys
+  }
+}
+
+function cols() {
+  const { lg, sm } = this.$vuetify.display
+  return lg ? [3, 9] : sm ? [9, 3] : [6, 6]
+}
+
+onMounted(() => {
+  console.log('onMounted event triggered')
+})
+</script>
+
 <template>
   <v-container>
 
     <v-row no-gutters>
       <v-col cols="12" sm="4">
         <resource-grid-views class="ma-2 pa-2" title="View Odyssey Suite Documentation"
-          subtitle="View Documentation on features of Odyssey Suite"
-          imageSrc="https://cdn.vuetifyjs.com/images/cards/sunset.jpg" resourceId="1" resourceType="documentation"
-          resourcePath="https://aurora-docs.com"></resource-grid-views>
+                             subtitle="View Documentation on features of Odyssey Suite"
+                             imageSrc="https://cdn.vuetifyjs.com/images/cards/sunset.jpg" resourceId="1" resourceType="documentation"
+                             resourcePath="https://aurora-docs.com" lastModified="2024-01-01" size="100"></resource-grid-views>
       </v-col>
       <v-col v-for="n in 2" :key="n" cols="12" sm="4">
         <resource-grid-views class="ma-2 pa-2" title="View Aurora Documentation"
-          subtitle="View Original Documentation to get started"
-          imageSrc="https://cdn.vuetifyjs.com/images/cards/sunset.jpg" resourceId="1" resourceType="documentation"
-          resourcePath="https://aurora-docs.com"></resource-grid-views>
+                             subtitle="View Original Documentation to get started"
+                             imageSrc="https://cdn.vuetifyjs.com/images/cards/sunset.jpg" resourceId="1" resourceType="documentation"
+                             resourcePath="https://aurora-docs.com" lastModified="2024-01-01" size="100"></resource-grid-views>
       </v-col>
     </v-row>
 
@@ -62,7 +106,9 @@
             </v-timeline-item>
           </v-timeline>
           <v-card-actions>
-
+            <v-btn @click="expand = !expand">
+              {{ !expand ? 'Full Report' : 'Hide Report' }}
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -98,57 +144,22 @@
               <v-btn> </v-btn>
             </template>
           </v-banner>
-
+          <v-card-actions>
+            <v-btn @click="expand = !expand">
+              {{ !expand ? 'View Accounts' : 'Hide Report' }}
+            </v-btn>
+          </v-card-actions>
+          <v-card-actions>
+            <v-btn @click="expand = !expand">
+              {{ !expand ? 'Add Account' : 'Hide Report' }}
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
+<style scoped>
 
-<script lang="ts">
-import ResourceGridViews from "@/components/Shared/ResourceGridView.vue";
-
-export default {
-  name: "AdminDashboard",
-  components: { ResourceGridViews },
-  data() {
-    return {
-      keys: [
-        {
-          color: 'cyan',
-          year: '1960'
-        },
-        {
-          color: 'green',
-          year: '1970'
-        },
-        {
-          color: 'pink',
-          year: '1980'
-        },
-        {
-          color: 'amber',
-          year: '1990'
-        },
-        {
-          color: 'orange',
-          year: '2000'
-        }
-      ]
-    };
-  },
-  methods: {
-    cols() {
-      const { lg, sm } = this.$vuetify.display;
-      return lg ? [3, 9] : sm ? [9, 3] : [6, 6];
-    }
-  },
-  mounted() {
-    console.log('onMounted event triggered');
-  }
-};
-</script>
-
-
-<style scoped></style>
+</style>

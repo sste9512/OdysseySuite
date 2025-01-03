@@ -374,12 +374,11 @@ export default {
       this.showContextMenu = false;
       this.$refs.menu.close();
       this.tabStore.addTab('chitin-tab', "chitin", true, "ChitinKeyView");
-      //this.tabStore.setCurrentTab('chitin-tab');
     },
     navigateToResourceViewERF() {
       this.showContextMenu = false;
       this.$refs.menu.close();
-      this.tabStore.addTab('erf-tab', "erf", true, "ErfView", "ERFView");
+      this.tabStore.addTab('erf-tab', "erf", true, "ErfView", "ProfilePage");
     },
     openContextMenu(e) {
       console.log("This worked partially")

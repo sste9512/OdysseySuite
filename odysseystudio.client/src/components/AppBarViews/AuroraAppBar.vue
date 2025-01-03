@@ -122,7 +122,6 @@ export default {
     width: 400px;
 
     &--focused {
-
       animation: glow 1.5s ease-in-out infinite alternate;
     }
 

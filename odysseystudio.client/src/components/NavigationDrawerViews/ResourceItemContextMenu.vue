@@ -53,7 +53,7 @@ export default {
 </script>
 <style scoped lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,500,700");
-/*@import '../src/renderer/src/assets/css/settings.scss';*/
+
 
 $material-bg: #212121;
 $body-bg: #121416;

@@ -11,12 +11,7 @@ import { aliases, mdi } from "vuetify/iconsets/mdi";
 import { InjectionContext } from "@/injection/injection-context";
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
-import  Antd  from "ant-design-vue";
-import STable from '@surely-vue/table';
-import { setLicenseKey } from '@surely-vue/table';
-setLicenseKey('fdafefdaffklfjajuiefhrdbfdnsafjkasyegwfpqfldfd45f48ew468fr5ds');
-
-
+import Antd from "ant-design-vue";
 
 const pinia = createPinia();
 const context = new InjectionContext();
@@ -54,7 +49,7 @@ const vuetify = createVuetify({
   components,
   directives,
 });
-app.use(STable);
+
 app.use(Antd);
 app.use(pinia);
 app.use(router);

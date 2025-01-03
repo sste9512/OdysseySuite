@@ -165,7 +165,7 @@
 
 
       <KeyTableCollection key-table-items="keys"></KeyTableCollection>
-
+      <creature-struct-table />
 
     </v-container>
 
@@ -188,15 +188,15 @@
 </template>
 
 <script>
-import BluePrintScaffold from '../../components/ResourceViews/BluePrintScaffold.vue'
+import BluePrintScaffold from '../../components/ResourceViews/data/BluePrintScaffold.vue'
 import KeyTableCollection from "@/components/ResourceViews/chitin/KeyTableView.vue";
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
 import { ref } from 'vue';
-
+import CreatureStructTable from '@/components/ResourceViews/CreatureStruct.vue';
 
 export default {
   name: 'ChitinKeyView',
-  components: { KeyTableCollection, BluePrintScaffold, ContextMenu },
+  components: { KeyTableCollection, BluePrintScaffold, ContextMenu, CreatureStructTable },
   setup() {
     const showContextMenu = ref(false);
     return {

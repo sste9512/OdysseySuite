@@ -4,7 +4,7 @@
 import {useField, useForm} from 'vee-validate'
 import type {Project} from "@/clients/web-api-client";
 import router from "@/navigation/base-router";
-import DirectoryViewer from "@/components/directory-viewer.vue";
+import DirectoryViewer from "@/components/DirectoryViewer.vue";
 import {ref} from "vue";
 
 export default {

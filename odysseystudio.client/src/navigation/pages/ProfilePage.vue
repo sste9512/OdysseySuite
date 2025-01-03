@@ -1,60 +1,81 @@
 <template>
-  <v-sheet class="flex-wrap mx-auto" elevation="4" height="90%" rounded max-width="90%" width="90%">
+  <v-sheet class="flex-wrap" elevation="4" height="90%" rounded max-width="90%" width="90%" min-width="90%">
     <v-card>
-      <v-toolbar color="primary">
-        <v-toolbar-title>User Profile</v-toolbar-title>
-      </v-toolbar>
+
       <div class="d-flex flex-row">
 
         <v-tabs v-model="tab" direction="vertical" color="primary" height="40px">
           <v-tab value="option-1">
-            <v-icon start> mdi-account </v-icon>
+            <v-icon start> mdi-account</v-icon>
             Account
           </v-tab>
           <v-tab value="option-2">
-            <v-icon start> mdi-lock </v-icon>
+            <v-icon start> mdi-lock</v-icon>
             Profile Settings
           </v-tab>
           <v-tab value="option-3">
-            <v-icon start> mdi-access-point </v-icon>
+            <v-icon start> mdi-access-point</v-icon>
             Editor Settings
           </v-tab>
           <v-tab value="option-4">
-            <v-icon start> mdi-access-point </v-icon>
+            <v-icon start> mdi-access-point</v-icon>
             Integrations
           </v-tab>
           <v-tab value="option-5">
-            <v-icon start> mdi-access-point </v-icon>
+            <v-icon start> mdi-access-point</v-icon>
             Settings
           </v-tab>
         </v-tabs>
         <v-window v-model="tab">
+
+
+          <!-- Account Section -->
           <v-window-item value="option-1">
             <v-card flat>
+              <!-- Component to manage account-related settings -->
               <AccountView></AccountView>
             </v-card>
           </v-window-item>
+
+
+          <!-- Profile Settings Section -->
           <v-window-item value="option-2">
             <v-card flat>
+              <!-- Component to manage profile information -->
               <ProfileInfoView></ProfileInfoView>
             </v-card>
           </v-window-item>
+
+
+          <!-- Editor Settings Section -->
           <v-window-item value="option-3">
             <v-card flat>
+              <!-- Component to configure editor-specific settings -->
               <EditorSettingsView></EditorSettingsView>
             </v-card>
           </v-window-item>
+
+
+          <!-- Integrations Section -->
           <v-window-item value="option-4">
             <v-card flat>
+              <!-- Component to manage integrations -->
               <IntegrationsGridView></IntegrationsGridView>
             </v-card>
           </v-window-item>
+
+
+          <!-- General Settings Section -->
           <v-window-item value="option-5">
             <v-card flat>
+              <!-- Component for additional general settings -->
               <Settings></Settings>
             </v-card>
           </v-window-item>
+          
+          
         </v-window>
+        
       </div>
     </v-card>
   </v-sheet>
@@ -68,10 +89,9 @@ import IntegrationsGridView from "../../components/ProfileViews/IntegrationsGrid
 import Settings from "@/components/ProfileViews/Settings.vue";
 
 
-
 export default {
   name: 'ProfilePage',
-  components: { Settings, IntegrationsGridView, AccountView, EditorSettingsView, ProfileInfoView },
+  components: {Settings, IntegrationsGridView, AccountView, EditorSettingsView, ProfileInfoView},
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   data: () => ({
     tab: 'option-1'
@@ -81,17 +101,13 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
-
+@import "@/assets/css/vuetify-overrides/vuetify-tabs.scss";
 
 body {
   font-family: 'Nunito', sans-serif;
   color: #676767;
   background-color: #1e1e1e;
 }
-
-
-
-
 
 
 .bg-card {

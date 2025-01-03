@@ -133,43 +133,6 @@ export default {
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
   border-bottom: none !important;
-
-  // /* Augmented UI shape */
-  // --aug-border: 2px !important;
-  // --aug-inlay: 2px !important;
-  // --aug-inlay-bg: #181818 !important;
-  // --aug-border-bg: #4b367c !important;
-  // --aug-tl: 12px !important;
-  // --aug-tr: 12px !important;
-  // --aug-br: 12px !important;
-  // --aug-bl: 12px !important;
-  // --aug-border-opacity: 0.3 !important;
-
-  // /* Required for augmented-ui */
-  // position: relative;
-  // --aug-clip-tl1: initial !important;
-  // --aug-round-tl1: 10px !important;
-  // --aug-clip-tr1: initial !important;
-  // --aug-round-tr1: 10px !important;
-  // --aug-clip-br1: initial !important;
-  // --aug-round-br1: 10px !important;
-  // --aug-clip-bl1: initial !important;
-  // --aug-round-bl1: 10px !important;
-
-  // &::before {
-  //   content: '';
-  //   position: absolute;
-  //   inset: 0;
-  //   border-radius: inherit;
-  //   padding: 2px;
-  //   background: linear-gradient(45deg, #4b367c, #2e1e4e);
-  //   -webkit-mask:
-  //     linear-gradient(#fff 0 0) content-box,
-  //     linear-gradient(#fff 0 0);
-  //   -webkit-mask-composite: xor;
-  //   mask-composite: exclude;
-  //   pointer-events: none;
-  // }
 }
 
 ::v-deep(.v-slide-group__content) {

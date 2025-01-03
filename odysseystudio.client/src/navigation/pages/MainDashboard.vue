@@ -3,18 +3,18 @@
 
 import AuroraAppBar from "@/components/AppBarViews/AuroraAppBar.vue";
 import ToolboxView from "@/features/Toolbox/ToolboxView.vue";
-import OuterMainGameNav from "@/components/NavigationDrawerViews/OuterMainGameNav.vue";
-import router from "@/navigation/base-router.ts";
-import * as drawerService from "effect/HashSet";
+import OuterMainGameNav from "@/components/NavigationDrawerViews/GameResourcesNavView.vue";
 import { useTabViewStore } from "@/state/tab-store.ts";
 import { ref } from "vue";
 import TabNavigation from "@/navigation/pages/TabNavigation.vue";
 import { useDialogStore } from "@/state/dialog-store.ts";
+import ProfilePage from "@/navigation/pages/ProfilePage.vue";
 
 
 
 export default {
   components: {
+    ProfilePage,
     TabNavigation,
     ToolboxView,
     AuroraAppBar,
@@ -27,11 +27,10 @@ export default {
     const currentItem = ref(tabViewStore.currentItem);
     const length = ref(tabViewStore.tabs.length);
     const globalCommandsDialogSwitch = ref(dialogStore.globalCommandsDialog);
+    const settingsDialogSwitch = ref(dialogStore.settingsDialog);
 
     window.addEventListener('keydown', (e) => {
       if (e.altKey && e.key === 'g') {
-
-
         globalCommandsDialogSwitch.value = true;
       }
     });
@@ -41,7 +40,8 @@ export default {
       items,
       currentItem,
       showContextMenu: false,
-      globalCommandsDialogSwitch
+      globalCommandsDialogSwitch,
+      settingsDialogSwitch
     }
   },
   data() {
@@ -54,26 +54,19 @@ export default {
     }
   },
   mounted() {
-    this.tabViewStore.addTab('tab-home', "home", true, { icon: 'home', label: 'Home', closable: false, to: '/' },);
-    this.tabViewStore.setCurrentTab('tab-home');
+    this.tabViewStore.addTab('tab-home', "home", true, 'ProfilePage');
   },
   methods: {
-    // Bind the tabViewStore to the tab list in the app bar.
     addTab(item) {
       this.tabViewStore.addTab(item);
     },
-    toggleDrawer() {
-      console.log('I am being clicked')
-      drawerService.toggle()
-    },
     toggleBottomDrawer() {
       console.log('I am being clicked')
-      //drawerService.toggle();
       this.drawerBottom = !this.drawerBottom
     },
 
     navigateToProfile() {
-      router.push({ path: '/profile' })
+      this.settingsDialogSwitch = true;
     }
   }
 }
@@ -131,8 +124,6 @@ export default {
         <TabNavigation></TabNavigation>
 
 
-        <!-- ROUTER -->
-        <!--        <router-view/>-->
       </v-main>
     </v-layout>
   </v-card>
@@ -180,6 +171,8 @@ export default {
       </v-card>
     </v-dialog>
 
+
+    <!--- Global Commands Dialog --->
     <v-dialog theme="dark" v-model="globalCommandsDialogSwitch" min-width="75%" width="auto" style="z-index: 9999999">
       <v-card class="mx-auto dark-glass" width="75%">
         <v-toolbar flat height="20px" color="teal-darken-4" image="https://picsum.photos/1920/1080?random">
@@ -282,6 +275,47 @@ export default {
         </v-card-actions>
         <v-card-actions>
           <v-btn color="primary" block @click="globalCommandsDialogSwitch = false">Close Dialog</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
+    <!--- Settings Dialog --->
+    <v-dialog theme="dark" v-model="settingsDialogSwitch" min-width="75%" width="auto" style="z-index: 9999999">
+      <v-card class="mx-auto dark-glass" width="75%">
+        <v-toolbar flat height="20px" color="teal-darken-4">
+          <template v-slot:image>
+            <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
+          </template>
+          <v-btn icon="mdi-account"></v-btn>
+
+          <v-toolbar-title> Create a project from Game Directory</v-toolbar-title>
+
+          <v-spacer></v-spacer>
+
+          <v-btn icon>
+            <v-fade-transition leave-absolute>
+              <v-icon v-if="isEditing" size="x-small">mdi-close</v-icon>
+            </v-fade-transition>
+          </v-btn>
+        </v-toolbar>
+
+        <v-card-text>
+          <ProfilePage></ProfilePage>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-snackbar v-model="hasSaved" :timeout="2000" attach position="absolute" location="bottom left">
+          Your profile has been updated
+        </v-snackbar>
+
+
+        <v-card-actions>
+          <v-btn color="primary" block @click="settingsDialogSwitch = false">Finished</v-btn>
+        </v-card-actions>
+        <v-card-actions>
+          <v-btn color="primary" block @click="settingsDialogSwitch = false">Close Dialog</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
