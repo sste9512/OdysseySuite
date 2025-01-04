@@ -1,0 +1,27 @@
+
+.v-btn-group {
+  // Customizing the button group container
+  display: flex;
+  gap: 0px; // Add spacing between buttons
+  height: 35px;
+  font-weight: lighter;
+
+  .v-btn {
+    // Style for individual buttons within the group
+
+    color: #ffffff; // White text color
+    font-size: 11px;
+    font-weight: lighter; // Make text bold
+    transition: all 0.3s ease; // Smooth transition effect for hover states
+
+    &:hover {
+        background-color: rebeccapurple;
+    }
+
+    &--active {
+      // Active state for buttons in the group
+
+      color: #ffffff;
+    }
+  }
+}
