@@ -149,10 +149,10 @@ export default {
 }
 
 ::v-deep(.v-tab--selected) {
-  background-color: #353535;
   /* Background color for selected tabs */
-  color: #ffffff;
+  background-color: #353535;
   /* Text color for selected tabs */
+  color: #ffffff;
 }
 
 ::v-deep(.v-tab__icon) {
