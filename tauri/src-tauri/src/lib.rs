@@ -6,7 +6,6 @@ mod libs {
 
 mod domain {
     pub mod document_operations;
-    pub mod byte_operations;
 }
 
 
@@ -55,7 +54,6 @@ pub fn run() {
             open_url,
             list_directory,
             libs::greetings::greet_me_so_hard,
-            domain::byte_operations::read_file_bytes,
             list_directory_from_root
         ])
         .run(tauri::generate_context!())

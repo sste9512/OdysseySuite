@@ -9,11 +9,13 @@ import { ref } from "vue";
 import TabNavigation from "@/navigation/pages/TabNavigation.vue";
 import { useDialogStore } from "@/state/dialog-store.ts";
 import ProfilePage from "@/navigation/pages/ProfilePage.vue";
+import LogViewer from "@/features/LogViewer/LogViewer.vue";
 
 
 
 export default {
   components: {
+    LogViewer,
     ProfilePage,
     TabNavigation,
     ToolboxView,
@@ -109,8 +111,11 @@ export default {
         </v-list>
       </v-navigation-drawer>
 
+<!--      <v-navigation-drawer v-model="drawerBottom" location="bottom" style="height: 45%" temporary>-->
+<!--        <toolbox-view></toolbox-view>-->
+<!--      </v-navigation-drawer>-->
       <v-navigation-drawer v-model="drawerBottom" location="bottom" style="height: 45%" temporary>
-        <toolbox-view></toolbox-view>
+        <log-viewer></log-viewer>
       </v-navigation-drawer>
 
       <!--      Main App Bar     -->

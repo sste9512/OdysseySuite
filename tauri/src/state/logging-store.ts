@@ -1,15 +1,18 @@
 import {defineStore} from 'pinia';
 
 // Type definitions for user actions and categories
-interface UserAction {
+export interface UserAction {
     id: string;
     description: string;
     timestamp: Date;
 }
 
-interface UserActionsByCategory {
+export interface UserActionsByCategory {
     [category: string]: UserAction[];
 }
+
+
+
 
 export const useLoggingStore = defineStore('userActions', {
     state: () => ({
