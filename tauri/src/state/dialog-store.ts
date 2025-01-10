@@ -7,6 +7,7 @@ export const useDialogStore = defineStore("dialog", () => {
   const globalCommandsDialog = ref(false);
   const profileDialog = ref(false);
   const settingsDialog = ref(false);
+  const directoryViewerDialog = ref(false);
 
   // Toggle functions
   function toggleGameSetupDialog() {
@@ -23,6 +24,10 @@ export const useDialogStore = defineStore("dialog", () => {
 
   function toggleSettingsDialog() {
     settingsDialog.value = !settingsDialog.value;
+  }
+
+  function toggleDirectoryViewerDialog() {
+    directoryViewerDialog.value = !directoryViewerDialog.value;
   }
 
   // Direct state setters
@@ -42,11 +47,16 @@ export const useDialogStore = defineStore("dialog", () => {
     settingsDialog.value = value;
   }
 
+  function setDirectoryViewerDialog(value: boolean) {
+    directoryViewerDialog.value = value;
+  }
+
   function closeAllDialogs() {
     gameSetupDialog.value = false;
     globalCommandsDialog.value = false;
     profileDialog.value = false;
     settingsDialog.value = false;
+    directoryViewerDialog.value = false;
   }
 
   return {
@@ -55,18 +65,21 @@ export const useDialogStore = defineStore("dialog", () => {
     globalCommandsDialog,
     profileDialog,
     settingsDialog,
+    directoryViewerDialog,
 
     // Toggle methods
     toggleGameSetupDialog,
     toggleGlobalCommandsDialog,
     toggleProfileDialog,
     toggleSettingsDialog,
+    toggleDirectoryViewerDialog,
 
     // Setter methods
     setGameSetupDialog,
     setGlobalCommandsDialog,
     setProfileDialog,
     setSettingsDialog,
+    setDirectoryViewerDialog,
     closeAllDialogs,
   };
 });

@@ -1,6 +1,19 @@
 <script>
 
 
+import {onMounted} from 'vue';
+import {DirectoryService} from "@/data/directory-service.ts";
+
+export default {
+  setup() {
+    onMounted(async () => {
+      const directoryService = new DirectoryService();
+      const files = await directoryService.listDirectoryFromRoot();
+      console.log(files);
+    });
+  }
+};
+
 </script>
 
 <template>

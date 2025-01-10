@@ -20,8 +20,8 @@
       <v-icon>mdi-home</v-icon>
     </v-btn>
 
-    <v-btn icon>
-      <v-icon>mdi-magnify</v-icon>
+    <v-btn icon @click="openDirectoryViewer">
+      <v-icon>mdi-folder</v-icon>
     </v-btn>
 
     <v-btn icon>
@@ -29,11 +29,25 @@
     </v-btn>
 
   </v-app-bar>
+
+
+
+
   <ContextMenu :display="showContextMenu" ref="menu">
 
     <CustomContextMenu caller="appnavbar"></CustomContextMenu>
 
   </ContextMenu>
+
+
+  <v-overlay v-model="showDirectoryViewer" :scrim="true" :teleport="'body'" class=" align-center justify-center">
+    <v-container
+      style="overflow: hidden; margin: 15px 15px 15px 15px; max-width: 100%; min-width: 90vw; min-height: 90vh;">
+      <!-- Directory content can be dynamically loaded here -->
+      <DirectoryViewer :isOpen="showDirectoryViewer" @update:isOpen="showDirectoryViewer = $event"></DirectoryViewer>
+    </v-container>
+  </v-overlay>
+
 
 
 </template>
@@ -46,16 +60,37 @@ import ContextMenu from "../ContextMenus/ContextMenu.vue";
 import router from "../../navigation/base-router.ts";
 import * as drawerService from "effect/HashSet";
 import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
+import { onUnmounted, ref } from "vue";
+import DirectoryViewer from "@/features/DirectoryViewer/DirectoryViewer.vue";
+import { useDialogStore } from "@/state/dialog-store";
 
 export default {
   name: "AuroraAppBar",
-  components: { CustomContextMenu, ContextMenu },
+  components: { DirectoryViewer, CustomContextMenu, ContextMenu },
   setup() {
+    const dialogStore = useDialogStore();
+    const showDirectoryViewer = ref(dialogStore.directoryViewerDialog);
+    const directoryContent = ref([]);
+
+    dialogStore.$subscribe(() => {
+      showDirectoryViewer.value = !showDirectoryViewer.value;
+    });
 
 
+
+    return {
+      showDirectoryViewer,
+      directoryContent,
+      dialogStore
+    }
+  },
+  unmounted() {
+    this.dialogStore.$unsubscribe();
   },
   methods: {
-
+    openDirectoryViewer() {
+      this.showDirectoryViewer = true;
+    },
     toggle() {
       drawerService.toggle();
     },
