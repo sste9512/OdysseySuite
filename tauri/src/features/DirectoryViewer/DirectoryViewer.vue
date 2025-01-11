@@ -1,6 +1,7 @@
 <script lang="ts">
-import { DirectoryService, DriveStatistics } from "@/data/directory-service.ts";
 import { useDialogStore } from "@/state/dialog-store";
+import { useFileSystemStore } from "@/state/file-system-store";
+import { storeToRefs } from "pinia";
 
 export default {
   name: 'DirectoryViewer',
@@ -14,147 +15,37 @@ export default {
       required: false
     }
   },
-  setup(props) {
+  setup() {
     const dialogStore = useDialogStore();
-    return { dialogStore }
+    const fileSystemStore = useFileSystemStore();
+    const { drives, currentDirectory, previousDirectory, visitedDirectories, currentDirectoryIndex } = storeToRefs(fileSystemStore);
+    return { dialogStore, fileSystemStore, drives, currentDirectory, previousDirectory, visitedDirectories, currentDirectoryIndex }
   },
-  data() {
-    return {
-      directories: [] as string[],
-      drives: [] as DriveStatistics[],
-      selectedDirectory: '',
-      selectedDrive: '',
-      viewButtons: null as NodeListOf<Element> | null,
-      filesList: null as Element | null,
-      currentDirectory: null as string | null,
-      previousDirectory: null as string | null,
-      backBtn: null as HTMLElement | null,
-      forwardBtn: null as HTMLElement | null,
-      visitedDirectories: [] as string[],
-      currentDirectoryIndex: -1
-    }
+  unmounted() {
+    this.fileSystemStore.reset();
   },
   async mounted() {
-    const directoryService = new DirectoryService();
-    this.directories = await directoryService.listDirectoryFromRoot();
-    console.log(this.directories);
-
-    this.drives = await directoryService.getDriveStatistics();
-    console.log(this.drives);
-
-    this.viewButtons = document.querySelectorAll('.view-btn');
-    this.filesList = document.querySelector('#files-list');
-    this.backBtn = document.getElementById('back-btn');
-    this.forwardBtn = document.getElementById('forward-btn');
-
-    // Add click event listeners to view buttons
-    if (this.viewButtons) {
-      this.viewButtons.forEach(button => {
-        button.addEventListener('click', (e: Event) => {
-          const target = e.currentTarget as HTMLElement;
-          const view = target.dataset.view;
-          if (view) {
-            this.toggleView(view);
-            this.setActiveViewButton(view);
-          }
-        });
-      });
-    }
+    await this.fileSystemStore.loadDrives();
+    await this.fileSystemStore.navigateToDirectory(this.drives[1].path);
   },
   methods: {
-    toggleView(view: string) {
-      if (!this.filesList) return;
-
-      switch (view) {
-        case 'icons':
-          this.filesList.classList.add('mega-icons');
-          this.filesList.classList.remove('big-icons', 'normal-icons', 'details');
-          break;
-        case 'big-icons':
-          this.filesList.classList.add('big-icons');
-          this.filesList.classList.remove('mega-icons', 'normal-icons', 'details');
-          break;
-        case 'normal-icons':
-          this.filesList.classList.add('normal-icons');
-          this.filesList.classList.remove('mega-icons', 'big-icons', 'details');
-          break;
-        case 'table':
-          this.filesList.classList.add('details');
-          this.filesList.classList.remove('mega-icons', 'big-icons', 'normal-icons');
-          break;
-      }
+    // TODO: This is not working as expected
+    async goBack() {
+      await this.fileSystemStore.navigateToParent();
     },
-    setActiveViewButton(view: string) {
-      if (!this.viewButtons) return;
-
-      this.viewButtons.forEach(button => {
-        /*if (button.dataset.view === view) {
-          button.classList.add('active');
-        } else {
-          button.classList.remove('active');
-        }*/
-      });
-    },
-    goBack() {
-      if (this.previousDirectory) {
-        this.navigateToDirectory(this.previousDirectory);
-
-        const temp = this.currentDirectory;
-        this.currentDirectory = this.previousDirectory;
-        this.previousDirectory = temp;
-
-        if (!this.previousDirectory && this.backBtn) {
-          // this.backBtn.disabled = true;
-        }
-
-        if (this.hasNextDirectory() && this.forwardBtn) {
-          // this.forwardBtn.disabled = false;
-        }
-      }
-    },
-    goForward() {
-      if (this.hasNextDirectory()) {
-        const nextDir = this.getNextDirectory();
-        if (nextDir) {
-          this.navigateToDirectory(nextDir);
-
-          const temp = this.currentDirectory;
-          this.currentDirectory = nextDir;
-          this.previousDirectory = temp;
-
-          if (!this.hasNextDirectory() && this.forwardBtn) {
-            // this.forwardBtn.disabled = true;
-          }
-
-          if (this.previousDirectory && this.backBtn) {
-            // this.backBtn.disabled = false;
-          }
-        }
-      }
+    async goForward() {
+      await this.fileSystemStore.goForward();
     },
     hasNextDirectory(): boolean {
       return this.currentDirectoryIndex < this.visitedDirectories.length - 1;
     },
-    getNextDirectory(): string | null {
-      if (this.hasNextDirectory()) {
-        this.currentDirectoryIndex++;
-        return this.visitedDirectories[this.currentDirectoryIndex];
-      }
-      return null;
-    },
     async navigateToDirectory(directory: string) {
-      console.log(directory);
-      const directoryService = new DirectoryService();
-      this.directories = await directoryService.listDirectory(directory);
-    },
-    openModal(element: string) {
-      const modal = document.querySelector(element);
-      if (modal) {
-        modal.classList.add("modal-show");
-      }
+      await this.fileSystemStore.navigateToDirectory(directory);
     },
     closeModal() {
       this.$emit('update:isOpen', false);
+      // TODO: Fix the rerendering issue when closing the modal
+      this.fileSystemStore.reset();
     }
   }
 }
@@ -184,10 +75,9 @@ export default {
     <v-navigation-drawer location="right" width="300" elevation="4" rail>
       <v-list nav dense>
         <v-list-item @click="closeModal()">
-          <v-btn icon>
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-
+          <template v-slot:prepend>
+            <v-icon style="background-color: transparent;">mdi-close</v-icon>
+          </template>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -200,12 +90,12 @@ export default {
         <v-btn-group>
 
           <!-- Back button -->
-          <v-btn icon variant="text">
+          <v-btn icon variant="text" @click="goBack()">
             <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
 
           <!-- Forward button -->
-          <v-btn icon variant="text">
+          <v-btn icon variant="text" @click="goForward()">
             <v-icon>mdi-arrow-right</v-icon>
           </v-btn>
 
@@ -217,27 +107,24 @@ export default {
         <!-- View mode controls for displaying directory contents -->
         <v-btn-group>
           <!-- List view button - displays items in a detailed table format -->
-          <v-btn icon variant="text" @click="toggleView('table')">
+          <v-btn icon variant="text">
             <v-icon>mdi-view-list</v-icon>
           </v-btn>
 
           <!-- Grid view button - displays items as medium-sized icons -->
-          <v-btn icon variant="text" @click="toggleView('normal-icons')">
+          <v-btn icon variant="text">
             <v-icon>mdi-view-grid</v-icon>
           </v-btn>
 
           <!-- Large grid view button - displays items as large icons -->
-          <v-btn icon variant="text" @click="toggleView('big-icons')">
+          <v-btn icon variant="text">
             <v-icon>mdi-view-grid-plus</v-icon>
           </v-btn>
 
         </v-btn-group>
         <v-spacer></v-spacer>
 
-        <!-- Close button -->
-        <v-btn icon variant="text" @click="toggleView('big-icons')" style="margin-top: 10px; margin-right: 13px;">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+
       </v-row>
 
 
@@ -246,34 +133,32 @@ export default {
 
       <!-- another version - flat style with animated hover effect -->
       <div class="breadcrumb flat">
-        <a aria-disabled="true">Browse</a>
-        <a aria-disabled="true">Compare</a>
-        <a aria-disabled="true">Order Confirmation</a>
-        <a aria-disabled="true">Checkout</a>
+        <a aria-disabled="true">{{ currentDirectory.path }}</a>
+
       </div>
 
 
 
       <v-row style="padding: 0px 25px 25px 25px; min-height: 20vh;">
-        <v-col v-for="item in directories" :key="item.name" cols="12" md="4" lg="4">
-          <v-card @click="navigateToDirectory(item)" elevation="9">
+        <v-col v-for="item in currentDirectory.contents" :key="item.path" cols="12" md="4" lg="4">
+          <v-card @click="navigateToDirectory(item.path)" elevation="9">
             <v-card-title>
               <v-row>
-                <v-icon color="gold" style="margin-left: 10px;">mdi-folder</v-icon>
+                <v-icon color="gold" style="margin-left: 10px;" v-if="item.type === 'directory'">mdi-folder</v-icon>
+                <v-icon style="margin-left: 10px;" v-else>mdi-file</v-icon>
                 <v-spacer></v-spacer>
-                <span style="margin-left: 10px;">{{ item.valueOf() }}</span>
-
+                <span style="margin-left: 10px;">{{ item.name }}</span>
                 <v-spacer></v-spacer>
               </v-row>
             </v-card-title>
 
-
             <v-card-subtitle>
-              <v-row>
-                <v-spacer></v-spacer>
-                <v-chip size="small">8 files</v-chip>
-              </v-row>
 
+              <v-row style="margin-top: 5px;">
+                <v-spacer></v-spacer>
+                <v-chip size="small" v-if="item.type === 'directory'">{{ item.size }} items</v-chip>
+                <v-chip size="small" v-else color="light-blue">{{ item.size }} bytes</v-chip>
+              </v-row>
             </v-card-subtitle>
           </v-card>
         </v-col>
@@ -417,19 +302,20 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   /* Add a light shadow for depth */
 
-  border-left: 3px solid gold;
+  border-left: 2px solid gold;
   /* Add a thin border to the left */
   padding: 10px;
 }
 
 .v-card-title {
-  font-size: 16px;
+  font-size: 12px;
   /* Set a larger font size for the title */
   font-weight: lighter;
   /* Make the title bold */
   color: lightgray;
   /* Set a dark text color for better readability */
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 .v-card-subtitle {
@@ -468,6 +354,7 @@ export default {
   counter-reset: flag;
   margin-bottom: 9px;
   background-color: rgb(var(--v-theme-surface));
+  z-index: 2;
 }
 
 .breadcrumb a {

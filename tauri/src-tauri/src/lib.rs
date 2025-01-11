@@ -1,3 +1,4 @@
+use serde::Serialize;
 mod libs {
     pub mod greetings;
 }
@@ -106,6 +107,118 @@ async fn list_directory(path: String) -> Result<Vec<String>, String> {
     Ok(files)
 }
 
+/// Gets the contents of the parent directory for a given path
+///
+/// # Arguments
+///
+/// * `path` - A string representing the path whose parent directory contents should be retrieved
+///
+/// # Returns
+///
+/// * `Result<serde_json::Value, String>` - On success, returns a JSON value containing the parent directory contents.
+///   On failure, returns an error message string.
+///
+/// # Errors
+///
+/// Returns an error if:
+/// * The given path has no parent directory
+/// * The parent path is invalid (contains non-UTF8 characters)
+/// * The underlying `get_directory_contents` call fails
+#[tauri::command]
+async fn get_parent_directory_contents(path: String) -> Result<serde_json::Value, String> {
+    use std::path::PathBuf;
+
+    // Get parent directory path
+    let current_path = PathBuf::from(path);
+    let parent_path = current_path
+        .parent()
+        .ok_or("No parent directory found".to_string())?
+        .to_str()
+        .ok_or("Invalid parent path")?
+        .to_string();
+
+    // Reuse existing get_directory_contents command
+    get_directory_contents(parent_path).await
+}
+
+#[derive(Serialize)]
+struct DirectoryItem {
+    name: String,
+    path: String,
+    size: u64,
+    created: u64,
+    modified: u64,
+    is_hidden: bool,
+    #[serde(rename = "type")]
+    file_type: String,
+    readonly: bool,
+}
+
+#[derive(Serialize)]
+struct DirectoryContents {
+    path: String,
+    contents: Vec<DirectoryItem>,
+    total_items: usize,
+}
+
+#[tauri::command]
+async fn get_directory_contents(path: String) -> Result<serde_json::Value, String> {
+    use std::fs;
+    use std::time::SystemTime;
+
+    let directory = fs::read_dir(&path).map_err(|e| e.to_string())?;
+    let mut contents = Vec::new();
+
+    for entry in directory {
+        let entry = entry.map_err(|e| e.to_string())?;
+        let metadata = entry.metadata().map_err(|e| e.to_string())?;
+        let file_name = entry.file_name();
+        let file_name = file_name.to_str().ok_or("Invalid filename")?;
+
+        let modified = metadata.modified().map_err(|e| e.to_string())?;
+        let modified = modified
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .map_err(|e| e.to_string())?
+            .as_secs();
+
+        let created = metadata.created().map_err(|e| e.to_string())?;
+        let created = created
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .map_err(|e| e.to_string())?
+            .as_secs();
+
+        let file_type = if metadata.is_dir() {
+            "directory"
+        } else if metadata.is_file() {
+            "file"
+        } else {
+            "other"
+        };
+
+        let item = DirectoryItem {
+            name: file_name.to_string(),
+            path: entry.path().to_str().ok_or("Invalid path")?.to_string(),
+            size: metadata.len(),
+            created,
+            modified,
+            is_hidden: false, // TODO: Implement for Windows
+            file_type: file_type.to_string(),
+            readonly: metadata.permissions().readonly(),
+        };
+
+        contents.push(item);
+    }
+    let contents = contents;
+    let total_items = contents.len();
+
+    Ok(serde_json::to_value(DirectoryContents {
+        path,
+        contents,
+        total_items: total_items,
+    })
+    .map_err(|e| e.to_string())?)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -117,7 +230,9 @@ pub fn run() {
             get_drive_info,
             get_drive_statistics,
             libs::greetings::greet_me_so_hard,
-            list_directory_from_root
+            list_directory_from_root,
+            get_directory_contents,
+            get_parent_directory_contents
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

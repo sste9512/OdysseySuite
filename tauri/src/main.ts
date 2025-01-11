@@ -18,6 +18,7 @@ const pinia = createPinia();
 const context = new InjectionContext();
 const app = createApp(App);
 app.component("EasyDataTable", Vue3EasyDataTable);
+
 const customTheme = {
   dark: false,
   colors: {
@@ -57,7 +58,7 @@ app.use(router);
 app.use(vuetify);
 
 if (process.env.NODE_ENV === "development") {
-  await devtools.connect();
+  devtools.connect();
 }
 
 app.mount("#app");

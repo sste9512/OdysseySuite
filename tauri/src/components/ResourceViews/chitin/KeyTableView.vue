@@ -86,8 +86,6 @@ export default defineComponent({
 
 
 <style scoped lang="scss">
-@import "@/assets/css/vuetify-overrides/vuetify-breadcrumb.scss";
-
 .v-data-table {
   border: 0px solid #ccc !important;
   border-radius: 0px !important;
