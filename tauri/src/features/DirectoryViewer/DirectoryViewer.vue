@@ -131,7 +131,9 @@ export default {
 
 
 
-      <!-- another version - flat style with animated hover effect -->
+      <!-- Breadcrumb -->
+      <!-- TODO: Split into multiple crumbs to file path -->
+
       <div class="breadcrumb flat">
         <a aria-disabled="true">{{ currentDirectory.path }}</a>
 
