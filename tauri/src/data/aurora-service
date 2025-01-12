@@ -1,0 +1,51 @@
+import { Result } from "@/models/Result";
+import { invoke } from "@tauri-apps/api/core";
+
+interface KeyHeader {
+  fileType: string; // [char; 4]
+  fileVersion: string; // [char; 4]
+  bifCount: number; // u32
+  keyCount: number; // u32
+  offsetToFileTable: number; // u32
+  offsetToKeyTable: number; // u32
+  buildYear: number; // u32
+  buildDay: number; // u32
+  reserved: number[]; // [u8; 32]
+}
+
+interface FileEntry {
+  fileSize: number; // u32
+  filenameOffset: number; // u32
+  filenameSize: number; // u16
+  drives: number; // u16
+}
+
+interface FilenameEntry {
+  filename: string;
+}
+
+interface KeyEntry {
+  resref: string; // [char; 16]
+  resourceType: number; // u16
+  resId: number; // u32
+}
+
+export type { KeyHeader, FileEntry, FilenameEntry, KeyEntry };
+
+interface ChitinKey {
+  header: KeyHeader;
+  fileEntries: FileEntry[];
+  filenames: string[];
+  keyEntries: KeyEntry[];
+}
+
+export class AuroraService {
+  async readChitinKey(path: string): Promise<any> {
+    try {
+      return await invoke("read_chitin_key", { path });
+    } catch (error) {
+      console.error("Failed to read chitin key:", error);
+      throw error;
+    }
+  }
+}
