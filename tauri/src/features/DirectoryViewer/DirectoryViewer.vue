@@ -29,7 +29,6 @@ export default {
     await this.fileSystemStore.navigateToDirectory(this.drives[1].path);
   },
   methods: {
-    // TODO: This is not working as expected
     async goBack() {
       await this.fileSystemStore.navigateToParent();
     },
