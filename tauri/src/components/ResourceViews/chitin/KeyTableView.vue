@@ -28,7 +28,9 @@ import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   name: "DataTableComponent",
-  components: {},
+  components: {
+ 
+  },
   setup() {
 
   },

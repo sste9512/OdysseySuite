@@ -13,32 +13,31 @@ import { InjectionContext } from "@/injection/injection-context";
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 import Antd from "ant-design-vue";
+import "@mdi/font/css/materialdesignicons.css";
 
 const pinia = createPinia();
 const context = new InjectionContext();
 const app = createApp(App);
 app.component("EasyDataTable", Vue3EasyDataTable);
 
-const customTheme = {
-  dark: false,
-  colors: {
-    primary: "#1E88E5", // Blue
-    secondary: "#43A047", // Green
-    accent: "#FF5722", // Orange
-    error: "#E53935", // Red
-    info: "#1E88E5", // Blue
-    success: "#4CAF50", // Green
-    warning: "#FB8C00", // Amber
-    background: "#F5F5F5", // Light grey
-    surface: "#FFFFFF", // White
-  },
-};
-
 const vuetify = createVuetify({
+  components,
+  directives,
   theme: {
-    defaultTheme: "customTheme",
+    defaultTheme: "dark",
     themes: {
-      customTheme,
+      dark: {
+        dark: true,
+        colors: {
+          primary: "#673AB7",
+          secondary: "#424242",
+          accent: "#82B1FF",
+          error: "#FF5252",
+          info: "#2196F3",
+          success: "#4CAF50",
+          warning: "#FFC107",
+        },
+      },
     },
   },
   icons: {
@@ -48,8 +47,6 @@ const vuetify = createVuetify({
       mdi,
     },
   },
-  components,
-  directives,
 });
 
 app.use(Antd);

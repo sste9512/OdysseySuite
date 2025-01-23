@@ -10,41 +10,7 @@
 }
 
 
-/* Deep selector to override Vuetify tab styles */
-::v-deep(.v-tab) {
-  background-color: #181818; /* Custom background for tabs */
-  color: #4b367c; /* Text color for tabs */
-  border-radius: 12px; /* Add rounded corners */
-  font-weight: lighter; /* Bold text for tabs */
-  font-size: 10px;
-  transition: all 0.1s ease; /* Smooth transition for hover effects */
-  height: 35px !important;
-  min-width: 50px !important;
-  // margin-bottom: 0 !important;
-  // padding-bottom: 0 !important;
-  // border-bottom: none !important;
-}
 
-::v-deep(.v-tab:hover) {
-  background-color: #1e1e1e; /* Slightly lighter background on hover */
-  color: white; /* Text color on hover */
-}
-
-::v-deep(.v-tab--selected) {
-  background-color: #353535; /* Background color for selected tabs */
-  color: #ffffff; /* Text color for selected tabs */
-}
-
-::v-deep(.v-tab__icon) {
-  color: #4b367c; /* Icon color for tabs */
-  margin-right: 8px; /* Spacing between icon and text */
-}
-
-::v-deep(.v-tabs) {
-  background-color: #121212; /* Background for the tabs container */
-  border-bottom: 1px solid #2e2e2e; /* Optional border for separation */
-  padding: 2px 2px 2px 2px !important; /* Padding around tabs */
-}
 
 
 

@@ -373,12 +373,12 @@ export default {
     navigateToResourceView() {
       this.showContextMenu = false;
       this.$refs.menu.close();
-      this.tabStore.addTab('chitin-tab', "chitin", true, "ChitinKeyView");
+      this.tabStore.addTab('chitin-tab', "chitin", "chitin.key");
     },
     navigateToResourceViewERF() {
       this.showContextMenu = false;
       this.$refs.menu.close();
-      this.tabStore.addTab('erf-tab', "erf", true, "ErfView", "ProfilePage");
+      this.tabStore.addTab('erf-tab', "erf", "swpc_tex_tpc");
     },
     openContextMenu(e) {
       console.log("This worked partially")

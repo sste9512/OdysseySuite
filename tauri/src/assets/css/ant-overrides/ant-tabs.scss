@@ -1,0 +1,39 @@
+// Custom Overrides for Ant Design Vue Tabs
+.ant-custom-tabs {
+ 
+  .ant-tabs {
+
+      &-nav {
+        // Adjust tab navigation styling
+        background-color: #f5f5f5 !important; // Set a light background color
+        border-bottom: 8px solid #d9d9d9 !important; // Add a border to distinguish tabs
+
+        .ant-tabs-tab {
+          // Style for individual tab
+          color: #595959 !important; // Change default tab text color
+          font-weight: 200 !important;
+
+          &:hover {
+            color: #1677ff !important; // Color on hover
+            font-weight: bold !important;
+          }
+        }
+
+        .ant-tabs-tab-active {
+          color: #1677ff !important; // Active tab text color
+          border-bottom: 3px solid #1677ff !important; // Highlight the active tab with a border
+          border-right: #0d00e7 1px solid !important;
+        }
+
+        .ant-tabs-ink-bar {
+          background-color: #1677ff !important; // Ink bar color
+        }
+
+        .ant-tabs-tab-remove {
+          display: none !important; // Override to hide the close button for tabs
+        }
+      }
+
+  }
+
+}

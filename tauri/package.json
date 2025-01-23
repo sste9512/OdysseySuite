@@ -10,6 +10,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
     "ant-design-vue": "^4.2.6",
@@ -18,13 +19,15 @@
     "effect": "^3.2.5",
     "pinia": "^2.1.7",
     "reflect-metadata": "^0.2.1",
+    "sass": "^1.83.4",
     "tsyringe": "^4.8.0",
     "uuid": "^9.0.1",
     "vee-validate": "^4.10.9",
+    "vite-plugin-vuetify": "^2.0.4",
     "vue": "^3.5.13",
     "vue-router": "^4.2.5",
     "vue3-easy-data-table": "^1.5.47",
-    "vuetify": "^3.7.6"
+    "vuetify": "^3.7.7"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",

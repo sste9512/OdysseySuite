@@ -1,78 +1,84 @@
 <template>
-  <v-container fluid style="background: radial-gradient(#1a192b, black); ">
-
+  <h1>Chitin Key View</h1>
+  <v-container :key="componentKey" style="background: radial-gradient(#1a192b, black); ">
+    <v-overlay v-if="loading">
+      <v-progress-circular indeterminate />
+    </v-overlay>
+   
     <div class="components-page-header-demo-content" style="padding: 5%">
 
-      <a-page-header title="Title" class="site-page-header" sub-title="This is a subtitle"
-        :avatar="{ src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4' }" :breadcrumb="{ routes }">
-        <template #tags>
+      <!-- <v-card class="pa-4">
+        <v-card-title class="d-flex align-center">
+          <div>
+            <div class="text-h5">Title</div>
+            <div class="text-subtitle-1">This is a subtitle</div>
+          </div>
+          <v-avatar class="ml-4" size="40">
+            <v-img src="https://avatars1.githubusercontent.com/u/8186664?s=460&v=4"></v-img>
+          </v-avatar>
+          <v-spacer></v-spacer>
           <v-breadcrumbs style="color: white" :items="items" divider="-"></v-breadcrumbs>
-        </template>
-        <template #extra>
+        </v-card-title>
 
+        <v-card-actions>
           <v-btn-group>
-            <v-btn prepend-icon="mdi-export"> Export</v-btn>
-            <v-btn prepend-icon="mdi-book-open-variant"> View Documentation</v-btn>
-            <v-btn prepend-icon="mdi-content-save"> Save</v-btn>
+            <v-btn prepend-icon="mdi-export">Export</v-btn>
+            <v-btn prepend-icon="mdi-book-open-variant">View Documentation</v-btn>
+            <v-btn prepend-icon="mdi-content-save">Save</v-btn>
           </v-btn-group>
 
-
-          <a-dropdown key="more">
-            <a-button :style="{ border: 'none', padding: 0 }">
-              <EllipsisOutlined :style="{ fontSize: '20px', verticalAlign: 'top' }" />
-
-            </a-button>
-            <template #overlay>
-              <a-menu>
-                <a-menu-item>
-                  <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-                    1st menu item
-                  </a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-                    2nd menu item
-                  </a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-                    3rd menu item
-                  </a>
-                </a-menu-item>
-              </a-menu>
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn icon v-bind="props">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
             </template>
-          </a-dropdown>
-        </template>
+            <v-list>
+              <v-list-item href="http://www.alipay.com/" target="_blank">
+                <v-list-item-title>1st menu item</v-list-item-title>
+              </v-list-item>
+              <v-list-item href="http://www.taobao.com/" target="_blank">
+                <v-list-item-title>2nd menu item</v-list-item-title>
+              </v-list-item>
+              <v-list-item href="http://www.tmall.com/" target="_blank">
+                <v-list-item-title>3rd menu item</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-card-actions> 
 
+        <v-card-text class="text-white">
+          <p>
+            Chitin Key is the resource mapping for all other resources embedded and compiled inside the other
+            resources i.e bifs, erfs, rim files and so on
+          </p>
 
-        <a-row class="content" style="color: white">
-          <div style="flex: 1">
-            <p>
-              Chitin Key is the resource mapping for all other resources embedded and compiled inside the other
-              resources i.e bifs, erfs, rim files and so on
-            </p>
-
-            <div>
-              <template v-for="item in iconLinks" :key="item.src">
-                <a class="example-link">
-                  <img class="example-link-icon" :src="item.src" :alt="item.text" />
-                  {{ item.text }}
-                </a>
-              </template>
-            </div>
+          <div class="d-flex gap-4">
+            <template v-for="item in iconLinks" :key="item.src">
+              <a class="text-decoration-none d-flex align-center">
+                <v-img :src="item.src" :alt="item.text" width="24" height="24" class="mr-2"></v-img>
+                {{ item.text }}
+              </a>
+            </template>
           </div>
-          <div>
-            <a-row style="color: white">
-              <a-col :span="12">
-                <a-statistic title="File Size" :value="112893" style="margin-right: 60px; color: white" />
-              </a-col>
-              <a-col :span="12">
-                <a-statistic title="Asc Files" :precision="2" :value="112893" />
-              </a-col>
-            </a-row>
-          </div>
-        </a-row>
-      </a-page-header>
+
+          <v-row class="mt-4">
+            <v-col cols="6">
+              <v-card-text>
+                <div class="text-subtitle-2">Bif Count</div>
+                <div class="text-h5">{{ chitinKey?.header?.bif_count }}</div>
+              </v-card-text>
+            </v-col>
+            <v-col cols="6">
+              <v-card-text>
+                <div class="text-subtitle-2">Key Count</div>
+                <div class="text-h5">{{ chitinKey?.header?.key_count }}</div>
+              </v-card-text>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card> -->
+     
     </div>
 
 
@@ -106,71 +112,21 @@
     3. Search and sort through key file entries
     -->
     <v-container fluid style="background: radial-gradient(#1a192b, black); padding: 5%">
-      <a-page-header title="Key Data" class="site-page-header" sub-title="Search for ids of resources in other files"
-        :avatar="{ src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4' }" :breadcrumb="{ routes }">
-        <template #tags>
-
-        </template>
-        <template #extra>
-          <!-- Search Bar -->
-          <v-text-field :loading="loading" append-inner-icon="mdi-magnify" density="compact" label="Search templates"
-            variant="solo" hide-details single-line @click:append-inner="onClick" style="width: 500px;"></v-text-field>
-        </template>
+   
 
 
-        <a-row class="content" style="color: white">
-          <div style="flex: 1">
-            <div class="d-flex flex-row gap-4">
-              <a-select mode="multiple" allow-clear class="flex-grow-1" placeholder="Search Filters">
-                <a-select-option value="Texture">Texture</a-select-option>
-                <a-select-option value="Scripts">Scripts</a-select-option>
-                <a-select-option value="Maps">Maps</a-select-option>
-                <a-select-option value="Lighting">Lighting</a-select-option>
-                <a-select-option value="Meshes">Meshes</a-select-option>
-                <a-select-option value="Sounds">Sounds</a-select-option>
-                <a-select-option value="Dialogue">Dialogue</a-select-option>
-              </a-select>
-              <a-select mode="multiple" allow-clear class="flex-grow-1" placeholder="Search Filters">
-                <a-select-option value="Texture">Texture</a-select-option>
-                <a-select-option value="Scripts">Scripts</a-select-option>
-                <a-select-option value="Maps">Maps</a-select-option>
-                <a-select-option value="Lighting">Lighting</a-select-option>
-                <a-select-option value="Meshes">Meshes</a-select-option>
-                <a-select-option value="Sounds">Sounds</a-select-option>
-                <a-select-option value="Dialogue">Dialogue</a-select-option>
-              </a-select>
-              <a-select mode="multiple" allow-clear class="flex-grow-1" placeholder="Search Filters">
-                <a-select-option value="Texture">Texture</a-select-option>
-                <a-select-option value="Scripts">Scripts</a-select-option>
-                <a-select-option value="Maps">Maps</a-select-option>
-                <a-select-option value="Lighting">Lighting</a-select-option>
-                <a-select-option value="Meshes">Meshes</a-select-option>
-                <a-select-option value="Sounds">Sounds</a-select-option>
-                <a-select-option value="Dialogue">Dialogue</a-select-option>
-              </a-select>
-            </div>
-            <div>
-              <template v-for="item in iconLinks" :key="item.src">
-                <a class="example-link">
-                  <img class="example-link-icon" :src="item.src" :alt="item.text" /> {{ item.text }}
-                </a>
-              </template>
-            </div>
-          </div>
-          <div>
-
-          </div>
-        </a-row>
-      </a-page-header>
-
-
-      <KeyTableCollection key-table-items="keys"></KeyTableCollection>
-      <creature-struct-table />
+      <!-- <ErrorBoundary>
+        <KeyTableCollection 
+          v-if="chitinKey && chitinKey.key_entries" 
+          :key-table-items="chitinKey.key_entries"
+        />
+      </ErrorBoundary> -->
+      <!-- <creature-struct-table /> -->
 
     </v-container>
 
 
-    <v-container fluid style="background: radial-gradient(ellipse at bottom, #1a192b, black); padding: 5%">
+    <!-- <v-container fluid style="background: radial-gradient(ellipse at bottom, #1a192b, black); padding: 5%">
       <v-row>
         <v-col cols="12">
           <v-container fluid class="border-bottom">
@@ -178,37 +134,164 @@
           </v-container>
         </v-col>
       </v-row>
-    </v-container>
+    </v-container> -->
 
     <ContextMenu :display="showContextMenu" ref="menu">
       <!-- <CustomContextMenu caller="tab-navigation"></CustomContextMenu> -->
-      <KeyTableCollection key-table-items="keys"></KeyTableCollection>
+      <!-- <KeyTableCollection :key-table-items="chitinKey.key_entries"></KeyTableCollection> -->
     </ContextMenu>
+
+    <!-- <div v-if="chitinKey"> -->
+      <!-- Your existing content -->
+      <!-- <KeyTableCollection 
+        v-if="chitinKey.key_entries" 
+        :key-table-items="chitinKey.key_entries"
+      /> -->
+    <!-- </div> -->
+    <!-- <div v-else-if="!loading">
+      <v-alert type="error">
+        Failed to load chitin key data
+      </v-alert>
+    </div> -->
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import BluePrintScaffold from '../../components/ResourceViews/data/BluePrintScaffold.vue'
 import KeyTableCollection from "@/components/ResourceViews/chitin/KeyTableView.vue";
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
-import { ref } from 'vue';
-import CreatureStructTable from '@/components/ResourceViews/CreatureStruct.vue';
+import { ref, watch } from 'vue';
+import CreatureStructTable from '@/components/ResourceViews/CreatureStruct.vue'
+import { AuroraService } from '@/data/aurora-service';
+import { ChitinKey, KeyEntry, Header } from "@/data/chitin-key";
+import { EllipsisOutlined } from '@ant-design/icons-vue';
+import { defineComponent, onMounted, onUpdated, onUnmounted, onErrorCaptured } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'ChitinKeyView',
-  components: { KeyTableCollection, BluePrintScaffold, ContextMenu, CreatureStructTable },
-  setup() {
+  components: { KeyTableCollection, BluePrintScaffold, ContextMenu, CreatureStructTable, EllipsisOutlined },
+  props: {
+    path: {
+      type: String,
+      required: false,
+      default: ''
+    }
+  },
+  async setup(props) {
+    console.log('ChitinKeyView setup called');
+    
     const showContextMenu = ref(false);
+    const loading = ref(false);
+    const chitinKey = ref<ChitinKey | null>(null);
+    const iconLinks = ref([
+      {
+        src: '/icons/resource.png',
+        text: 'Resources'
+      },
+      {
+        src: '/icons/key.png',
+        text: 'Keys'
+      }
+    ]);
+
+    const loadChitinKey = async () => {
+      try {
+        loading.value = true;
+        const auroraService = new AuroraService();
+        const path = 'E:/SteamLibrary/steamapps/common/swkotor/chitin.key';
+        const result = await auroraService.readChitinKey(path);
+        if (!result) {
+          throw new Error('Failed to load chitin key data');
+        }
+      
+        chitinKey.value = result;
+        console.log('Loaded chitin key:', result);
+      } catch (error) {
+        console.error('Error loading chitin key:', error);
+        // You might want to show an error message to the user
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    await loadChitinKey();
+
+    const routes = ref([
+      {
+        path: 'index',
+        breadcrumbName: 'Home',
+      },
+      {
+        path: 'first',
+        breadcrumbName: 'Resources',
+      },
+      {
+        path: 'second',
+        breadcrumbName: 'Chitin Key',
+      },
+    ]);
+
+    const onClick = () => {
+      console.log('Search clicked');
+    };
+
+    const menu = ref<InstanceType<typeof ContextMenu> | null>(null);
+    const componentKey = ref(0);
+
+    // Force re-render function if needed
+    const forceRerender = () => {
+      componentKey.value += 1;
+    };
+
+    onMounted(() => {
+      console.log('ChitinKeyView mounted');
+    });
+
+    onUpdated(() => {
+      console.log('ChitinKeyView updated');
+    });
+
+    onUnmounted(() => {
+      console.log('ChitinKeyView unmounted');
+    });
+
+    onErrorCaptured((err, instance, info) => {
+      console.error('Render Error:', err);
+      console.log('Component:', instance);
+      console.log('Error Info:', info);
+      return false; // Prevent error from propagating
+    });
+
+    watch(chitinKey, (newVal, oldVal) => {
+      console.log('ChitinKey changed:', {
+        old: oldVal,
+        new: newVal
+      });
+    }, { deep: true });
+
     return {
       showContextMenu,
+      chitinKey,
+      loading,
+      iconLinks,
+      onClick,
+      menu,
+      routes,
+      componentKey,
+      forceRerender
     };
   },
+  mounted() {
+     console.log("mounted ChitinKeyView");
+     this.forceRerender();
+  },
   methods: {
-    openContextMenu(event) {
+    openContextMenu(event: { preventDefault: () => void; clientX: number; clientY: number }) {
       event.preventDefault();
-      this.showContextMenu = true;
-      console.log(event);
-      this.$refs.menu.setPosition(event.clientX, event.clientY);
+     // this.showContextMenu = true;
+      if (this.$refs.menu) {
+        (this.$refs.menu as any).setPosition(event.clientX, event.clientY);
+      }
     },
   },
   data: () => ({
@@ -230,7 +313,7 @@ export default {
       },
     ],
   }),
-}
+})
 </script>
 
 <style scoped lang="scss">
