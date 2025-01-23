@@ -1,3 +1,22 @@
+// Variables
+$border-radius-root: 6px;
+$font-size-root: 14px;
+
+// Custom Vuetify variables
+$btn-font-weight: 400;
+$btn-sizes: (
+  'default': 41,
+  'large': 54
+);
+
+$input-font-size: 16px;
+$border-color: #424242;
+
+// // Import Vuetify styling
+// @use 'vuetify/styles' with (
+//   $body-font-family: ('Inter', sans-serif),
+//   $heading-font-family: ('Inter', sans-serif)
+// );
 
 .v-btn-group {
   // Customizing the button group container
@@ -25,3 +44,15 @@
     }
   }
 }
+
+.v-application {
+  [class*='ant-'] {
+    font-family: inherit;
+  }
+}
+
+// Prevent Vuetify from overriding Ant Design styles
+.ant-select-dropdown {
+  z-index: 1000 !important;
+}
+

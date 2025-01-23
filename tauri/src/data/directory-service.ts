@@ -124,24 +124,5 @@ export class DirectoryService {
     }
   }
 
-  // Example usage:
-  //     async function example() {
-  //         try {
-  //             const drives = await getDriveInfo();
-  //             console.log('Available drives:', drives);
-  //         } catch (error) {
-  //             console.error('Error:', error);
-  //         }
-  //     }
 
-  // Example usage:
-  //     async function example() {
-  //         try {
-  //             const files = await listDirectory('C:/some/path');
-  //             console.log('Files in directory:', files);
-  //         } catch (error) {
-  //             console.error('Error:', error);
-  //         }
-  //     }
-  // }
 }

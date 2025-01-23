@@ -12,9 +12,14 @@ interface TabViewState {
 
 export const useTabViewStore = defineStore('tabViewStore', {
 
+    // {
+    //     icon: 'mdi-shield-lock-outline',
+    //     text: 'Security',
+    //     value: 'tab-4',
+    //   },
     state: () => ({
-        tabs: [] as TabViewState[], // List of tab states
-        currentTab: "" as string,
+        tabs: [] as { icon: string, text: string, value: string }[], // List of tab states
+        currentTab: "swpc_tex_tpc" as string,
     }),
     actions: {
         setCurrentTab(id: string) {
@@ -28,35 +33,37 @@ export const useTabViewStore = defineStore('tabViewStore', {
             }
         },
         // Add a new tab with optional configuration and inner component reference
-        addTab(id: string, title: string, isSelected: boolean, innerComponent?: string) {
+        addTab(id: string, title: string, value: string) {
             const loggingStore = useLoggingStore();
             loggingStore.addAction("tabs", "Add Tab ->" + id)
-            this.tabs.push({
-                id,
-                title: title,
-                isSelected: isSelected,
-                pinned: false,
-                innerComponent : innerComponent,
-            });
+            const existingTab = this.tabs.find(tab => tab.value === value);   
+            if (!existingTab) {
+                this.tabs.push({
+                    icon: "mdi-shield-lock-outline",
+                    text: title,
+                    value: value,
+                });
+              
+            }
         },
 
         // Set the pinned state of a specific tab
-        setTabPinned(id: string, pinned: boolean) {
-            const tab = this.tabs.find(tab => tab.id === id);
+        setTabPinned(value: string, pinned: boolean) {
+            const tab = this.tabs.find(tab => tab.value === value);
             if (tab) {
                 tab.pinned = pinned;
             }
         },
         // Update the inner component reference of a specific tab
-        setInnerComponent(id: string, innerComponent: any) {
-            const tab = this.tabs.find(tab => tab.id === id);
+        setInnerComponent(value: string, innerComponent: any) {
+            const tab = this.tabs.find(tab => tab.value === value);
             if (tab) {
                 tab.innerComponent = innerComponent;
             }
         },
         // Remove a tab
-        removeTab(id: string) {
-            this.tabs = this.tabs.filter(tab => tab.id !== id);
+        removeTab(value: string) {
+            this.tabs = this.tabs.filter(tab => tab.value !== value);
         },
         closeAllTabs() {
             this.tabs = [];
