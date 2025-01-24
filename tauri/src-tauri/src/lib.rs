@@ -34,6 +34,7 @@ pub fn run() {
             application::file_system_commands::get_parent_directory_contents,
             application::file_system_commands::get_drive_info,
             application::file_system_commands::get_drive_statistics,
+            application::file_system_commands::search_files_by_extension,
             application::aurora_commands::read_chitin_key,
         ])
         .run(tauri::generate_context!())

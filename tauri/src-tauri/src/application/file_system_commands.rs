@@ -25,6 +25,34 @@ pub async fn get_drive_info() -> Result<Vec<String>, String> {
     Ok(drives)
 }
 
+
+#[tauri::command]
+pub async fn search_files_by_extension(path: String, extension: String) -> Result<Vec<String>, String> {
+    use rust_search::SearchBuilder;
+
+    let search_results: Vec<String> = SearchBuilder::default()
+        .location(path)
+        .limit(1000) // results to return
+        .ext(extension.as_str())
+        .strict()
+        .depth(10)
+        .ignore_case()
+        .hidden()
+        .build()
+        .collect();
+
+
+    println!("Search results:");
+    for result in &search_results {
+        println!("Found file: {}", result);
+    }
+
+    match search_results.is_empty() {
+        true => Err("No files found".to_string()),
+        false => Ok(search_results)
+    }
+}
+
 #[tauri::command]
 pub async fn get_drive_statistics() -> Result<Vec<serde_json::Value>, String> {
     use std::path::Path;

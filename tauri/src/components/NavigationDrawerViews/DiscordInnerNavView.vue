@@ -26,9 +26,14 @@
 </template>
 
 <script lang="ts">
+import { DirectoryService } from '@/data/directory-service';
+import { onMounted } from 'vue';
+
 export default {
   name: "DiscordInnerNavView"
 }
+
+
 
 const $ = document.querySelectorAll.bind(document);
 

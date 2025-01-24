@@ -7,7 +7,7 @@
 
         <h3 role="header" class="channels-header-name">Game Resources</h3>
         <svg role="button" aria-label="Dropdown" class="channels-header-dropdown">
-          <use xlink:href="#icon-dropdown"/>
+          <use xlink:href="#icon-dropdown" />
         </svg>
       </header>
 
@@ -24,9 +24,9 @@
           <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
 
             <template v-slot:activator="{ props }">
-              <li class="channel focusable channel-text" v-bind="props" v-ripple @click="navigateToResourceView"
-                  @click.right="openContextMenu">
-                <span class="channel-name">chitin.key</span>
+              <li v-for="file in keyFiles" :key="file" class="channel focusable channel-text" v-bind="props" v-ripple @click="navigateToResourceView"
+                @click.right="openContextMenu">
+                <span class="channel-name">{{ file }}</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
                   <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
@@ -51,8 +51,8 @@
 
           <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
             <template v-slot:activator="{ props }">
-              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
-                <span class="channel-name">swpc_tex_gui</span>
+              <li v-for="file in erfFiles" :key="file" class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
+                <span class="channel-name">{{ file }}</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
                   <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
@@ -64,50 +64,7 @@
             </template>
           </v-tooltip>
 
-          <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
-            <template v-slot:activator="{ props }">
-              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
-                <span class="channel-name">swpc_tex_tpa</span>
-                <v-spacer></v-spacer>
-                <button style="margin-right:9px">
-                  <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
-                </button>
-                <button style="margin-right: 10px">
-                  <v-icon icon="mdi-cog" size="x-small" class="float-right"></v-icon>
-                </button>
-              </li>
-            </template>
-          </v-tooltip>
-
-          <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
-            <template v-slot:activator="{ props }">
-              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
-                <span class="channel-name">swpc_tex_tpb</span>
-                <v-spacer></v-spacer>
-                <button style="margin-right:9px">
-                  <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
-                </button>
-                <button style="margin-right: 10px">
-                  <v-icon icon="mdi-cog" size="x-small" class="float-right"></v-icon>
-                </button>
-              </li>
-            </template>
-          </v-tooltip>
-
-          <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
-            <template v-slot:activator="{ props }">
-              <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
-                <span class="channel-name">swpc_tex_tpc</span>
-                <v-spacer></v-spacer>
-                <button style="margin-right:9px">
-                  <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
-                </button>
-                <button style="margin-right: 10px">
-                  <v-icon icon="mdi-cog" size="x-small" class="float-right"></v-icon>
-                </button>
-              </li>
-            </template>
-          </v-tooltip>
+    
         </ul>
 
 
@@ -119,33 +76,17 @@
 
 
         <ul class="channels-list-text">
-          <li class="channel focusable channel-text">
-            <span class="channel-name">general</span>
-            <button class="button" role="button" aria-label="Invite">
-              <svg>
-                <use xlink:href="#icon-invite"/>
-              </svg>
+          <li v-for="file in bifFiles" :key="file" class="channel focusable channel-text">
+            <span class="channel-name">{{ file }}</span>
+            <v-spacer></v-spacer>
+            <button style="margin-right:9px">
+              <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
             </button>
-            <button class="button" role="button" aria-label="settings">
-              <svg>
-                <use xlink:href="#icon-channel-settings"/>
-              </svg>
+            <button style="margin-right: 10px">
+              <v-icon icon="mdi-cog" size="x-small" class="float-right"></v-icon>
             </button>
           </li>
 
-          <li class="channel focusable channel-text">
-            <span class="channel-name">help</span>
-            <button class="button" role="button" aria-label="Invite">
-              <svg>
-                <use xlink:href="#icon-invite"/>
-              </svg>
-            </button>
-            <button class="button" role="button" aria-label="settings">
-              <svg>
-                <use xlink:href="#icon-channel-settings"/>
-              </svg>
-            </button>
-          </li>
         </ul>
 
 
@@ -157,33 +98,17 @@
 
 
         <ul class="channels-list-text">
-          <li class="channel focusable channel-text">
-            <span class="channel-name">general</span>
-            <button class="button" role="button" aria-label="Invite">
-              <svg>
-                <use xlink:href="#icon-invite"/>
-              </svg>
+          <li v-for="file in gffFiles" :key="file" class="channel focusable channel-text">
+            <span class="channel-name">{{ file }}</span>
+            <v-spacer></v-spacer>
+            <button style="margin-right:9px">
+              <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
             </button>
-            <button class="button" role="button" aria-label="settings">
-              <svg>
-                <use xlink:href="#icon-channel-settings"/>
-              </svg>
+            <button style="margin-right: 10px">
+              <v-icon icon="mdi-cog" size="x-small" class="float-right"></v-icon>
             </button>
           </li>
 
-          <li class="channel focusable channel-text">
-            <span class="channel-name">help</span>
-            <button class="button" role="button" aria-label="Invite">
-              <svg>
-                <use xlink:href="#icon-invite"/>
-              </svg>
-            </button>
-            <button class="button" role="button" aria-label="settings">
-              <svg>
-                <use xlink:href="#icon-channel-settings"/>
-              </svg>
-            </button>
-          </li>
         </ul>
 
 
@@ -193,16 +118,16 @@
 
 
         <ul class="channels-list-text">
-          <li class="channel focusable channel-text">
-            <span class="channel-name">general</span>
+          <li v-for="rim in rimFiles" :key="rim" class="channel focusable channel-text">
+            <span class="channel-name">{{ rim }}</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite"/>
+                <use xlink:href="#icon-invite" />
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings"/>
+                <use xlink:href="#icon-channel-settings" />
               </svg>
             </button>
           </li>
@@ -211,12 +136,12 @@
             <span class="channel-name">help</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
-                <use xlink:href="#icon-invite"/>
+                <use xlink:href="#icon-invite" />
               </svg>
             </button>
             <button class="button" role="button" aria-label="settings">
               <svg>
-                <use xlink:href="#icon-channel-settings"/>
+                <use xlink:href="#icon-channel-settings" />
               </svg>
             </button>
           </li>
@@ -233,7 +158,7 @@
 
             <template v-slot:activator="{ props }">
               <li class="channel focusable channel-text" v-bind="props" @click="navigateToResourceView"
-                  @click.right="openContextMenu">
+                @click.right="openContextMenu">
                 <span class="channel-name">chitin.key</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -263,7 +188,7 @@
 
       <p class="mb-4 text-medium-emphasis text-body-2">
         To see a report on this reconciliation, click <a href="#" class="text-decoration-none text-info">View
-        reconciliation report.</a>
+          reconciliation report.</a>
 
         <br>
 
@@ -353,65 +278,111 @@
   </ContextMenu>
 </template>
 
-<script>
-
-
+<script setup lang="ts">
 import ContextMenu from "../../components/ContextMenus/ContextMenu.vue";
-import {useTabViewStore} from "@/state/tab-store.ts";
+import { useTabViewStore } from "@/state/tab-store.ts";
+import { ref } from "vue";
+import { DirectoryService } from "@/data/directory-service.ts";
 
-export default {
-  name: "OuterMainGameNav",
-  components: {ContextMenu},
-  setup() {
-    const tabStore = useTabViewStore();
-    return {
-      tabStore,
-      showContextMenu: false
-    };
-  },
-  methods: {
-    navigateToResourceView() {
-      this.showContextMenu = false;
-      this.$refs.menu.close();
-      this.tabStore.addTab('chitin-tab', "chitin", "chitin.key");
-    },
-    navigateToResourceViewERF() {
-      this.showContextMenu = false;
-      this.$refs.menu.close();
-      this.tabStore.addTab('erf-tab', "erf", "swpc_tex_tpc");
-    },
-    openContextMenu(e) {
-      console.log("This worked partially")
-      e.preventDefault()
-      this.showContextMenu = true;
-      this.$refs.menu2.open(e);
-    },
-  },
+const tabStore = useTabViewStore();
+const keyFiles = ref<string[]>([]);
+const bifFiles = ref<string[]>([]);
+const erfFiles = ref<string[]>([]);
+const gffFiles = ref<string[]>([]);
+const rimFiles = ref<string[]>([]);
+const showContextMenu = ref(false);
 
-  data() {
-    return {
-      showContextMenu: false,
-      items3: [
-        {text: 'Open in Explorer', icon: 'mdi-folder'},
-        {text: 'View Data', icon: 'mdi-account-multiple'},
-        {text: 'Open in Editor', icon: 'mdi-star'},
-        {text: 'Export', icon: 'mdi-history'},
-        {text: 'Extract', icon: 'mdi-check-circle'},
-      ],
-      storageOptions: [
-        {text: 'Google Drive', icon: 'mdi-clock'},
-        {text: 'One Drive', icon: 'mdi-account'},
-        {text: 'Local Files', icon: 'mdi-flag'},
-      ],
-      items: [
-        {title: 'Click Me'},
-        {title: 'Click Me'},
-        {title: 'Click Me'},
-        {title: 'Click Me 2'},
-      ],
-    }
-  },
-}
+const items3 = ref([
+  { text: 'Open in Explorer', icon: 'mdi-folder' },
+  { text: 'View Data', icon: 'mdi-account-multiple' },
+  { text: 'Open in Editor', icon: 'mdi-star' },
+  { text: 'Export', icon: 'mdi-history' },
+  { text: 'Extract', icon: 'mdi-check-circle' },
+]);
+
+const storageOptions = ref([
+  { text: 'Google Drive', icon: 'mdi-clock' },
+  { text: 'One Drive', icon: 'mdi-account' },
+  { text: 'Local Files', icon: 'mdi-flag' },
+]);
+
+const items = ref([
+  { title: 'Click Me' },
+  { title: 'Click Me' },
+  { title: 'Click Me' },
+  { title: 'Click Me 2' },
+]);
+
+const directoryService = new DirectoryService();
+
+// Load files
+const loadFiles = async () => {
+  let files1 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "key");
+  if (files1.ok) {
+    const keyFileNames = files1.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    keyFiles.value = keyFileNames;    
+  } else {
+    console.log(files1.error);
+  }
+
+  let files2 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "bif");
+  if (files2.ok) {
+    const bifFileNames = files2.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    bifFiles.value = bifFileNames;
+  } else {
+    console.log(files2.error);
+  }
+
+  let files3 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "erf");
+  if (files3.ok) {
+    const erfFileNames = files3.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    erfFiles.value = erfFileNames;
+  } else {
+    console.log(files3.error);
+  }
+
+  let files4 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "utf");
+  if (files4.ok) {
+    const gffFileNames = files4.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    gffFiles.value = gffFileNames;
+  } else {
+    console.log(files4.error);
+  }
+
+  let files5 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "rim");
+  if (files5.ok) {
+    const rimFileNames = files5.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    rimFiles.value = rimFileNames;
+  } else {
+    console.log(files5.error);  
+  }
+
+  let files6 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "uti");
+  if (files6.ok) {
+    const utiFileNames = files6.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    gffFiles.value = utiFileNames;
+  } else {
+    console.log(files6.error);
+  }
+};
+
+loadFiles();
+
+const navigateToResourceView = () => {
+  showContextMenu.value = false;
+  tabStore.addTab('chitin-tab', "chitin", "chitin.key");
+};
+
+const navigateToResourceViewERF = () => {
+  showContextMenu.value = false;
+  tabStore.addTab('erf-tab', "erf", "swpc_tex_tpc");
+};
+
+const openContextMenu = (e: MouseEvent) => {
+  console.log("This worked partially");
+  e.preventDefault();
+  showContextMenu.value = true;
+};
 
 
 </script>
@@ -786,7 +757,7 @@ body {
     justify-content: center;
   }
 
-  .server-icon > img {
+  .server-icon>img {
     border-radius: inherit;
     max-width: 100%;
   }
@@ -862,8 +833,8 @@ body {
   appearance: none;
   user-select: none;
 
-  > svg,
-  > img {
+  >svg,
+  >img {
     max-width: 100%;
     max-height: 100%;
   }
@@ -880,7 +851,7 @@ body {
     border-right: 1px solid $border-accent;
   }
 
-  .button + .button {
+  .button+.button {
     box-shadow: inset 1px 0 0 #393c41;
   }
 }
