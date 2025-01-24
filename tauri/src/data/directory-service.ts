@@ -124,5 +124,39 @@ export class DirectoryService {
     }
   }
 
+  /**
+ * Invokes the `search_files_by_extension` command from Tauri.
+ * 
+ * @param path - The path where the search should be performed.
+ * @param extension - The file extension to search for.
+ * @returns A promise resolving to a list of matching file paths or an error message.
+ */
+  async searchFilesByExtension(path: string, extension: string): Promise<Result<string[]>> {
+    try {
+      const matchingFiles = await invoke<string[]>('search_files_by_extension', {
+        path,
+        extension
+      });
+      console.log('Matching files:', matchingFiles);
+      return { ok: true, value: matchingFiles };
+    } catch (error) {
+      console.error('Error searching files:', error);
+      return { ok: false, error: error as Error };
+    }
+  }
+
+  // Example usage:
+  // const path = 'C:\\Users\\Example\\Documents'; // Replace with the desired path
+  // const extension = 'txt'; // Replace with the desired file extension
+
+  // searchFilesByExtension(path, extension)
+  //   .then((files) => {
+  //     console.log('Found files:', files);
+  //   })
+  //   .catch((err) => {
+  //     console.error('Failed to search for files:', err);
+  //   });
+
+
 
 }
