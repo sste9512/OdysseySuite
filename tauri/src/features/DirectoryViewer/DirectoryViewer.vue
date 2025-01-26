@@ -58,7 +58,6 @@ export default {
       } else {
         await this.fileSystemStore.navigateToDirectory(directory.path);
       }
-
     },
     closeModal() {
       this.$emit('update:isOpen', false);

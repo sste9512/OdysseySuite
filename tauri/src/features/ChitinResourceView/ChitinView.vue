@@ -102,7 +102,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { AuroraService } from '@/data/aurora-service';
 import { KeyHeader, KeyEntry } from '@/data/chitin-key';
 import { FileEntry, FilenameEntry } from '@/data/chitin-key';
@@ -112,7 +112,14 @@ import { FileEntry, FilenameEntry } from '@/data/chitin-key';
 
 export default defineComponent({
     name: 'ChitinView',
-    setup() {
+    props: {
+        path: {
+            type: String,
+            required: false,
+            default: 'E:/SteamLibrary/steamapps/common/swkotor/chitin.key'
+        }
+    },
+    setup(props) {
         const chitinData = ref<KeyEntry[]>([]);
         const loading = ref(false);
         const header = ref<KeyHeader | null>(null);
@@ -181,7 +188,7 @@ export default defineComponent({
             try {
                 loading.value = true;
                 const auroraService = new AuroraService();
-                const path = 'E:/SteamLibrary/steamapps/common/swkotor/chitin.key';
+                const path =  props.path;
                 const result = await auroraService.readChitinKey(path);
                 if (result) {
                     chitinData.value = result.key_entries;
@@ -196,7 +203,9 @@ export default defineComponent({
             }
         };
 
-        loadChitinData();
+        onMounted(async () => {
+            await loadChitinData(); 
+        });
 
         return {
             chitinData,
@@ -206,7 +215,9 @@ export default defineComponent({
             fileEntries,
             filenameEntries,
             fileColumns,
-            filenameColumns
+            filenameColumns,
+            props,
+            loadChitinData
         };
     }
 });

@@ -15,10 +15,11 @@
       </template>
  
 
-      <BluePrintScaffold v-if="item.value === 'chitin.key'" />
-      <ChitinView v-if="item.value === 'chitin.key'" />
-      <ErfResourceView v-if="item.value === 'swpc_tex_tpc'" />
-      <AdminDashboard v-else />
+   
+      <ChitinView v-if="item.text === 'chitin'" :path="item.value" />
+      <ErfResourceView v-if="item.text === 'erf'" :filePath="item.value" />
+      <BiffResourceView v-if="item.text === 'biff'" :filePath="item.value" />
+      <AdminDashboard v-if="item.text === 'admin'" />
 
 
 
@@ -35,16 +36,11 @@ import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
 import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
 import ChitinView from "@/features/ChitinResourceView/ChitinView.vue";
 import ErfResourceView from "@/features/ErfResourceView/ErfResourceView.vue";
-
-import OdysseyTabs from "@/components/NavigationDrawerViews/OdysseyTabs.vue";
-
-import { PushpinOutlined } from '@ant-design/icons-vue';
+import BiffResourceView from "@/features/BiffResourceView/BiffResourceView.vue";
 
 
 import DirectoryViewer from "@/features/DirectoryViewer/DirectoryViewer.vue";
 import AdminDashboard from "./AdminDashboard.vue";
-import { Tabs } from "ant-design-vue";
-import BluePrintScaffold from "@/components/ResourceViews/data/BluePrintScaffold.vue";
 
 export default defineComponent({
   name: 'TabNavigation',
@@ -55,6 +51,7 @@ export default defineComponent({
     DirectoryViewer,
     ErfResourceView,
     AdminDashboard,
+    BiffResourceView,
   },
   setup() {
     const tabViewStore = useTabViewStore();

@@ -12,7 +12,6 @@ mod domain {
 mod application {
     pub mod aurora_commands;
     pub mod file_system_commands;
-    
     pub mod project_commands;
 }
 
@@ -51,6 +50,7 @@ pub fn run() {
             application::file_system_commands::get_drive_statistics,
             application::file_system_commands::search_files_by_extension,
             application::aurora_commands::read_chitin_key,
+            application::aurora_commands::read_biff,
             application::project_commands::create_project,
             application::project_commands::list_projects
         ])

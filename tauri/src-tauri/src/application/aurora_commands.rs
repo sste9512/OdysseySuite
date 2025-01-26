@@ -2,7 +2,7 @@ use serde_json::Value;
 use std::fs::File;
 use std::io::BufReader;
 
-use crate::domain::odyssey_api::chitin::{ChitinKey, ChitinKeyReader};
+use crate::domain::odyssey_api::{biff::Biff, chitin::{ChitinKey, ChitinKeyReader}};
 
 #[tauri::command]
 pub async fn read_chitin_key(path: &str) -> Result<Value, String> {
@@ -55,3 +55,16 @@ pub async fn read_chitin_key(path: &str) -> Result<Value, String> {
     }
     Ok(serde_json::to_value(&chitin_key).unwrap())
 }
+
+#[tauri::command]
+pub fn read_biff(path: &str) -> Result<Biff, String> {
+    // Read the BIFF file
+    match Biff::read_biff_file(path) {
+        Ok(biff) => Ok(biff),
+        Err(e) => {
+            println!("Error reading BIFF file: {}", e);
+            Err(e.to_string())
+        }
+    }
+}
+

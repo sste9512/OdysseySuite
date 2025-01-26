@@ -25,8 +25,8 @@
 
             <template v-slot:activator="{ props }">
               <li v-for="file in keyFiles" :key="file" class="channel focusable channel-text" v-bind="props" v-ripple
-                @click="navigateToResourceView" @click.right="openContextMenu">
-                <span class="channel-name">{{ file }}</span>
+                @click="navigateToResourceView(file)" @click.right="openContextMenu">
+                <span class="channel-name">{{ file.split('\\').pop() }}</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
                   <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
@@ -52,8 +52,8 @@
           <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
             <template v-slot:activator="{ props }">
               <li v-for="file in erfFiles" :key="file" class="channel focusable channel-text" v-bind="props"
-                @click="navigateToResourceViewERF">
-                <span class="channel-name">{{ file }}</span>
+                @click="navigateToResourceViewERF(file)">
+                <span class="channel-name">{{ file.split('\\').pop() }}</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
                   <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
@@ -77,16 +77,22 @@
 
 
         <ul class="channels-list-text">
-          <li v-for="file in bifFiles" :key="file" class="channel focusable channel-text">
-            <span class="channel-name">{{ file }}</span>
-            <v-spacer></v-spacer>
-            <button style="margin-right:9px">
-              <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
-            </button>
-            <button style="margin-right: 10px">
-              <v-icon icon="mdi-cog" size="x-small" class="float-right"></v-icon>
-            </button>
-          </li>
+          <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover> 
+          <template v-slot:activator="{ props }">
+            <li v-for="file in bifFiles" :key="file" class="channel focusable channel-text" v-bind="props" v-ripple
+              @click="navigateToBiffResourceView(file)">
+              <span class="channel-name">{{ file.split('\\').pop() }}</span>
+              <v-spacer></v-spacer>
+              <button style="margin-right:9px">
+                <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
+              </button>
+              <button style="margin-right: 10px">
+                <v-icon icon="mdi-cog" size="x-small" class="float-right"></v-icon>
+              </button>
+            </li>
+            </template>
+          </v-tooltip>
+
 
         </ul>
 
@@ -100,7 +106,7 @@
 
         <ul class="channels-list-text">
           <li v-for="file in gffFiles" :key="file" class="channel focusable channel-text">
-            <span class="channel-name">{{ file }}</span>
+            <span class="channel-name">{{ file.split('\\').pop() }}</span>
             <v-spacer></v-spacer>
             <button style="margin-right:9px">
               <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
@@ -120,7 +126,7 @@
 
         <ul class="channels-list-text">
           <li v-for="rim in rimFiles" :key="rim" class="channel focusable channel-text">
-            <span class="channel-name">{{ rim }}</span>
+            <span class="channel-name">{{ rim.split('\\').pop() }}</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
                 <use xlink:href="#icon-invite" />
@@ -320,7 +326,7 @@ const directoryService = new DirectoryService();
 const loadFiles = async () => {
   let keyFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "key");
   if (keyFileResults.ok) {
-    const keyFileNames = keyFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    const keyFileNames = keyFileResults.value;
     keyFiles.value = keyFileNames;
   } else {
     console.log(keyFileResults.error);
@@ -328,7 +334,7 @@ const loadFiles = async () => {
 
   let bifFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "bif");
   if (bifFileResults.ok) {
-    const bifFileNames = bifFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    const bifFileNames = bifFileResults.value;
     bifFiles.value = bifFileNames;
   } else {
     console.log(bifFileResults.error);
@@ -336,7 +342,7 @@ const loadFiles = async () => {
 
   let erfFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "erf");
   if (erfFileResults.ok) {
-    const erfFileNames = erfFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    const erfFileNames = erfFileResults.value;
     erfFiles.value = erfFileNames;
   } else {
     console.log(erfFileResults.error);
@@ -344,7 +350,7 @@ const loadFiles = async () => {
 
   let utfFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "utf");
   if (utfFileResults.ok) {
-    const gffFileNames = utfFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    const gffFileNames = utfFileResults.value;
     gffFiles.value = gffFileNames;
   } else {
     console.log(utfFileResults.error);
@@ -352,7 +358,7 @@ const loadFiles = async () => {
 
   let rimFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "rim");
   if (rimFileResults.ok) {
-    const rimFileNames = rimFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    const rimFileNames = rimFileResults.value;
     rimFiles.value = rimFileNames;
   } else {
     console.log(rimFileResults.error);
@@ -360,7 +366,7 @@ const loadFiles = async () => {
 
   let utiFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "uti");
   if (utiFileResults.ok) {
-    const utiFileNames = utiFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    const utiFileNames = utiFileResults.value;
     gffFiles.value = utiFileNames;
   } else {
     console.log(utiFileResults.error);
@@ -369,14 +375,14 @@ const loadFiles = async () => {
 
 loadFiles();
 
-const navigateToResourceView = () => {
+const navigateToResourceView = (file: string) => {
   showContextMenu.value = false;
-  tabStore.addTab('chitin-tab', "chitin", "chitin.key");
+  tabStore.addTab('chitin-tab', "chitin", file);
 };
 
-const navigateToResourceViewERF = () => {
+const navigateToResourceViewERF = (file: string) => {
   showContextMenu.value = false;
-  tabStore.addTab('erf-tab', "erf", "swpc_tex_tpc");
+  tabStore.addTab('erf-tab', "erf", file);
 };
 
 const openContextMenu = (e: MouseEvent) => {
@@ -385,6 +391,11 @@ const openContextMenu = (e: MouseEvent) => {
   showContextMenu.value = true;
 };
 
+const navigateToBiffResourceView = (file: string) => {
+  console.log("Navigating to Biff Resource View for file:", file);
+  // Implement navigation logic here
+  tabStore.addTab('biff-tab', "biff", file);
+};
 
 </script>
 
