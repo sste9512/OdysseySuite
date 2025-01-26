@@ -152,7 +152,7 @@ const submit = handleSubmit(async values => {
       </v-row>
     </v-container>
   </v-sheet>
-  <directory-viewer :show="show"></directory-viewer>
+  <directory-viewer :show="show" @update:selectedDirectory="updateSelectedDirectory" @update:isOpen="updateIsOpen"></directory-viewer>
 </template>
 
 <style scoped>

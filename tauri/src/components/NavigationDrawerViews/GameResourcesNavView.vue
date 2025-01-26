@@ -24,8 +24,8 @@
           <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
 
             <template v-slot:activator="{ props }">
-              <li v-for="file in keyFiles" :key="file" class="channel focusable channel-text" v-bind="props" v-ripple @click="navigateToResourceView"
-                @click.right="openContextMenu">
+              <li v-for="file in keyFiles" :key="file" class="channel focusable channel-text" v-bind="props" v-ripple
+                @click="navigateToResourceView" @click.right="openContextMenu">
                 <span class="channel-name">{{ file }}</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -51,7 +51,8 @@
 
           <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
             <template v-slot:activator="{ props }">
-              <li v-for="file in erfFiles" :key="file" class="channel focusable channel-text" v-bind="props" @click="navigateToResourceViewERF">
+              <li v-for="file in erfFiles" :key="file" class="channel focusable channel-text" v-bind="props"
+                @click="navigateToResourceViewERF">
                 <span class="channel-name">{{ file }}</span>
                 <v-spacer></v-spacer>
                 <button style="margin-right:9px">
@@ -64,7 +65,7 @@
             </template>
           </v-tooltip>
 
-    
+
         </ul>
 
 
@@ -317,52 +318,52 @@ const directoryService = new DirectoryService();
 
 // Load files
 const loadFiles = async () => {
-  let files1 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "key");
-  if (files1.ok) {
-    const keyFileNames = files1.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
-    keyFiles.value = keyFileNames;    
+  let keyFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "key");
+  if (keyFileResults.ok) {
+    const keyFileNames = keyFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+    keyFiles.value = keyFileNames;
   } else {
-    console.log(files1.error);
+    console.log(keyFileResults.error);
   }
 
-  let files2 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "bif");
-  if (files2.ok) {
-    const bifFileNames = files2.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+  let bifFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "bif");
+  if (bifFileResults.ok) {
+    const bifFileNames = bifFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
     bifFiles.value = bifFileNames;
   } else {
-    console.log(files2.error);
+    console.log(bifFileResults.error);
   }
 
-  let files3 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "erf");
-  if (files3.ok) {
-    const erfFileNames = files3.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+  let erfFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "erf");
+  if (erfFileResults.ok) {
+    const erfFileNames = erfFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
     erfFiles.value = erfFileNames;
   } else {
-    console.log(files3.error);
+    console.log(erfFileResults.error);
   }
 
-  let files4 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "utf");
-  if (files4.ok) {
-    const gffFileNames = files4.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+  let utfFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "utf");
+  if (utfFileResults.ok) {
+    const gffFileNames = utfFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
     gffFiles.value = gffFileNames;
   } else {
-    console.log(files4.error);
+    console.log(utfFileResults.error);
   }
 
-  let files5 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "rim");
-  if (files5.ok) {
-    const rimFileNames = files5.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+  let rimFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "rim");
+  if (rimFileResults.ok) {
+    const rimFileNames = rimFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
     rimFiles.value = rimFileNames;
   } else {
-    console.log(files5.error);  
+    console.log(rimFileResults.error);
   }
 
-  let files6 = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "uti");
-  if (files6.ok) {
-    const utiFileNames = files6.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
+  let utiFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "uti");
+  if (utiFileResults.ok) {
+    const utiFileNames = utiFileResults.value.map(file => file.split('\\').pop()).filter((name): name is string => name !== undefined);
     gffFiles.value = utiFileNames;
   } else {
-    console.log(files6.error);
+    console.log(utiFileResults.error);
   }
 };
 

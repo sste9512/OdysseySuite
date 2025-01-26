@@ -10,17 +10,19 @@ import TabNavigation from "@/navigation/pages/TabNavigation.vue";
 import { useDialogStore } from "@/state/dialog-store.ts";
 import ProfilePage from "@/navigation/pages/ProfilePage.vue";
 import LogViewer from "@/features/LogViewer/LogViewer.vue";
+import CreateProjectDialog from "@/navigation/pages/CreateProjectDialog.vue";
 
 
 
 export default {
   components: {
+    CreateProjectDialog,
     LogViewer,
     ProfilePage,
     TabNavigation,
     ToolboxView,
     AuroraAppBar,
-    OuterMainGameNav
+    OuterMainGameNav,
   },
   setup() {
     const tabViewStore = useTabViewStore();
@@ -30,6 +32,7 @@ export default {
     const length = ref(tabViewStore.tabs.length);
     const globalCommandsDialogSwitch = ref(dialogStore.globalCommandsDialog);
     const settingsDialogSwitch = ref(dialogStore.settingsDialog);
+
 
     window.addEventListener('keydown', (e) => {
       if (e.altKey && e.key === 'g') {
@@ -111,9 +114,9 @@ export default {
         </v-list>
       </v-navigation-drawer>
 
-<!--      <v-navigation-drawer v-model="drawerBottom" location="bottom" style="height: 45%" temporary>-->
-<!--        <toolbox-view></toolbox-view>-->
-<!--      </v-navigation-drawer>-->
+      <!--      <v-navigation-drawer v-model="drawerBottom" location="bottom" style="height: 45%" temporary>-->
+      <!--        <toolbox-view></toolbox-view>-->
+      <!--      </v-navigation-drawer>-->
       <v-navigation-drawer v-model="drawerBottom" location="bottom" style="height: 45%" temporary>
         <log-viewer></log-viewer>
       </v-navigation-drawer>
@@ -134,51 +137,20 @@ export default {
   </v-card>
 
   <div class="text-center">
-    <v-dialog theme="dark" v-model="dialogGameSetup" min-width="75%" width="auto" style="z-index: 9999999">
-      <v-card class="mx-auto dark-glass" width="75%">
-        <v-toolbar flat height="20px" color="teal-darken-4" image="https://picsum.photos/1920/1080?random">
-          <template v-slot:image>
-            <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
-          </template>
-          <v-btn icon="mdi-account"></v-btn>
-
-          <v-toolbar-title> Create a project from Game Directory</v-toolbar-title>
-
-          <v-spacer></v-spacer>
-
-          <v-btn icon>
-            <v-fade-transition leave-absolute>
-              <v-icon v-if="isEditing" size="x-small">mdi-close</v-icon>
-            </v-fade-transition>
-          </v-btn>
-        </v-toolbar>
-
-        <v-card-text>
-          <v-text-field color="white" label="Name" variant="solo"></v-text-field>
-
-          <v-autocomplete :disabled="!isEditing" :items="states" :custom-filter="customFilter" color="white"
-            item-title="name" item-value="abbr" label="State" variant="solo"></v-autocomplete>
-        </v-card-text>
-
-        <v-divider></v-divider>
-
-        <v-snackbar v-model="hasSaved" :timeout="2000" attach position="absolute" location="bottom left">
-          Your profile has been updated
-        </v-snackbar>
 
 
-        <v-card-actions>
-          <v-btn color="primary" block @click="dialogGameSetup = false">Finished</v-btn>
-        </v-card-actions>
-        <v-card-actions>
-          <v-btn color="primary" block @click="dialogGameSetup = false">Close Dialog</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <!-- Dialog for creating a new project -->
+    <!-- Uses dark theme, takes up 75% of screen width, and appears above other content -->
+    <v-overlay v-model="dialogGameSetup" :scrim="true" :teleport="'body'" class=" align-center justify-center">
+      <v-container
+      style="overflow: hidden; margin: 15px 15px 15px 15px; max-width: 100%; min-width: 90vw; min-height: 90vh;">
+      <CreateProjectDialog :showDialog="dialogGameSetup" @update:showDialog="dialogGameSetup = false"> </CreateProjectDialog>
+      </v-container>
+    </v-overlay>
 
 
     <!--- Global Commands Dialog --->
-    <v-dialog theme="dark" v-model="globalCommandsDialogSwitch" min-width="75%" width="auto" style="z-index: 9999999">
+    <v-overlay v-model="globalCommandsDialogSwitch" class="align-center justify-center">
       <v-card class="mx-auto dark-glass" width="75%">
         <v-toolbar flat height="20px" color="teal-darken-4" image="https://picsum.photos/1920/1080?random">
           <template v-slot:image>
@@ -282,11 +254,11 @@ export default {
           <v-btn color="primary" block @click="globalCommandsDialogSwitch = false">Close Dialog</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-overlay>
 
 
     <!--- Settings Dialog --->
-    <v-dialog theme="dark" v-model="settingsDialogSwitch" min-width="75%" width="auto" style="z-index: 9999999">
+    <v-overlay v-model="settingsDialogSwitch" class="align-center justify-center">
       <v-card class="mx-auto dark-glass" width="75%">
         <v-toolbar flat height="20px" color="teal-darken-4">
           <template v-slot:image>
@@ -323,7 +295,7 @@ export default {
           <v-btn color="primary" block @click="settingsDialogSwitch = false">Close Dialog</v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-overlay>
   </div>
 </template>
 

@@ -1,7 +1,9 @@
 <script lang="ts">
+import { DirectoryItem, DriveStatistics } from "@/data/directory-service";
 import { useDialogStore } from "@/state/dialog-store";
 import { useFileSystemStore } from "@/state/file-system-store";
 import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
 export default {
   name: 'DirectoryViewer',
@@ -13,46 +15,68 @@ export default {
     close: {
       type: Function,
       required: false
+    },
+    selectedDirectory: {
+      type: String,
+      required: false
     }
   },
+  emits: ['update:selectedDirectory', 'update:isOpen'],
   setup() {
-    const dialogStore = useDialogStore();
     const fileSystemStore = useFileSystemStore();
+    const selectedDrive = ref<DriveStatistics | null>(null);
+    selectedDrive.value = fileSystemStore.drives[1];
     const { drives, currentDirectory, previousDirectory, visitedDirectories, currentDirectoryIndex } = storeToRefs(fileSystemStore);
-    return { dialogStore, fileSystemStore, drives, currentDirectory, previousDirectory, visitedDirectories, currentDirectoryIndex }
+    return { fileSystemStore, drives, currentDirectory, previousDirectory, visitedDirectories, currentDirectoryIndex, selectedDrive }
   },
   unmounted() {
-    this.fileSystemStore.reset();
+    //this.fileSystemStore.reset();
+    this.$emit('update:isOpen', false);
   },
   async mounted() {
     await this.fileSystemStore.loadDrives();
-    await this.fileSystemStore.navigateToDirectory(this.drives[1].path);
+    // Only navigate if selectedDrive exists
+    if (this.selectedDrive) {
+      await this.fileSystemStore.navigateToDirectory(this.selectedDrive.path);
+    }
   },
   methods: {
-    // TODO: This is not working as expected
     async goBack() {
       await this.fileSystemStore.navigateToParent();
+      this.$emit('update:selectedDirectory', this.currentDirectory.path);
     },
     async goForward() {
       await this.fileSystemStore.goForward();
+      this.$emit('update:selectedDirectory', this.currentDirectory.path);
     },
     hasNextDirectory(): boolean {
       return this.currentDirectoryIndex < this.visitedDirectories.length - 1;
     },
-    async navigateToDirectory(directory: string) {
-      await this.fileSystemStore.navigateToDirectory(directory);
+    async navigateToDirectory(directory: DirectoryItem | string) {
+      if (typeof directory === "string") {
+        await this.fileSystemStore.navigateToDirectory(directory);
+      } else {
+        await this.fileSystemStore.navigateToDirectory(directory.path);
+      }
+
     },
     closeModal() {
       this.$emit('update:isOpen', false);
-      // TODO: Fix the rerendering issue when closing the modal
-      this.fileSystemStore.reset();
+    },
+    selectDirectory() {
+      this.$emit('update:selectedDirectory', this.currentDirectory.path);
+      this.closeModal();
+    },
+    selectDrive(drive: DriveStatistics) {
+      this.selectedDrive = drive;
+      this.fileSystemStore.navigateToDirectory(drive.path);
     }
   }
 }
 </script>
 
 <template>
-  <v-layout>
+  <v-layout width="90vw" height="90vh">
 
 
     <v-navigation-drawer location="left" width="300" elevation="4" expand-on-hover rail>
@@ -60,7 +84,7 @@ export default {
         <v-list-subheader>Drives</v-list-subheader>
 
         <v-list-item v-for="drive in drives" :key="drive.path" :value="drive.path" :title="drive.path"
-          @click="selectDrive(drive.path)">
+          @click="selectDrive(drive)">
           <template v-slot:prepend>
             <v-icon>mdi-harddisk</v-icon>
           </template>
@@ -81,69 +105,51 @@ export default {
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+    <v-app-bar flat>
+      <v-btn-group>
+        <!-- Back button -->
+        <v-btn icon variant="text" @click="goBack()">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+
+        <!-- Forward button -->
+        <v-btn icon variant="text" @click="goForward()">
+          <v-icon>mdi-arrow-right</v-icon>
+        </v-btn>
+      </v-btn-group>
+
+      <v-divider vertical style="margin-left: 15px; margin-right: 15px;color: rebeccapurple; width: 3px;"></v-divider>
+
+      <!-- View mode controls for displaying directory contents -->
+      <v-btn-group>
+        <!-- List view button - displays items in a detailed table format -->
+        <v-btn icon variant="text">
+          <v-icon>mdi-view-list</v-icon>
+        </v-btn>
+
+        <!-- Grid view button - displays items as medium-sized icons -->
+        <v-btn icon variant="text">
+          <v-icon>mdi-view-grid</v-icon>
+        </v-btn>
+
+        <!-- Large grid view button - displays items as large icons -->
+        <v-btn icon variant="text">
+          <v-icon>mdi-view-grid-plus</v-icon>
+        </v-btn>
+      </v-btn-group>
+
+      <v-spacer></v-spacer>
+      <div class="breadcrumb flat">
+        <a aria-disabled="true">{{ currentDirectory.path }}</a>
+      </div>
+    </v-app-bar>
 
 
     <v-main>
 
-
-      <v-row>
-        <v-btn-group>
-
-          <!-- Back button -->
-          <v-btn icon variant="text" @click="goBack()">
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-btn>
-
-          <!-- Forward button -->
-          <v-btn icon variant="text" @click="goForward()">
-            <v-icon>mdi-arrow-right</v-icon>
-          </v-btn>
-
-
-
-        </v-btn-group>
-
-        <v-divider vertical style="margin-left: 15px; margin-right: 15px;color: rebeccapurple; width: 3px;"></v-divider>
-        <!-- View mode controls for displaying directory contents -->
-        <v-btn-group>
-          <!-- List view button - displays items in a detailed table format -->
-          <v-btn icon variant="text">
-            <v-icon>mdi-view-list</v-icon>
-          </v-btn>
-
-          <!-- Grid view button - displays items as medium-sized icons -->
-          <v-btn icon variant="text">
-            <v-icon>mdi-view-grid</v-icon>
-          </v-btn>
-
-          <!-- Large grid view button - displays items as large icons -->
-          <v-btn icon variant="text">
-            <v-icon>mdi-view-grid-plus</v-icon>
-          </v-btn>
-
-        </v-btn-group>
-        <v-spacer></v-spacer>
-
-
-      </v-row>
-
-
-
-
-
-      <!-- Breadcrumb -->
-      <!-- TODO: Split into multiple crumbs to file path -->
-
-      <div class="breadcrumb flat">
-        <a aria-disabled="true">{{ currentDirectory.path }}</a>
-
-      </div>
-
-
-
-      <v-row style="padding: 0px 25px 25px 25px; min-height: 20vh;">
+      <v-row style="min-height: 20vh;">
         <v-col v-for="item in currentDirectory.contents" :key="item.path" cols="12" md="4" lg="4">
-          <v-card @click="navigateToDirectory(item.path)" elevation="9">
+          <v-card @click="navigateToDirectory(item)" elevation="9">
             <v-card-title>
               <v-row>
                 <v-icon color="gold" style="margin-left: 10px;" v-if="item.type === 'directory'">mdi-folder</v-icon>
@@ -165,11 +171,25 @@ export default {
           </v-card>
         </v-col>
       </v-row>
-      <v-spacer style="rotate: 90deg;"></v-spacer>
+
 
 
 
     </v-main>
+    <v-bottom-navigation >
+      <v-row class="d-flex flex-row align-center" elevation="4">
+        <v-icon size="small" color="grey" class="mr-2" style="margin-left: 20px;">mdi-folder-open</v-icon>
+        <span class="text-caption text-grey" >{{ currentDirectory.path }}</span>
+        <v-spacer></v-spacer>
+        <v-btn tile color="success" @click="selectDirectory" style="margin-right: 15px;">
+          <v-icon left>
+            mdi-pencil
+          </v-icon>
+          Select
+        </v-btn>
+      </v-row>
+    </v-bottom-navigation>
+
   </v-layout>
 
 
@@ -200,18 +220,9 @@ export default {
 /** CSS *************************
  * Reset
  ************************************/
-.v-main {
-  padding: 0px 0px 0px 52px;
-  display: flex;
-  flex-direction: column;
-  margin-left: 0px;
-  min-height: var(--viewport-height);
-  min-width: var(--viewport-width);
-}
 
-.v-main .v-container {
-  flex: 1;
-}
+
+ 
 
 .v-layout {
   background-color: rgb(var(--v-theme-surface));
@@ -223,6 +234,10 @@ export default {
   /* Prevent horizontal resizing */
   overflow: auto;
   /* Add scrollbars if content overflows */
+}
+
+.v-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 /* Row styling overrides */

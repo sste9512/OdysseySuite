@@ -2,33 +2,27 @@
 import {resolve} from "@/injection/injection-context";
 import type {IProjectManagementClient} from "@/clients/web-api-client";
 import {ref, computed} from 'vue';
+import {ProjectApi} from "@/data/project-api";
 
 export const useProjectStore = defineStore('project', () => {
-
 
 
     const projects = ref<Project[]>([]);
     const selectedProject = ref<Project | null>(null);
     const totalProjects = computed(() => projects.value.length);
 
-    const projectClient = resolve<IProjectManagementClient>('project-client');
+    const projectApi = new ProjectApi();
 
     async function loadProjects() {
         try {
-            const response = await projectClient.getProjects();
-            projects.value = response.map(p => ({
-                id: p.id,
-                name: p.name,
-                path: p.path,
-                description: p.description || '',
-                createdAt: new Date(p.createdAt),
-                lastModified: new Date(p.lastModified),
-                gameType: p.gameType,
-                settings: p.settings || {}
-            }));
+            const response = await projectApi.listProjects();
+            if (response.ok) {
+                projects.value = response.value;
+                return {ok: true, value: response.value};
+            }
         } catch (error) {
             console.error('Failed to load projects:', error);
-            return { ok: false, error: error as Error };
+            return {ok: false, error: error as Error};
         }
     }
 
@@ -38,66 +32,69 @@ export const useProjectStore = defineStore('project', () => {
                 ...defaultProject,
                 ...project,
                 id: crypto.randomUUID(),
-                createdAt: new Date(),
+                created_at: new Date().toISOString(),
                 lastModified: new Date()
             };
-            
-            const response = await projectClient.createProject({
-                id: newProject.id,
-                name: newProject.name,
-                path: newProject.path,
-                description: newProject.description,
-                createdAt: newProject.createdAt.toISOString(),
-                lastModified: newProject.lastModified.toISOString(),
-                gameType: newProject.gameType,
-                settings: newProject.settings
-            });
 
-            projects.value.push(newProject);
-            return { ok: true, value: newProject };
+            const response = await projectApi.createProject(
+                newProject.name,
+                newProject.description || null,
+                newProject.staging_path,
+                newProject.original_directory_path
+            );
+
+            if (response.ok) {
+                projects.value.push(newProject);
+                return {ok: true, value: newProject};
+            } else {
+                throw new Error('Failed to create project on the server');
+            }
         } catch (error) {
             console.error('Failed to create project:', error);
-            return { ok: false, error: error as Error };
+            return {ok: false, error: error as Error};
         }
     }
 
-    async function updateProject(project: Project) {
-        try {
-            const response = await projectClient.updateProject(project.id, {
-                name: project.name,
-                path: project.path,
-                description: project.description,
-                gameType: project.gameType,
-                settings: project.settings
-            });
+    // async function updateProject(project: Project) {
+    //     try {
+    //         const response = await projectApi.updateProject(project.id, {
+    //             name: project.name,
+    //             staging_path: project.staging_path,
+    //             description: project.description
+    //         });
+    //
+    //         if (response.ok) {
+    //             const index = projects.value.findIndex(p => p.id === project.id);
+    //             if (index !== -1) {
+    //                 projects.value[index] = {
+    //                     ...projects.value[index],
+    //                     ...project,
+    //                     lastModified: new Date()
+    //                 };
+    //             }
+    //             return {ok: true, value: project};
+    //         } else {
+    //             throw new Error('Failed to update project on the server');
+    //         }
+    //     } catch (error) {
+    //         console.error('Failed to update project:', error);
+    //         return {ok: false, error: error as Error};
+    //     }
+    // }
 
-            const index = projects.value.findIndex(p => p.id === project.id);
-            if (index !== -1) {
-                projects.value[index] = {
-                    ...project,
-                    lastModified: new Date()
-                };
-            }
-            return { ok: true, value: project };
-        } catch (error) {
-            console.error('Failed to update project:', error);
-            return { ok: false, error: error as Error };
-        }
-    }
-
-    async function deleteProject(projectId: string) {
-        try {
-            await projectClient.deleteProject(projectId);
-            projects.value = projects.value.filter(p => p.id !== projectId);
-            if (selectedProject.value?.id === projectId) {
-                selectedProject.value = null;
-            }
-            return { ok: true, value: undefined };
-        } catch (error) {
-            console.error('Failed to delete project:', error);
-            return { ok: false, error: error as Error };
-        }
-    }
+    // async function deleteProject(projectId: string) {
+    //     try {
+    //             await projectApi.deleteProject(projectId);
+    //         projects.value = projects.value.filter(p => p.id !== projectId);
+    //         if (selectedProject.value?.id === projectId) {
+    //             selectedProject.value = null;
+    //         }
+    //         return { ok: true, value: undefined };
+    //     } catch (error) {
+    //         console.error('Failed to delete project:', error);
+    //         return { ok: false, error: error as Error };
+    //     }
+    // }
 
     function selectProject(project: Project) {
         selectedProject.value = project;
@@ -117,26 +114,21 @@ export const useProjectStore = defineStore('project', () => {
 })
 
 export interface Project {
-    id: string;
-    name: string;
-    path: string;
-    description?: string;
-    createdAt: Date;
-    lastModified: Date;
-    gameType?: string;
-    settings?: {
-        [key: string]: any;
-    };
+    id: string; // Unique project ID
+    name: string; // Project name
+    description?: string; // Optional project description
+    created_at: string; // Timestamp when the project was created
+    staging_path: string; // Path where the project is staged
+    original_directory_path: string; // Path to the original project directory
 }
 
+
 export const defaultProject: Project = {
-    id: crypto.randomUUID(),
+    id: '', // Placeholder, can be set dynamically (e.g., crypto.randomUUID())
     name: '',
-    path: '',
     description: '',
-    createdAt: new Date(),
-    lastModified: new Date(),
-    gameType: '',
-    settings: {}
+    created_at: new Date().toISOString(),
+    staging_path: '',
+    original_directory_path: ''
 };
 
