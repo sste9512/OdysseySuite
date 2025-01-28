@@ -1,10 +1,8 @@
-use std::io::{self, Read, Seek, SeekFrom};
-use std::fs::File;
 use byteorder::{LittleEndian, ReadBytesExt};
 use serde::{Deserialize, Serialize};
 use std::convert::TryInto;
-
-
+use std::fs::File;
+use std::io::{self, Read, Seek, SeekFrom};
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct BiffHeader {
@@ -89,9 +87,6 @@ impl FixedResourceData {
     }
 }
 
-
-
-
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Biff {
     pub header: BiffHeader,
@@ -100,8 +95,6 @@ pub struct Biff {
     pub variable_resource_data: Vec<VariableResourceData>,
     pub fixed_resource_data: Vec<FixedResourceData>,
 }
-
-
 
 ///  **`header: BiffHeader`**:
 /// - Contains the basic metadata about the BIFF file format, such as the type of file, version,
@@ -140,17 +133,17 @@ impl Biff {
 
         // Read the BIFF header
         let mut header = BiffHeader::new();
-        
+
         // Read file type and version as bytes first
         let mut file_type_bytes = [0u8; 4];
         let mut file_version_bytes = [0u8; 4];
         file.read_exact(&mut file_type_bytes)?;
         file.read_exact(&mut file_version_bytes)?;
-        
+
         // Convert bytes to chars
         header.file_type = file_type_bytes.map(|b| b as char);
         header.file_version = file_version_bytes.map(|b| b as char);
-        
+
         header.variable_resource_count = file.read_u32::<LittleEndian>()?;
         header.fixed_resource_count = file.read_u32::<LittleEndian>()?;
         header.variable_table_offset = file.read_u32::<LittleEndian>()?;
@@ -158,10 +151,14 @@ impl Biff {
         biff.header = header;
 
         // Pre-allocate vectors with known sizes to avoid reallocations
-        biff.variable_resources.reserve_exact(biff.header.variable_resource_count as usize);
-        biff.variable_resource_data.reserve_exact(biff.header.variable_resource_count as usize);
-        biff.fixed_resources.reserve_exact(biff.header.fixed_resource_count as usize);
-        biff.fixed_resource_data.reserve_exact(biff.header.fixed_resource_count as usize);
+        biff.variable_resources
+            .reserve_exact(biff.header.variable_resource_count as usize);
+        biff.variable_resource_data
+            .reserve_exact(biff.header.variable_resource_count as usize);
+        biff.fixed_resources
+            .reserve_exact(biff.header.fixed_resource_count as usize);
+        biff.fixed_resource_data
+            .reserve_exact(biff.header.fixed_resource_count as usize);
 
         // Seek to the variable resource table offset
         file.seek(SeekFrom::Start(biff.header.variable_table_offset.into()))?;
@@ -180,18 +177,20 @@ impl Biff {
         // Read Variable Resource Data with size checks
         for v_resource in &biff.variable_resources {
             file.seek(SeekFrom::Start(v_resource.offset.into()))?;
-            
+
             // Add size limit check to prevent allocation of extremely large buffers
-            if v_resource.file_size > 100_000_000 { // 100MB limit example
+            if v_resource.file_size > 100_000_000 {
+                // 100MB limit example
                 return Err(io::Error::new(
                     io::ErrorKind::InvalidData,
-                    "Resource size exceeds maximum allowed"
+                    "Resource size exceeds maximum allowed",
                 ));
             }
-            
+
             let mut data = vec![0; v_resource.file_size as usize];
             file.read_exact(&mut data)?;
-            biff.variable_resource_data.push(VariableResourceData { data });
+            biff.variable_resource_data
+                .push(VariableResourceData { data });
         }
 
         // Read Fixed Resource Entries
@@ -209,15 +208,16 @@ impl Biff {
         // Read Fixed Resource Data with size checks
         for f_resource in &biff.fixed_resources {
             file.seek(SeekFrom::Start(f_resource.offset.into()))?;
-            
+
             // Add size limit check
-            if f_resource.file_size > 100_000_000 { // 100MB limit example
+            if f_resource.file_size > 100_000_000 {
+                // 100MB limit example
                 return Err(io::Error::new(
                     io::ErrorKind::InvalidData,
-                    "Resource size exceeds maximum allowed"
+                    "Resource size exceeds maximum allowed",
                 ));
             }
-            
+
             let mut data = vec![0; f_resource.file_size as usize];
             file.read_exact(&mut data)?;
             biff.fixed_resource_data.push(FixedResourceData { data });

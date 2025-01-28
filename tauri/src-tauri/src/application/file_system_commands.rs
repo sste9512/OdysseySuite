@@ -25,9 +25,11 @@ pub async fn get_drive_info() -> Result<Vec<String>, String> {
     Ok(drives)
 }
 
-
 #[tauri::command]
-pub async fn search_files_by_extension(path: String, extension: String) -> Result<Vec<String>, String> {
+pub async fn search_files_by_extension(
+    path: String,
+    extension: String,
+) -> Result<Vec<String>, String> {
     use rust_search::SearchBuilder;
 
     let search_results: Vec<String> = SearchBuilder::default()
@@ -41,7 +43,6 @@ pub async fn search_files_by_extension(path: String, extension: String) -> Resul
         .build()
         .collect();
 
-
     println!("Search results:");
     for result in &search_results {
         println!("Found file: {}", result);
@@ -49,7 +50,7 @@ pub async fn search_files_by_extension(path: String, extension: String) -> Resul
 
     match search_results.is_empty() {
         true => Err("No files found".to_string()),
-        false => Ok(search_results)
+        false => Ok(search_results),
     }
 }
 

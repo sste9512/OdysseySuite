@@ -125,7 +125,7 @@
 
 
         <ul class="channels-list-text">
-          <li v-for="rim in rimFiles" :key="rim" class="channel focusable channel-text">
+          <li v-for="rim in rimFiles" :key="rim" class="channel focusable channel-text" @click="navigateToResourceViewRim(rim)">
             <span class="channel-name">{{ rim.split('\\').pop() }}</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
@@ -381,10 +381,15 @@ const navigateToResourceView = (file: string) => {
 };
 
 const navigateToResourceViewERF = (file: string) => {
+  console.log("Navigating to ERF Resource View for file:", file);
   showContextMenu.value = false;
   tabStore.addTab('erf-tab', "erf", file);
 };
-
+const navigateToResourceViewRim = (file: string) => {
+  console.log("Navigating to RIM Resource View for file:", file);
+  showContextMenu.value = false;
+  tabStore.addTab('rim-tab', "rim", file);
+};
 const openContextMenu = (e: MouseEvent) => {
   console.log("This worked partially");
   e.preventDefault();

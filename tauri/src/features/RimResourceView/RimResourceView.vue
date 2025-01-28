@@ -1,31 +1,38 @@
 <template>
-   <div class="erf-view">
+  <div class="rim-view">
     <div class="desk">
- 
-    <v-row>
-      <v-col cols="12">
-          <div class="name">
-            <a-breadcrumb style="color: white">
-              <a-breadcrumb-item>File Path</a-breadcrumb-item>
-              <a-breadcrumb-item>{{ path }}</a-breadcrumb-item>
-            </a-breadcrumb>
-          </div>
+   
+          <a-page-header title="RIM Resource" sub-title="Resource Index Manager" :ghost="false"  style="background-color: transparent; padding: 10px;">
+            <template #breadcrumb>
+              <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
+            </template>
 
-          <a-page-header title="ERF Resource" sub-title="Resource Archive File" :ghost="false" style="background-color: transparent; padding: 10px;">
             <template #extra>
-              <v-btn key="3">Export As</v-btn>
-              <v-btn key="2">View Relationships</v-btn>
-              <v-btn key="1" color="primary">Save</v-btn>
+              <v-btn-group>
+                <v-btn prepend-icon="mdi-export" variant="outlined">Export</v-btn>
+                <v-btn prepend-icon="mdi-book-open-variant" variant="outlined">Documentation</v-btn>
+                <v-btn prepend-icon="mdi-content-save" variant="outlined">Save</v-btn>
+              </v-btn-group>
             </template>
 
             <div style="display: flex; flex-direction: row; gap: 16px;">
-              <a-statistic title="Total Resources" :value="erf?.key_list.entries.length || 0" />
-              <a-statistic title="Total Size" :value="erf?.resource_data.data.length || 0" suffix="bytes" />
-              <a-statistic title="Version" :value="erf?.header.version.join('.') || '0.0.0.0'" />
+              <a-statistic title="Total Resources" :value="rim?.entry_count || 0" />
+              <a-statistic title="Total Size" :value="rim?.data?.length || 0" suffix="bytes" />
+            </div>
+
+            <div class="mt-4">
+              <v-text-field v-model="search" 
+                :loading="loading" 
+                prepend-inner-icon="mdi-magnify" 
+                label="Search resources"
+                variant="outlined" 
+                hide-details 
+                density="comfortable"
+                class="search-field">
+              </v-text-field>
             </div>
           </a-page-header>
-
-      
+  
 
           <v-row class="mt-4">
             <v-col cols="12">
@@ -45,23 +52,17 @@
             :loading="loading" 
             class="mt-4"
             hover>
-            <template v-slot:item.filename="{ item }">
-              {{ item.filename.join('') }}
-            </template>
             <template v-slot:item.resource_type="{ item }">
               {{ getResourceTypeName(item.resource_type) }}
             </template>
             <template v-slot:item.resource_size="{ item }">
-              {{ formatBytes(item.filename.length) }}
+              {{ formatBytes(item.length) }}
             </template>
           </v-data-table>
-  
-      </v-col>
-    </v-row>
+
 
     <ContextMenu :display="showContextMenu" ref="menu">
     </ContextMenu>
- 
   </div>
   </div>
 </template>
@@ -69,11 +70,12 @@
 <script lang="ts">
 import { defineComponent, ref, watch, computed, onMounted } from 'vue';
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
-import { ErfFile, ErfKeyEntry } from '@/data/erf';
+import { Rim } from '@/data/rim';
 import { AuroraService } from '@/data/aurora-service';
+import { ResourceType, resourceTypeFromNumber } from '@/data/resource_identification';
 
-export default {
-  name: 'ErfResourceView',
+export default defineComponent({
+  name: 'RimResourceView',
   components: { ContextMenu },
   props: {
     path: {
@@ -82,66 +84,61 @@ export default {
     }
   },
   setup(props) {
-    console.log('ERF Resource View', props.path);
-    const erf = ref<ErfFile | null>(null);
+    const rim = ref<Rim | null>(null);
     const loading = ref(false);
     const showContextMenu = ref(false);
     const search = ref('');
     const selectedTypes = ref<number[]>([]);
     const resourceTypes = ref<number[]>([]);
-    const menu = ref();
-
     const headers = ref([
-      { title: 'Name', key: 'filename', align: 'start' as const },
+      { title: 'Name', key: 'resource_name', align: 'start' },
       { title: 'Type', key: 'resource_type' },
       { title: 'Size', key: 'resource_size' },
       { title: 'Actions', key: 'actions' }
     ]);
 
     const breadcrumbItems = ref([
-      { title: 'Resources', disabled: false },
-      { title: 'ERF View', disabled: true }
+      { title: 'Resources', disabled: false, path: '/resources' },
+      { title: props.path.split('/').pop() || 'RIM View', disabled: true, path: props.path }
     ]);
 
-    const loadErf = async () => {
+    const loadRim = async () => {
       try {
         loading.value = true;
         const auroraService = new AuroraService();
-        console.log('Loading ERF from path:', props.path);
-        const erfData = await auroraService.readErfFile(props.path);
-        if (erfData.ok) {
-          console.log('ERF data loaded:', erfData.value);
-          erf.value = erfData.value;
-
-          // Extract unique resource types from key list entries
-          const types = new Set(erfData.value.key_list.entries.map(entry => entry.resource_type));
+        console.log('Loading RIM from path:', props.path);
+        const rimData = await auroraService.readRimFile(props.path);
+        if (rimData.ok) {
+          console.log('RIM data loaded:', rimData.value);
+          rim.value = rimData.value;
+          
+          // Extract unique resource types
+          const types = new Set(rimData.value.key_entry_list.map(entry => resourceTypeFromNumber(entry.resource_type)));
           resourceTypes.value = Array.from(types) as number[];
         } else {
-          console.error('Failed to load ERF:', erfData.error);
+          console.error('Failed to load RIM:', rimData.error);
         }
       } catch (error) {
-        console.error('Failed to load ERF:', error);
+        console.error('Failed to load RIM:', error);
       } finally {
         loading.value = false;
       }
     };
 
     const filteredResources = computed(() => {
-      if (!erf.value) return [];
+      if (!rim.value) return [];
+      
+      let resources = rim.value.key_entry_list;
 
-      let resources = erf.value.key_list.entries;
+      if (search.value) {
+        const searchLower = search.value.toLowerCase();
+        resources = resources.filter(resource => 
+          resource.resource_name.toLowerCase().includes(searchLower)
+        );
+      }
 
-      // // Apply search filter
-      // if (search.value) {
-      //   const searchLower = search.value.toLowerCase();
-      //   resources = resources.filter(resource =>
-      //     resource.filename.toLowerCase().includes(searchLower)
-      //   );
-      // }
-
-      // Apply type filter
       if (selectedTypes.value.length > 0) {
-        resources = resources.filter(resource =>
+        resources = resources.filter(resource => 
           selectedTypes.value.includes(resource.resource_type)
         );
       }
@@ -150,8 +147,8 @@ export default {
     });
 
     const getResourceTypeName = (type: number) => {
-      // Add resource type mapping here if needed
-      return `Type ${type}`;
+      const resourceType = resourceTypeFromNumber(type);
+      return resourceType ? ResourceType[resourceType] : `Type ${type}`;
     };
 
     const formatBytes = (bytes: number) => {
@@ -162,48 +159,35 @@ export default {
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     };
 
-    const openContextMenu = (event: { preventDefault: () => void; clientX: number; clientY: number }) => {
-      event.preventDefault();
-      if (menu.value) {
-        menu.value.setPosition(event.clientX, event.clientY);
-      }
-    };
-
-    // Load ERF when component mounts
     onMounted(async () => {
-      console.log('ERF Resource View mounted');
-      await loadErf();
+      await loadRim();
     });
 
-    // Watch for path changes
     watch(() => props.path, async () => {
-      console.log('ERF Resource View path changed:', props.path);
-      await loadErf();
+      await loadRim();
     });
 
     return {
-      erf,
+      rim,
       loading,
       showContextMenu,
       headers,
       breadcrumbItems,
-      loadErf,
+      loadRim,
       getResourceTypeName,
       formatBytes,
       search,
       selectedTypes,
       resourceTypes,
-      filteredResources,
-      openContextMenu,
-      menu
+      filteredResources
     };
   }
-}
+});
 </script>
 
 <style scoped lang="scss">
 
-.erf-view {
+.rim-view {
   padding: 15px 15px 15px 15px;
 
   .desk {

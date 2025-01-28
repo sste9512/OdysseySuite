@@ -17,8 +17,9 @@
 
    
       <ChitinView v-if="item.text === 'chitin'" :path="item.value" />
-      <ErfResourceView v-if="item.text === 'erf'" :filePath="item.value" />
+      <ErfResourceView v-if="item.text === 'erf'" :path="item.value" />
       <BiffResourceView v-if="item.text === 'biff'" :filePath="item.value" />
+      <RimResourceView v-if="item.text === 'rim'" :path="item.value" />
       <AdminDashboard v-if="item.text === 'admin'" />
 
 
@@ -37,7 +38,7 @@ import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
 import ChitinView from "@/features/ChitinResourceView/ChitinView.vue";
 import ErfResourceView from "@/features/ErfResourceView/ErfResourceView.vue";
 import BiffResourceView from "@/features/BiffResourceView/BiffResourceView.vue";
-
+import RimResourceView from "@/features/RimResourceView/RimResourceView.vue";
 
 import DirectoryViewer from "@/features/DirectoryViewer/DirectoryViewer.vue";
 import AdminDashboard from "./AdminDashboard.vue";
@@ -52,6 +53,7 @@ export default defineComponent({
     ErfResourceView,
     AdminDashboard,
     BiffResourceView,
+    RimResourceView,
   },
   setup() {
     const tabViewStore = useTabViewStore();

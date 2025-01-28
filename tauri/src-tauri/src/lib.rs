@@ -1,5 +1,5 @@
-use rusqlite::Connection;
 use crate::application::project_commands::initialize_projects_table;
+use rusqlite::Connection;
 
 mod libs {
     pub mod greetings;
@@ -51,6 +51,8 @@ pub fn run() {
             application::file_system_commands::search_files_by_extension,
             application::aurora_commands::read_chitin_key,
             application::aurora_commands::read_biff,
+            application::aurora_commands::read_erf,
+            application::aurora_commands::read_rim,
             application::project_commands::create_project,
             application::project_commands::list_projects
         ])
