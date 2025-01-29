@@ -1,7 +1,7 @@
 import {container} from "tsyringe";
 import type {AxiosInstance} from "axios";
 import axios from "axios";
-import {useAuthStore} from "@/state/auth-state";
+import {useAuthStore} from "@/state/auth-store.ts";
 import {appDatabase} from "@/data/app-database";
 import {
     FileExplorationClient,

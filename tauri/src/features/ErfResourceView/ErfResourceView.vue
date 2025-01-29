@@ -1,21 +1,22 @@
 <template>
-   <div class="erf-view">
+  <div class="erf-view">
     <div class="desk">
- 
-    <v-row>
-      <v-col cols="12">
+
+      <v-row>
+        <v-col cols="12">
           <div class="name">
-            <a-breadcrumb style="color: white">
-              <a-breadcrumb-item>File Path</a-breadcrumb-item>
-              <a-breadcrumb-item>{{ path }}</a-breadcrumb-item>
-            </a-breadcrumb>
+            <v-breadcrumbs :items="path.split(/[/\\]/).map(item => ({
+              title: item || 'Root',
+              disabled: false
+            }))"></v-breadcrumbs>
           </div>
 
-          <a-page-header title="ERF Resource" sub-title="Resource Archive File" :ghost="false" style="background-color: transparent; padding: 10px;">
+          <a-page-header title="ERF Resource" sub-title="Resource Archive File" :ghost="false"
+            style="background-color: transparent; padding: 10px;">
             <template #extra>
               <v-btn key="3">Export As</v-btn>
               <v-btn key="2">View Relationships</v-btn>
-              <v-btn key="1" color="primary">Save</v-btn>
+              <v-btn key="1" color="primary">Save</v-btn> 
             </template>
 
             <div style="display: flex; flex-direction: row; gap: 16px;">
@@ -25,44 +26,35 @@
             </div>
           </a-page-header>
 
-      
+
 
           <v-row class="mt-4">
             <v-col cols="12">
-              <v-select v-model="selectedTypes" 
-                multiple 
-                chips 
-                label="Resource Types" 
-                :items="resourceTypes"
-                variant="outlined" 
-                class="resource-select">
+              <v-select v-model="selectedTypes" multiple chips label="Resource Types" :items="resourceTypes"
+                variant="outlined" class="resource-select">
               </v-select>
             </v-col>
           </v-row>
 
-          <v-data-table :headers="headers" 
-            :items="filteredResources" 
-            :loading="loading" 
-            class="mt-4"
-            hover>
+          <v-data-table :headers="headers" :items="filteredResources" :loading="loading" class="mt-4" hover>
             <template v-slot:item.filename="{ item }">
               {{ item.filename.join('') }}
             </template>
             <template v-slot:item.resource_type="{ item }">
-              {{ getResourceTypeName(item.resource_type) }}
+              <v-chip class="resource-type-chip">{{ getResourceTypeName(item.resource_type) }}</v-chip>
             </template>
             <template v-slot:item.resource_size="{ item }">
-              {{ formatBytes(item.filename.length) }}
+             {{ formatBytes(item.filename.length) }}
             </template>
           </v-data-table>
-  
-      </v-col>
-    </v-row>
 
-    <ContextMenu :display="showContextMenu" ref="menu">
-    </ContextMenu>
- 
-  </div>
+        </v-col>
+      </v-row>
+
+      <ContextMenu :display="showContextMenu" ref="menu">
+      </ContextMenu>
+
+    </div>
   </div>
 </template>
 
@@ -71,6 +63,8 @@ import { defineComponent, ref, watch, computed, onMounted } from 'vue';
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
 import { ErfFile, ErfKeyEntry } from '@/data/erf';
 import { AuroraService } from '@/data/aurora-service';
+import { ResourceType } from '@/data/resource_identification';
+
 
 export default {
   name: 'ErfResourceView',
@@ -88,8 +82,9 @@ export default {
     const showContextMenu = ref(false);
     const search = ref('');
     const selectedTypes = ref<number[]>([]);
-    const resourceTypes = ref<number[]>([]);
+    const resourceTypes = ref<string[]>([]);
     const menu = ref();
+
 
     const headers = ref([
       { title: 'Name', key: 'filename', align: 'start' as const },
@@ -114,8 +109,8 @@ export default {
           erf.value = erfData.value;
 
           // Extract unique resource types from key list entries
-          const types = new Set(erfData.value.key_list.entries.map(entry => entry.resource_type));
-          resourceTypes.value = Array.from(types) as number[];
+          const types = new Set<number>(erfData.value.key_list.entries.map(entry => entry.resource_type));
+          resourceTypes.value = Array.from(types).map(type => getResourceTypeName(type));
         } else {
           console.error('Failed to load ERF:', erfData.error);
         }
@@ -126,8 +121,13 @@ export default {
       }
     };
 
+    const getResourceTypeName = (type: number) => {
+      return ResourceType[type] || type;
+    };
+
     const filteredResources = computed(() => {
       if (!erf.value) return [];
+
 
       let resources = erf.value.key_list.entries;
 
@@ -149,10 +149,7 @@ export default {
       return resources;
     });
 
-    const getResourceTypeName = (type: number) => {
-      // Add resource type mapping here if needed
-      return `Type ${type}`;
-    };
+
 
     const formatBytes = (bytes: number) => {
       if (bytes === 0) return '0 Bytes';
@@ -202,14 +199,43 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .erf-view {
+  :deep(.v-breadcrumbs) {
+        padding: 0;
+        
+        .v-breadcrumbs-item {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 14px;
+            
+            &--disabled {
+                opacity: 0.5;
+            }
+            
+            &:hover:not(.v-breadcrumbs-item--disabled) {
+                color: rgba(255, 255, 255, 0.85);
+            }
+        }
+
+        .v-breadcrumbs-divider {
+            color: rgba(255, 255, 255, 0.45);
+            padding: 0 8px;
+        }
+    }
   padding: 15px 15px 15px 15px;
+ 
+  .resource-type-chip {
+    background: rgba(74, 158, 255, 0.15);
+    color: #4a9eff;
+    font-size: 12px;
+    height: 24px;
+  }
 
   .desk {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     padding: 25px 25px 30px 30px;
+    border: 0.4px solid rebeccapurple;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
   }
 
   .titles {
@@ -237,6 +263,7 @@ export default {
       }
     }
   }
+
   :deep(.ant-page-header) {
     .ant-page-header-heading-title {
       color: rgba(255, 255, 255, 0.85);
@@ -286,12 +313,86 @@ export default {
     }
   }
 
+  :deep(.v-select) {
+    .v-field {
+      background: rgba(30, 30, 40, 0.7) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+
+      &:hover {
+        border-color: rgba(74, 158, 255, 0.5);
+      }
+
+      &.v-field--focused {
+        border-color: #4a9eff;
+        box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+      }
+
+      .v-field__input {
+        color: rgba(255, 255, 255, 0.85) !important;
+        font-size: 14px;
+      }
+
+      .v-field__append-inner {
+        color: rgba(255, 255, 255, 0.45);
+      }
+    }
+
+    .v-select__selection {
+      color: rgba(255, 255, 255, 0.85) !important;
+    }
+
+    .v-label {
+      color: rgba(255, 255, 255, 0.65) !important;
+      font-size: 14px;
+    }
+
+    .v-chip {
+      background: rgba(74, 158, 255, 0.15);
+      color: #4a9eff;
+      font-size: 12px;
+      height: 24px;
+
+      &:hover {
+        background: rgba(74, 158, 255, 0.25);
+      }
+
+      .v-chip__close {
+        color: #4a9eff;
+        opacity: 0.7;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    .v-list {
+      background: rgba(30, 30, 40, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      .v-list-item {
+        color: rgba(255, 255, 255, 0.85);
+
+        &:hover {
+          background: rgba(74, 158, 255, 0.1);
+        }
+
+        &.v-list-item--active {
+          background: rgba(74, 158, 255, 0.2);
+          color: #4a9eff;
+        }
+      }
+    }
+  }
+
   .v-data-table {
-    background: rgba(0, 0, 0, 0.3);
+
     border-radius: 8px;
 
     :deep(.v-data-table-header) {
-      background: rgba(0, 0, 0, 0.2);
+
+
 
       th {
         color: rgba(255, 255, 255, 0.85) !important;

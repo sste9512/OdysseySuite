@@ -243,7 +243,7 @@
 
 <script>
 import ChitinView from '../components/ResourceViews/ChitinView.vue'
-import ProfilePage from './ProfilePage.vue'
+import ProfilePage from './Login-Auth/ProfilePage.vue'
 import GlassContainer from '../layouts/default/GlassContainer.vue'
 import GlassCardView from '../components/ResourceViews/GlassCardView.vue'
 import App from '../App.vue'

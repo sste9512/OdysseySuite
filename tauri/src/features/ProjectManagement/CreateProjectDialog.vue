@@ -64,8 +64,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { useProjectStore } from "@/state/project-store";
-import { useDialogStore } from "@/state/dialog-store";
+import { useProjectStore } from "@/state/project-store.ts";
+import { useDialogStore } from "@/state/dialog-store.ts";
 import DirectoryViewer from "@/features/DirectoryViewer/DirectoryViewer.vue";
 
 const props = defineProps({

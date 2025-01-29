@@ -1,5 +1,5 @@
 <template>
-  <a-tabs v-model:activeKey="current" type="editable-card" class="ant-custom-tabs">
+  <a-tabs v-model:activeKey="current"   >
     <a-tab-pane v-for="item in tabViewStore.tabs" :key="item.value" :tab="item.text" :closable="true"
       @contextmenu.prevent="openContextMenu" @mouseenter="onTabHover(item.text)" @mouseleave="onTabLeave(item)"
       @dragstart="onTabDragStart(item, $event)" @dragend="onTabDragEnd(item, $event)"
@@ -16,11 +16,11 @@
  
 
    
-      <ChitinView v-if="item.text === 'chitin'" :path="item.value" />
-      <ErfResourceView v-if="item.text === 'erf'" :path="item.value" />
-      <BiffResourceView v-if="item.text === 'biff'" :filePath="item.value" />
-      <RimResourceView v-if="item.text === 'rim'" :path="item.value" />
-      <AdminDashboard v-if="item.text === 'admin'" />
+      <ChitinView v-if="item.type === 'chitin'" :path="item.value" />
+      <ErfResourceView v-if="item.type === 'erf'" :path="item.value" />
+      <BiffResourceView v-if="item.type === 'biff'" :filePath="item.value" />
+      <RimResourceView v-if="item.type === 'rim'" :path="item.value" />
+      <AdminDashboard v-if="item.type === 'admin'" />
 
 
 
@@ -41,7 +41,7 @@ import BiffResourceView from "@/features/BiffResourceView/BiffResourceView.vue";
 import RimResourceView from "@/features/RimResourceView/RimResourceView.vue";
 
 import DirectoryViewer from "@/features/DirectoryViewer/DirectoryViewer.vue";
-import AdminDashboard from "./AdminDashboard.vue";
+import AdminDashboard from "./Administration/AdminDashboard.vue";
 
 export default defineComponent({
   name: 'TabNavigation',
@@ -136,5 +136,52 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/css/ant-overrides/ant-tabs.scss";
+.ant-tabs {
+  .ant-tabs-nav {
+    margin-bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 0, 0, 0.918);
+    color: white;
+
+    .ant-tabs-tab {
+      padding: 8px 16px;
+      color: rgba(255, 255, 255, 0.65);
+      transition: all 0.3s;
+      color: wheat !important;
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      &.ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+          color: #4a9eff;
+        }
+      }
+    }
+
+    .ant-tabs-ink-bar {
+      background: rebeccapurple;
+    }
+  }
+
+  .ant-tabs-content {
+    height: 100%;
+    
+    .ant-tabs-tabpane {
+      padding: 16px;
+    }
+  }
+
+  .ant-tabs-nav-operations {
+    .ant-tabs-nav-more {
+      color: rgba(255, 255, 255, 0.65);
+      
+      &:hover {
+        color: rgba(255, 255, 255, 0.85);
+      }
+    }
+  }
+}
+
 </style>

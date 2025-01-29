@@ -2,15 +2,15 @@
     <div class="biff-view">
         <div class="desk">
             <div class="name">
-                <a-breadcrumb style="color: white">
-                    <a-breadcrumb-item>File Path</a-breadcrumb-item>
-                    <a-breadcrumb-item>biff</a-breadcrumb-item>
-                    <a-breadcrumb-item>{{ filePath.split('/').pop() }}</a-breadcrumb-item>
-                </a-breadcrumb>
+                <v-breadcrumbs :items="filePath.split(/[/\\]/).map(item => ({
+                    title: item || 'Root',
+                    disabled: false
+                }))"></v-breadcrumbs>
             </div>
 
-            <a-page-header :title="filePath.split('/').pop()" sub-title="BIFF Resource File" :ghost="false"
-                style="background-color: transparent; padding: 10px;">
+
+            <a-page-header :title="filePath.split(/[/\\]/).pop()" sub-title="BIFF Resource File" :ghost="false"
+                style="background-color: transparent; padding: 10px; color: blue !important;">
                 <template #extra>
                     <v-btn key="3">Export As</v-btn>
                     <v-btn key="2">View Relationships</v-btn>
@@ -28,10 +28,25 @@
             <a-tabs>
                 <a-tab-pane key="1" tab="Variable Resources">
                     <v-data-table :headers="variableHeaders" :items="variableResources" :height="400" fixed-header>
+                        <template v-slot:item.resource_type="{ item }">
+                            {{ getResourceTypeName(item.resource_type) }}
+                        </template>
                         <template v-slot:item.data="{ item }">
-                            <v-btn size="small" color="primary" @click="viewResourceData(item)">
-                                View Data
-                            </v-btn>
+                            <v-row>
+                                <v-col>
+                                    <v-btn size="small" color="primary" @click="viewResourceData(item)">
+                                        View Data
+                                    </v-btn>
+                                </v-col>
+                                <v-col>
+                                    <v-btn size="small" color="primary" @click="viewResourceData(item)">
+                                        Extract Data
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+
+
+
                         </template>
                     </v-data-table>
                 </a-tab-pane>
@@ -55,6 +70,7 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import { BiffHeader, VResourceEntry, FResourceEntry } from '@/data/biff';
 import { AuroraService } from '@/data/aurora-service';
+import { ResourceType } from '@/data/resource_identification';
 
 export default defineComponent({
     name: 'BiffResourceView',
@@ -73,18 +89,20 @@ export default defineComponent({
         const variableHeaders = [
             { title: 'ID', key: 'id' },
             { title: 'Offset', key: 'offset' },
-            { title: 'File Size', key: 'fileSize' },
-            { title: 'Resource Type', key: 'resourceType' },
+            { title: 'File Size', key: 'file_size' },
+            { title: 'Resource Type', key: 'resource_type' },
             { title: 'Actions', key: 'data' }
+
         ];
 
         const fixedHeaders = [
             { title: 'ID', key: 'id' },
             { title: 'Offset', key: 'offset' },
-            { title: 'Part Count', key: 'partCount' },
-            { title: 'File Size', key: 'fileSize' },
-            { title: 'Resource Type', key: 'resourceType' },
+            { title: 'Part Count', key: 'part_count' },
+            { title: 'File Size', key: 'file_size' },
+            { title: 'Resource Type', key: 'resource_type' },
             { title: 'Actions', key: 'data' }
+
         ];
 
         const viewResourceData = (resource: VResourceEntry | FResourceEntry) => {
@@ -94,14 +112,19 @@ export default defineComponent({
 
         const auroraService = new AuroraService();
 
+        const getResourceTypeName = (type: number) => {
+            return ResourceType[type] || type;
+        };
+
         const loadBiffData = async () => {
             try {
+
                 const result = await auroraService.readBiffFile(props.filePath);
                 if (result.ok) {
                     biffHeader.value = result.value.header;
                     variableResources.value = result.value.variable_resources;
                     fixedResources.value = result.value.fixed_resources;
-                } else {    
+                } else {
                     console.error('Failed to load BIFF data:', result.error);
                 }
             } catch (error) {
@@ -122,7 +145,8 @@ export default defineComponent({
             fixedHeaders,
             viewResourceData,
             props,
-            loadBiffData
+            loadBiffData,
+            getResourceTypeName
         };
     }
 });
@@ -130,10 +154,33 @@ export default defineComponent({
 
 <style scoped>
 .biff-view {
-.v-data-table {
-    margin-top: 1rem;
-}
-:deep(.ant-tabs) {
+    :deep(.v-breadcrumbs) {
+        padding: 0;
+
+        .v-breadcrumbs-item {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 14px;
+
+            &--disabled {
+                opacity: 0.5;
+            }
+
+            &:hover:not(.v-breadcrumbs-item--disabled) {
+                color: rgba(255, 255, 255, 0.85);
+            }
+        }
+
+        .v-breadcrumbs-divider {
+            color: rgba(255, 255, 255, 0.45);
+            padding: 0 8px;
+        }
+    }
+
+    .v-data-table {
+        margin-top: 1rem;
+    }
+
+    :deep(.ant-tabs) {
         .ant-tabs-nav {
             margin-bottom: 16px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -165,6 +212,7 @@ export default defineComponent({
             color: rgba(255, 255, 255, 0.85);
         }
     }
+
     :deep(.ant-page-header) {
         background: transparent;
         padding: 16px 24px;
@@ -264,6 +312,8 @@ export default defineComponent({
         background: rgba(0, 0, 0, 0.3);
         border-radius: 8px;
         padding: 25px 25px 30px 30px;
+        border: 0.4px solid rebeccapurple;
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
     }
 
 

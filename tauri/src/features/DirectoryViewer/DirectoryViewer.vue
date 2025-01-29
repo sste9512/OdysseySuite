@@ -180,7 +180,8 @@ export default {
         <v-icon size="small" color="grey" class="mr-2" style="margin-left: 20px;">mdi-folder-open</v-icon>
         <span class="text-caption text-grey" >{{ currentDirectory.path }}</span>
         <v-spacer></v-spacer>
-        <v-btn tile color="success" @click="selectDirectory" style="margin-right: 15px;">
+    
+        <v-btn color="success" variant="tonal" style="margin-right: 15px;">
           <v-icon left>
             mdi-pencil
           </v-icon>

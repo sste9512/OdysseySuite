@@ -376,19 +376,20 @@ const loadFiles = async () => {
 loadFiles();
 
 const navigateToResourceView = (file: string) => {
+  console.log("Navigating to Chitin Resource View for file:", file);
   showContextMenu.value = false;
-  tabStore.addTab('chitin-tab', "chitin", file);
+  tabStore.addTab('chitin-tab', "chitin",file.split('\\').pop() || 'Chitin Resource', file);
 };
 
 const navigateToResourceViewERF = (file: string) => {
   console.log("Navigating to ERF Resource View for file:", file);
   showContextMenu.value = false;
-  tabStore.addTab('erf-tab', "erf", file);
+  tabStore.addTab('erf-tab', "erf",file.split('\\').pop() || 'Erf Resource', file);
 };
 const navigateToResourceViewRim = (file: string) => {
   console.log("Navigating to RIM Resource View for file:", file);
   showContextMenu.value = false;
-  tabStore.addTab('rim-tab', "rim", file);
+  tabStore.addTab('rim-tab', "rim",file.split('\\').pop() || 'Rim Resource', file);
 };
 const openContextMenu = (e: MouseEvent) => {
   console.log("This worked partially");
@@ -398,8 +399,8 @@ const openContextMenu = (e: MouseEvent) => {
 
 const navigateToBiffResourceView = (file: string) => {
   console.log("Navigating to Biff Resource View for file:", file);
-  // Implement navigation logic here
-  tabStore.addTab('biff-tab', "biff", file);
+  showContextMenu.value = false;
+  tabStore.addTab('biff-tab', 'biff', file.split('\\').pop() || 'Biff Resource', file);
 };
 
 </script>

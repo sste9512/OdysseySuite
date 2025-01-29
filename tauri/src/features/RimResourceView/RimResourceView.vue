@@ -1,69 +1,73 @@
 <template>
   <div class="rim-view">
     <div class="desk">
+
+      <a-page-header title="RIM Resource" sub-title="Resource Index Manager" :ghost="false"
+        style="background-color: transparent; padding: 10px;">
+        <template #breadcrumb>
+          <v-breadcrumbs :items="path.split(/[/\\]/).map(item => ({
+            title: item || 'Root',
+            disabled: false
+          }))"></v-breadcrumbs>
+        </template>
+
+        <template #extra>
+          <v-btn-group>
+            <v-btn prepend-icon="mdi-export" variant="outlined">Export</v-btn>
+            <v-btn prepend-icon="mdi-book-open-variant" variant="outlined">Documentation</v-btn>
+            <v-btn prepend-icon="mdi-content-save" variant="outlined">Save</v-btn>
+          </v-btn-group>
+        </template>
+
+        <div style="display: flex; flex-direction: row; gap: 16px;">
+          <a-statistic title="Total Resources" :value="rim?.entry_count || 0" />
+          <a-statistic title="Total Size" :value="rim?.data?.length || 0" suffix="bytes" />
+        </div>
+
    
-          <a-page-header title="RIM Resource" sub-title="Resource Index Manager" :ghost="false"  style="background-color: transparent; padding: 10px;">
-            <template #breadcrumb>
-              <v-breadcrumbs :items="breadcrumbItems"></v-breadcrumbs>
-            </template>
+      </a-page-header>
 
-            <template #extra>
-              <v-btn-group>
-                <v-btn prepend-icon="mdi-export" variant="outlined">Export</v-btn>
-                <v-btn prepend-icon="mdi-book-open-variant" variant="outlined">Documentation</v-btn>
-                <v-btn prepend-icon="mdi-content-save" variant="outlined">Save</v-btn>
-              </v-btn-group>
-            </template>
 
-            <div style="display: flex; flex-direction: row; gap: 16px;">
-              <a-statistic title="Total Resources" :value="rim?.entry_count || 0" />
-              <a-statistic title="Total Size" :value="rim?.data?.length || 0" suffix="bytes" />
-            </div>
+      <v-row class="mt-4">
+        <v-col cols="12">
+          <v-text-field v-model="search" :loading="loading" prepend-inner-icon="mdi-magnify" label="Search resources"
+            variant="outlined" hide-details density="comfortable" class="search-field">
+          </v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-select v-model="selectedTypes" multiple chips label="Resource Types" :items="resourceTypes"
+            variant="outlined" class="resource-select">
+          </v-select>
+        </v-col>
+      </v-row>
 
-            <div class="mt-4">
-              <v-text-field v-model="search" 
-                :loading="loading" 
-                prepend-inner-icon="mdi-magnify" 
-                label="Search resources"
-                variant="outlined" 
-                hide-details 
-                density="comfortable"
-                class="search-field">
-              </v-text-field>
-            </div>
-          </a-page-header>
-  
-
-          <v-row class="mt-4">
-            <v-col cols="12">
-              <v-select v-model="selectedTypes" 
-                multiple 
-                chips 
-                label="Resource Types" 
-                :items="resourceTypes"
-                variant="outlined" 
-                class="resource-select">
-              </v-select>
+      <v-data-table :headers="headers" :items="filteredResources" :loading="loading" class="mt-4" hover>
+        <template v-slot:item.resource_type="{ item }">
+          <v-chip class="resource-type-chip">{{ getResourceTypeName(item.resource_type) }}</v-chip>
+        </template>
+        <template v-slot:item.resource_size="{ item }">
+          <v-chip class="resource-size-chip">{{ formatBytes(item.length) }}</v-chip>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-row>
+            <v-col>
+              <v-btn size="small" color="primary">
+                View Data
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn size="small" color="primary">
+                Extract Data
+              </v-btn>
             </v-col>
           </v-row>
-
-          <v-data-table :headers="headers" 
-            :items="filteredResources" 
-            :loading="loading" 
-            class="mt-4"
-            hover>
-            <template v-slot:item.resource_type="{ item }">
-              {{ getResourceTypeName(item.resource_type) }}
-            </template>
-            <template v-slot:item.resource_size="{ item }">
-              {{ formatBytes(item.length) }}
-            </template>
-          </v-data-table>
+        </template>
+      </v-data-table>
 
 
-    <ContextMenu :display="showContextMenu" ref="menu">
-    </ContextMenu>
-  </div>
+      <ContextMenu :display="showContextMenu" ref="menu">
+      </ContextMenu>
+    </div>
   </div>
 </template>
 
@@ -111,7 +115,7 @@ export default defineComponent({
         if (rimData.ok) {
           console.log('RIM data loaded:', rimData.value);
           rim.value = rimData.value;
-          
+
           // Extract unique resource types
           const types = new Set(rimData.value.key_entry_list.map(entry => resourceTypeFromNumber(entry.resource_type)));
           resourceTypes.value = Array.from(types) as number[];
@@ -127,18 +131,18 @@ export default defineComponent({
 
     const filteredResources = computed(() => {
       if (!rim.value) return [];
-      
+
       let resources = rim.value.key_entry_list;
 
       if (search.value) {
         const searchLower = search.value.toLowerCase();
-        resources = resources.filter(resource => 
+        resources = resources.filter(resource =>
           resource.resource_name.toLowerCase().includes(searchLower)
         );
       }
 
       if (selectedTypes.value.length > 0) {
-        resources = resources.filter(resource => 
+        resources = resources.filter(resource =>
           selectedTypes.value.includes(resource.resource_type)
         );
       }
@@ -186,14 +190,83 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-
 .rim-view {
+  :deep(.v-text-field) {
+    .v-field {
+      background: rgba(91, 5, 117, 0.938) !important;
+      border-radius: 4px !important;
+      border-color: rebeccapurple !important;
+      
+      &__input {
+        color: rgba(255, 255, 255, 0.85) !important;
+      }
+      
+      &__field {
+        color: rgba(255, 255, 255, 0.85) !important;
+      }
+    }
+
+    .v-label {
+      color: rgba(255, 255, 255, 0.65) !important;
+    }
+  }
+
+  :deep(.v-input) {
+    .v-field {
+      background: rgba(0, 0, 0, 0.3) !important;
+      border-radius: 4px !important;
+      border-color: rebeccapurple !important;
+
+      &__input {
+        color: rgba(255, 255, 255, 0.85) !important;
+      }
+      
+      &__field {
+        color: rgba(255, 255, 255, 0.85) !important;
+      }
+    }
+
+    .v-label {
+      color: rgba(255, 255, 255, 0.65) !important;
+    }
+  }
+ 
+  .resource-type-chip {
+    background: rgba(74, 158, 255, 0.15);
+    color: #4a9eff;
+    font-size: 12px;
+    height: 24px;
+  }
+
+  :deep(.v-breadcrumbs) {
+        padding: 0;
+        
+        .v-breadcrumbs-item {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 14px;
+            
+            &--disabled {
+                opacity: 0.5;
+            }
+            
+            &:hover:not(.v-breadcrumbs-item--disabled) {
+                color: rgba(255, 255, 255, 0.85);
+            }
+        }
+
+        .v-breadcrumbs-divider {
+            color: rgba(255, 255, 255, 0.45);
+            padding: 0 8px;
+        }
+    }
   padding: 15px 15px 15px 15px;
 
   .desk {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     padding: 25px 25px 30px 30px;
+    border: 0.4px solid rebeccapurple;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
   }
 
   .titles {
@@ -221,6 +294,7 @@ export default defineComponent({
       }
     }
   }
+
   :deep(.ant-page-header) {
     .ant-page-header-heading-title {
       color: rgba(255, 255, 255, 0.85);
@@ -271,7 +345,7 @@ export default defineComponent({
   }
 
   .v-data-table {
-    background: rgba(0, 0, 0, 0.3);
+
     border-radius: 8px;
 
     :deep(.v-data-table-header) {

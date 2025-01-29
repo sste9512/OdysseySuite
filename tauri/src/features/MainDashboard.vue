@@ -6,11 +6,11 @@ import ToolboxView from "@/features/Toolbox/ToolboxView.vue";
 import OuterMainGameNav from "@/components/NavigationDrawerViews/GameResourcesNavView.vue";
 import { useTabViewStore } from "@/state/tab-store.ts";
 import { ref } from "vue";
-import TabNavigation from "@/navigation/pages/TabNavigation.vue";
+import TabNavigation from "@/features/TabNavigation.vue";
 import { useDialogStore } from "@/state/dialog-store.ts";
-import ProfilePage from "@/navigation/pages/ProfilePage.vue";
+import ProfilePage from "@/features/Login-Auth/ProfilePage.vue";
 import LogViewer from "@/features/LogViewer/LogViewer.vue";
-import CreateProjectDialog from "@/navigation/pages/CreateProjectDialog.vue";
+import CreateProjectDialog from "@/features/ProjectManagement/CreateProjectDialog.vue";
 
 
 

@@ -6,28 +6,28 @@ const routes = [
         name: 'Login',
         path: '/',
         component: async function () {
-            return import('./pages/LoginScreen.vue')
+            return import('../features/Login-Auth/LoginScreen.vue')
         }
     },
     {
         name: "MainDashboard",
         path: '/project/maindashboard',
         component: async function () {
-            return import('./pages/MainDashboard.vue')
+            return import('../features/MainDashboard.vue')
         },
         children: [
             {
                 path: '',
                 name: 'Home',
-                component: () => import( '../navigation/pages/AdminDashboard.vue')
+                component: () => import( '../features/Administration/AdminDashboard.vue')
             },
             {
                 path: '/resource/:id',
-                component: () => import('../navigation/pages/ResourceViewPortalPage.vue')
+                component: () => import('../features/ResourceViewPortalPage.vue')
             },
             {
                 path: '/profile',
-                component: () => import('../navigation/pages/ProfilePage.vue')
+                component: () => import('../features/Login-Auth/ProfilePage.vue')
             }
         ]
     }

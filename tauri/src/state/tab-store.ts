@@ -14,11 +14,12 @@ export const useTabViewStore = defineStore('tabViewStore', {
 
     // {
     //     icon: 'mdi-shield-lock-outline',
+    //     type: 'chitin-tab',
     //     text: 'Security',
     //     value: 'tab-4',
     //   },
     state: () => ({
-        tabs: [] as { icon: string, text: string, value: string }[], // List of tab states
+        tabs: [] as { icon: string, type: string, text: string, value: string }[], // List of tab states
         currentTab: "swpc_tex_tpc" as string,
     }),
     actions: {
@@ -33,13 +34,14 @@ export const useTabViewStore = defineStore('tabViewStore', {
             }
         },
         // Add a new tab with optional configuration and inner component reference
-        addTab(id: string, title: string, value: string) {
+        addTab(id: string, type: string, title: string, value: string) {
             const loggingStore = useLoggingStore();
             loggingStore.addAction("tabs", "Add Tab ->" + id)
             const existingTab = this.tabs.find(tab => tab.value === value);   
             if (!existingTab) {
                 this.tabs.push({
                     icon: "mdi-shield-lock-outline",
+                    type: type,
                     text: title,
                     value: value,
                 });

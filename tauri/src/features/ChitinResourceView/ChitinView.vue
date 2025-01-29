@@ -3,19 +3,11 @@
         <div class="desk">
 
 
-
-
-
-
-
-
-
             <div class="name">
-                <a-breadcrumb style="color: white">
-                    <a-breadcrumb-item>File Path</a-breadcrumb-item>
-                    <a-breadcrumb-item>chitin</a-breadcrumb-item>
-                    <a-breadcrumb-item>key</a-breadcrumb-item>
-                </a-breadcrumb>
+                <v-breadcrumbs :items="path.split(/[/\\]/).map(item => ({
+                    title: item || 'Root',
+                    disabled: false
+                }))"></v-breadcrumbs>
             </div>
 
 
@@ -53,7 +45,7 @@
 
 
             <a-tabs>
-                <a-tab-pane key="1" tab="Resource Keys">
+                <a-tab-pane key="1" :tab="`Key Entries (${chitinData?.length || 0})`">
                     <v-data-table :headers="[
                         { title: 'Resref', key: 'resref' },
                         { title: 'Resource Type', key: 'resource_type' },
@@ -63,15 +55,16 @@
                             {{ item.resref }}
                         </template>
                         <template v-slot:item.resource_type="{ item }">
-                            {{ item.resource_type }}
+                            {{ getResourceTypeName(item.resource_type) }}
                         </template>
                         <template v-slot:item.res_id="{ item }">
                             {{ item.res_id }}
+
                         </template>
                     </v-data-table>
                 </a-tab-pane>
 
-                <a-tab-pane key="2" tab="File Entries">
+                <a-tab-pane key="2" :tab="`File Entries (${fileEntries?.length || 0})`">
                     <v-data-table :headers="fileColumns" :items="fileEntries" :height="400" fixed-header>
                         <template v-slot:item.filename="{ item }">
                             {{ item.file_size }}
@@ -88,10 +81,10 @@
                     </v-data-table>
                 </a-tab-pane>
 
-                <a-tab-pane key="3" tab="Filenames">
+                <a-tab-pane key="3" :tab="`Filenames (${filenameEntries?.length || 0})`">
                     <v-data-table :headers="filenameColumns" :items="filenameEntries" :height="400" fixed-header>
                         <template v-slot:item.filename="{ item }">
-                            {{ item.filename }}
+                            {{ item }}
                         </template>
                     </v-data-table>
                 </a-tab-pane>
@@ -106,6 +99,7 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { AuroraService } from '@/data/aurora-service';
 import { KeyHeader, KeyEntry } from '@/data/chitin-key';
 import { FileEntry, FilenameEntry } from '@/data/chitin-key';
+import { ResourceType } from '@/data/resource_identification';
 
 
 
@@ -124,8 +118,9 @@ export default defineComponent({
         const loading = ref(false);
         const header = ref<KeyHeader | null>(null);
         const fileEntries = ref<FileEntry[]>([]);
+        
 
-        const filenameEntries = ref<FilenameEntry[]>([]);
+        const filenameEntries = ref<string[]>([]);
 
         const fileColumns = [
             {
@@ -158,7 +153,7 @@ export default defineComponent({
                 title: 'Filename',
                 dataIndex: 'filename',
                 key: 'filename',
-                width: '40%'
+                width: '100%'
             }
         ];
 
@@ -184,17 +179,22 @@ export default defineComponent({
             }
         ];
 
+        const getResourceTypeName = (type: number) => {
+            return ResourceType[type] || type;
+        };
+
         const loadChitinData = async () => {
             try {
                 loading.value = true;
                 const auroraService = new AuroraService();
-                const path =  props.path;
+                const path = props.path;
                 const result = await auroraService.readChitinKey(path);
+                console.log(result.filenames);
                 if (result) {
                     chitinData.value = result.key_entries;
                     header.value = result.header;
                     fileEntries.value = result.file_entries;
-                    filenameEntries.value = result.filenames.map(filename => ({ filename }));
+                    filenameEntries.value = result.filenames;
                 }
             } catch (error) {
                 console.error('Error loading chitin data:', error);
@@ -204,7 +204,7 @@ export default defineComponent({
         };
 
         onMounted(async () => {
-            await loadChitinData(); 
+            await loadChitinData();
         });
 
         return {
@@ -217,14 +217,37 @@ export default defineComponent({
             fileColumns,
             filenameColumns,
             props,
-            loadChitinData
+            loadChitinData,
+            getResourceTypeName
         };
     }
 });
+
 </script>
 
 <style scoped lang="scss">
 .chitin-view {
+    :deep(.v-breadcrumbs) {
+        padding: 0;
+        
+        .v-breadcrumbs-item {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 14px;
+            
+            &--disabled {
+                opacity: 0.5;
+            }
+            
+            &:hover:not(.v-breadcrumbs-item--disabled) {
+                color: rgba(255, 255, 255, 0.85);
+            }
+        }
+
+        .v-breadcrumbs-divider {
+            color: rgba(255, 255, 255, 0.45);
+            padding: 0 8px;
+        }
+    }
 
     :deep(.ant-tabs) {
         .ant-tabs-nav {
@@ -258,6 +281,7 @@ export default defineComponent({
             color: rgba(255, 255, 255, 0.85);
         }
     }
+
     :deep(.ant-page-header) {
         background: transparent;
         padding: 16px 24px;
@@ -357,6 +381,8 @@ export default defineComponent({
         background: rgba(0, 0, 0, 0.3);
         border-radius: 8px;
         padding: 25px 25px 30px 30px;
+        border: 0.4px solid rebeccapurple;
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
     }
 
 
