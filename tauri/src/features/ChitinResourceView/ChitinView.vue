@@ -52,10 +52,10 @@
                         { title: 'Resource ID', key: 'res_id' }
                     ]" :items="chitinData" :height="400" fixed-header>
                         <template v-slot:item.resref="{ item }">
-                            {{ item.resref }}
+                            {{ removeNullCharacters(item.resref) }}
                         </template>
                         <template v-slot:item.resource_type="{ item }">
-                            {{ getResourceTypeName(item.resource_type) }}
+                            <v-chip color="primary">{{ getResourceTypeName(item.resource_type) }}</v-chip>
                         </template>
                         <template v-slot:item.res_id="{ item }">
                             {{ item.res_id }}
@@ -66,8 +66,8 @@
 
                 <a-tab-pane key="2" :tab="`File Entries (${fileEntries?.length || 0})`">
                     <v-data-table :headers="fileColumns" :items="fileEntries" :height="400" fixed-header>
-                        <template v-slot:item.filename="{ item }">
-                            {{ item.file_size }}
+                        <template v-slot:item.filename="{ item, index }">
+                            {{ filenameEntries[index].filename }}
                         </template>
                         <template v-slot:item.file_size="{ item }">
                             {{ item.file_size }}
@@ -84,7 +84,7 @@
                 <a-tab-pane key="3" :tab="`Filenames (${filenameEntries?.length || 0})`">
                     <v-data-table :headers="filenameColumns" :items="filenameEntries" :height="400" fixed-header>
                         <template v-slot:item.filename="{ item }">
-                            {{ item }}
+                            {{ item.filename }}
                         </template>
                     </v-data-table>
                 </a-tab-pane>
@@ -120,7 +120,7 @@ export default defineComponent({
         const fileEntries = ref<FileEntry[]>([]);
         
 
-        const filenameEntries = ref<string[]>([]);
+        const filenameEntries = ref<FilenameEntry[]>([]);
 
         const fileColumns = [
             {
@@ -183,6 +183,10 @@ export default defineComponent({
             return ResourceType[type] || type;
         };
 
+        const removeNullCharacters = (str: string[]) => {
+            return str.map(item => item.replace(/\u0000/g, '')).filter(item => item !== '').join('');
+        };
+
         const loadChitinData = async () => {
             try {
                 loading.value = true;
@@ -218,7 +222,8 @@ export default defineComponent({
             filenameColumns,
             props,
             loadChitinData,
-            getResourceTypeName
+            getResourceTypeName,
+            removeNullCharacters
         };
     }
 });

@@ -27,6 +27,8 @@ fn open_url(url: String) -> String {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+
+    
     let conn = match Connection::open("projects.db") {
         Ok(connection) => connection,
         Err(e) => panic!("Failed to connect to database: {}", e),

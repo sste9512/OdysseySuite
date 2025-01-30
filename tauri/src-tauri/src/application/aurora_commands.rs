@@ -45,7 +45,7 @@ pub async fn read_chitin_key(path: &str) -> Result<Value, String> {
         .zip(chitin_key.filenames.iter())
         .enumerate()
     {
-        println!("BIF {}: {} (size: {} bytes)", i, name, entry.file_size);
+        println!("BIF {}: {} (size: {} bytes)", i, name.filename, entry.file_size);
     }
 
     // Print some resource entries
@@ -60,6 +60,9 @@ pub async fn read_chitin_key(path: &str) -> Result<Value, String> {
     }
     Ok(serde_json::to_value(&chitin_key).unwrap())
 }
+
+
+
 
 #[tauri::command]
 pub fn read_biff(path: &str) -> Result<Biff, String> {

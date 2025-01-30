@@ -1,21 +1,27 @@
 use byteorder::{LittleEndian, ReadBytesExt};
 use serde::{Deserialize, Serialize};
-use std::io::{self, Read};
+use std::io::{self, Read, Seek};
+
+
+// TODO: Fix key entries
+// resref - returning partial strings
+// resource type - returning wrong number?
+// resource id - possibly wrong
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ChitinKey {
     pub header: KeyHeader,
     pub file_entries: Vec<FileEntry>,
-    pub filenames: Vec<String>,
+    pub filenames: Vec<FilenameEntry>,
     pub key_entries: Vec<KeyEntry>,
 }
 
 pub trait ChitinKeyReader {
-    fn read_chitin_key<R: Read>(reader: &mut R) -> io::Result<ChitinKey>;
-    fn read_key_header<R: Read>(reader: &mut R) -> io::Result<KeyHeader>;
-    fn read_file_entries<R: Read>(reader: &mut R, count: u32) -> io::Result<Vec<FileEntry>>;
-    fn read_filenames<R: Read>(reader: &mut R, count: u32) -> io::Result<Vec<String>>;
-    fn read_key_entries<R: Read>(reader: &mut R, count: u32) -> io::Result<Vec<KeyEntry>>;
+    fn read_chitin_key<R: Read + Seek>(reader: &mut R) -> io::Result<ChitinKey>;
+    fn read_key_header<R: Read + Seek>(reader: &mut R) -> io::Result<KeyHeader>;
+    fn read_file_entries<R: Read + Seek>(reader: &mut R, count: u32, offset_to_file_table: u32) -> io::Result<Vec<FileEntry>>;
+    fn read_filenames<R: Read>(reader: &mut R, file_entries: &Vec<FileEntry>) -> io::Result<Vec<FilenameEntry>>;
+    fn read_key_entries<R: Read + Seek>(reader: &mut R, count: u32, offset_to_key_table: u32) -> io::Result<Vec<KeyEntry>>;
 }
 
 impl ChitinKeyReader for ChitinKey {
@@ -32,11 +38,11 @@ impl ChitinKeyReader for ChitinKey {
     ///
     /// # Returns
     /// * `io::Result<ChitinKey>` - The parsed ChitinKey structure or an IO error
-    fn read_chitin_key<R: Read>(reader: &mut R) -> io::Result<ChitinKey> {
+    fn read_chitin_key<R: Read + Seek>(reader: &mut R) -> io::Result<ChitinKey> {
         let header = Self::read_key_header(reader)?;
-        let file_entries = Self::read_file_entries(reader, header.bif_count)?;
-        let filenames = Self::read_filenames(reader, header.bif_count)?;
-        let key_entries = Self::read_key_entries(reader, header.key_count)?;
+        let file_entries = Self::read_file_entries(reader, header.bif_count, header.offset_to_file_table)?;
+        let filenames = Self::read_filenames(reader, &file_entries)?;
+        let key_entries = Self::read_key_entries(reader, header.key_count, header.offset_to_key_table)?;
 
         Ok(ChitinKey {
             header,
@@ -69,8 +75,9 @@ impl ChitinKeyReader for ChitinKey {
         Ok(header)
     }
 
-    fn read_file_entries<R: Read>(reader: &mut R, count: u32) -> io::Result<Vec<FileEntry>> {
+    fn read_file_entries<R: Read + Seek>(reader: &mut R, count: u32, offset_to_file_table: u32) -> io::Result<Vec<FileEntry>> {
         let mut entries = Vec::with_capacity(count as usize);
+        reader.seek(io::SeekFrom::Start(offset_to_file_table as u64))?;
         for _ in 0..count {
             let mut entry = FileEntry::new();
             entry.file_size = reader.read_u32::<LittleEndian>()?;
@@ -82,34 +89,29 @@ impl ChitinKeyReader for ChitinKey {
         Ok(entries)
     }
 
-    fn read_filenames<R: Read>(reader: &mut R, count: u32) -> io::Result<Vec<String>> {
-        let mut names = Vec::with_capacity(count as usize);
-        for _ in 0..count {
-            let mut name = String::new();
-            reader.read_u32::<LittleEndian>()?;
+    fn read_filenames<R: Read>(reader: &mut R, file_entries: &Vec<FileEntry>) -> io::Result<Vec<FilenameEntry>> {
+        let mut names = Vec::with_capacity(file_entries.len() as usize);
+        for entry in file_entries {
+            let filename_buf = vec![0u8; entry.filename_size as usize]; // Buffer for reading filename string
+            let mut filename_buf = filename_buf;
+            reader.read_exact(&mut filename_buf)?;
+            let filename = String::from_utf8_lossy(&filename_buf)
+                .trim_matches(char::from(0))
+                .to_string();
+            let name = FilenameEntry::new(filename);
             names.push(name);
         }
         Ok(names)
     }
 
-    fn read_key_entries<R: Read>(reader: &mut R, count: u32) -> io::Result<Vec<KeyEntry>> {
+    fn read_key_entries<R: Read + Seek>(reader: &mut R, count: u32, offset_to_key_table: u32) -> io::Result<Vec<KeyEntry>> {
         let mut entries = Vec::with_capacity(count as usize);
+
+        reader.seek(io::SeekFrom::Start(offset_to_key_table as u64))?;
         for _ in 0..count {
             let mut entry = KeyEntry::new();
             let mut resref_buf = [0u8; 16];
             reader.read_exact(&mut resref_buf)?;
-            // TODO: Fix this to read entirety of string
-            // Resource: aps10.bifdata\l (Type: 26473, ID: 1634563176)
-            // Resource: ps11.bifdata\li (Type: 26727, ID: 1885433204)
-            // Resource: s12.bifdata\lig (Type: 29800, ID: 1936744813)
-            // Resource: 13.bifdata\ligh (Type: 28020, ID: 846426209)
-            // Resource: .bifdata\lightm (Type: 28769, ID: 1647194995)
-            // Resource: ifdata\lightmap (Type: 13427, ID: 1718182446)
-            // Resource: data\lightmaps5 (Type: 25134, ID: 1677747817)
-            // Resource: ata\lightmaps6.b (Type: 26217, ID: 1952539648)
-            // Resource: a\lightmaps7.bif (Type: 25600, ID: 1549890657)
-            // Resource: lightmaps8.bifd (Type: 29793, ID: 1768709217)
-            // Resource: ghtmaps9.bifdat (Type: 23649, ID: 1701080941) --> Currently getting shortened strings
             entry.resref = resref_buf.map(|b| b as char);
             entry.resource_type = reader.read_u16::<LittleEndian>()?;
             entry.res_id = reader.read_u32::<LittleEndian>()?;
@@ -258,3 +260,5 @@ impl KeyHeader {
         }
     }
 }
+
+
