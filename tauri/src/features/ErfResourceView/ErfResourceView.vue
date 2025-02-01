@@ -16,13 +16,26 @@
             <template #extra>
               <v-btn key="3">Export As</v-btn>
               <v-btn key="2">View Relationships</v-btn>
-              <v-btn key="1" color="primary">Save</v-btn> 
+              <v-btn key="1" color="primary">Save</v-btn>
             </template>
 
             <div style="display: flex; flex-direction: row; gap: 16px;">
               <a-statistic title="Total Resources" :value="erf?.key_list.entries.length || 0" />
               <a-statistic title="Total Size" :value="erf?.resource_data.data.length || 0" suffix="bytes" />
               <a-statistic title="Version" :value="erf?.header.version.join('.') || '0.0.0.0'" />
+              <a-statistic title="Language Count" :value="erf?.header.language_count || 0" />
+              <a-statistic title="Entry Count" :value="erf?.header.entry_count || 0" />
+              <a-statistic title="Description Str Ref" :value="erf?.header.description_strref || 0" />
+              <a-statistic title="Localized String Size" :value="erf?.header.localized_string_size || 0"
+                suffix="bytes" />
+              <a-statistic title="Entry Count" :value="erf?.header.entry_count || 0" />
+              <a-statistic title="Offset to Localized String" :value="erf?.header.offset_to_localized_string || 0"
+                suffix="bytes" />
+              <a-statistic title="Offset to Key List" :value="erf?.header.offset_to_key_list || 0" suffix="bytes" />
+              <a-statistic title="Offset to Resource List" :value="erf?.header.offset_to_resource_list || 0"
+                suffix="bytes" />
+              <a-statistic title="Build Year" :value="erf?.header.build_year || 0" />
+              <a-statistic title="Build Day" :value="erf?.header.build_day || 0" />
             </div>
           </a-page-header>
 
@@ -38,13 +51,35 @@
 
           <v-data-table :headers="headers" :items="filteredResources" :loading="loading" class="mt-4" hover>
             <template v-slot:item.filename="{ item }">
-              {{ item.filename.join('') }}
+              {{ String.fromCharCode(...item.filename).trim() }}
             </template>
             <template v-slot:item.resource_type="{ item }">
               <v-chip class="resource-type-chip">{{ getResourceTypeName(item.resource_type) }}</v-chip>
             </template>
+            <template v-slot:item.resource_id="{ item }">
+              {{ getResourceOffset(item.resource_id) }}
+            </template>
             <template v-slot:item.resource_size="{ item }">
-             {{ formatBytes(item.filename.length) }}
+              {{ getResourceSize(item.resource_id) }}
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-btn>Export</v-btn>
+              <v-btn @click="handleViewClick(item.resource_id)">View</v-btn>
+              <v-btn>Save</v-btn>
+            </template>
+          </v-data-table>
+
+
+          <v-data-table :headers="[
+            { title: 'Language', key: 'language_id', align: 'start' },
+            { title: 'String Size', key: 'string_size' },
+            { title: 'Content', key: 'string' }
+          ]" :items="localizedStrings" :loading="loading" class="mt-8" hover>
+            <template v-slot:item.language_id="{ item }">
+              {{ getLanguageName(item.language_id) }}
+            </template>
+            <template v-slot:item.string_size="{ item }">
+              {{ formatBytes(item.string_size) }}
             </template>
           </v-data-table>
 
@@ -53,6 +88,17 @@
 
       <ContextMenu :display="showContextMenu" ref="menu">
       </ContextMenu>
+      <v-overlay v-model="showTpcOverlay" class="align-center justify-center">
+        <v-card min-width="400" min-height="400">
+          <v-card-title class="d-flex justify-space-between">
+            <span>Texture Preview</span>
+            <v-btn icon="mdi-close" variant="text" @click="showTpcOverlay = false"></v-btn>
+          </v-card-title>
+          <v-card-text>
+            <TpcViewer v-if="selectedResourceData" :bytes="selectedResourceData" />
+          </v-card-text>
+        </v-card>
+      </v-overlay>
 
     </div>
   </div>
@@ -61,9 +107,10 @@
 <script lang="ts">
 import { defineComponent, ref, watch, computed, onMounted } from 'vue';
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
-import { ErfFile, ErfKeyEntry } from '@/data/erf';
+import { ErfFile, ErfKeyEntry, ErfLocalizedString, ErfResourceTable, LanguageId } from '@/data/erf';
 import { AuroraService } from '@/data/aurora-service';
 import { ResourceType } from '@/data/resource_identification';
+import TpcViewer from '@/components/DataPresentation/TpcViewer.vue';
 
 
 export default {
@@ -84,11 +131,15 @@ export default {
     const selectedTypes = ref<number[]>([]);
     const resourceTypes = ref<string[]>([]);
     const menu = ref();
+    const showTpcOverlay = ref(false);
+    const selectedResourceData = ref<Uint8Array | null>(null);
+    
 
 
     const headers = ref([
       { title: 'Name', key: 'filename', align: 'start' as const },
       { title: 'Type', key: 'resource_type' },
+      { title: 'Offset', key: 'resource_id' },
       { title: 'Size', key: 'resource_size' },
       { title: 'Actions', key: 'actions' }
     ]);
@@ -97,6 +148,18 @@ export default {
       { title: 'Resources', disabled: false },
       { title: 'ERF View', disabled: true }
     ]);
+
+    const localizedStrings = ref<ErfLocalizedString[]>([]);
+    const resourceList = ref<ErfResourceTable>();
+    const getLanguageName = (languageId: number) => {
+      return LanguageId[languageId] || languageId;
+    };
+
+    const handleViewClick = async (resourceId: number) => {
+      showTpcOverlay.value = true;
+      selectedResourceData.value = await getResourceData(resourceId);
+      console.log("selectedResourceData", selectedResourceData.value);
+    };  
 
     const loadErf = async () => {
       try {
@@ -111,6 +174,8 @@ export default {
           // Extract unique resource types from key list entries
           const types = new Set<number>(erfData.value.key_list.entries.map(entry => entry.resource_type));
           resourceTypes.value = Array.from(types).map(type => getResourceTypeName(type));
+          localizedStrings.value = erfData.value.localized_strings.strings;
+          resourceList.value = erfData.value.resource_list;
         } else {
           console.error('Failed to load ERF:', erfData.error);
         }
@@ -119,6 +184,24 @@ export default {
       } finally {
         loading.value = false;
       }
+    };
+
+    const getResourceData = async (resourceId: number) => {
+      const auroraService = new AuroraService();
+      const resourceData = await auroraService.getErfResourceData(props.path, resourceId);
+      if (resourceData.ok) {
+        return resourceData.value;
+      } else {
+        throw new Error("Failed to get resource data");
+      }
+    };
+
+    const getResourceSize = (size: number) => {
+      return resourceList.value?.entries[size].resource_size;
+    };
+
+    const getResourceOffset = (offset: number) => {
+      return resourceList.value?.entries[offset].offset_to_resource;
     };
 
     const getResourceTypeName = (type: number) => {
@@ -192,7 +275,15 @@ export default {
       resourceTypes,
       filteredResources,
       openContextMenu,
-      menu
+      menu,
+      localizedStrings,
+      getLanguageName,
+      getResourceSize,
+      getResourceOffset,
+      getResourceData,
+      showTpcOverlay,
+      selectedResourceData,
+      handleViewClick
     };
   }
 }
@@ -201,28 +292,29 @@ export default {
 <style scoped lang="scss">
 .erf-view {
   :deep(.v-breadcrumbs) {
-        padding: 0;
-        
-        .v-breadcrumbs-item {
-            color: rgba(255, 255, 255, 0.65);
-            font-size: 14px;
-            
-            &--disabled {
-                opacity: 0.5;
-            }
-            
-            &:hover:not(.v-breadcrumbs-item--disabled) {
-                color: rgba(255, 255, 255, 0.85);
-            }
-        }
+    padding: 0;
 
-        .v-breadcrumbs-divider {
-            color: rgba(255, 255, 255, 0.45);
-            padding: 0 8px;
-        }
+    .v-breadcrumbs-item {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 14px;
+
+      &--disabled {
+        opacity: 0.5;
+      }
+
+      &:hover:not(.v-breadcrumbs-item--disabled) {
+        color: rgba(255, 255, 255, 0.85);
+      }
     }
+
+    .v-breadcrumbs-divider {
+      color: rgba(255, 255, 255, 0.45);
+      padding: 0 8px;
+    }
+  }
+
   padding: 15px 15px 15px 15px;
- 
+
   .resource-type-chip {
     background: rgba(74, 158, 255, 0.15);
     color: #4a9eff;

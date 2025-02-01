@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::fs::File;
-use std::io::{self, Read, Seek, Write};
+use std::io::{self, Read, Seek, Write, SeekFrom};
 
 // The Encapsulated Resource File (ERF) format is one of BioWare's methods of packing multiple files into a
 // single file so that they may be treated as a single unit. In this regard, it is similar to .zip, .tar, or .rar.
@@ -30,6 +30,8 @@ impl ErfFile {
         ))
     }
 
+    
+    
  
 
     // Update the read_from_file function to store the file path
@@ -110,7 +112,7 @@ impl ErfFile {
         println!("Reading {} localized strings...", header.language_count);
         file.seek(std::io::SeekFrom::Start(header.offset_to_localized_string as u64))?;
         for i in 0..header.language_count {
-            let localized_string = ErfLocalizedString::read_from_file(&mut file)?;
+            let localized_string = ErfLocalizedString::read_from_file(&mut file, header.offset_to_localized_string)?;
             println!("Read localized string {}/{}", i+1, header.language_count);
             localized_strings.strings.push(localized_string);
         }
@@ -124,7 +126,12 @@ impl ErfFile {
             let mut resource_type = [0u8; 2];
             let mut unused = [0u8; 2];
 
-            file.read_exact(&mut filename)?;
+            for i in 0..16 {
+                let mut char_buf = [0u8; 1];
+                file.read_exact(&mut char_buf)?;
+                filename[i] = char_buf[0];
+            }
+           
             file.read_exact(&mut resource_id)?;
             file.read_exact(&mut resource_type)?;
             file.read_exact(&mut unused)?;
@@ -348,9 +355,12 @@ impl ErfLocalizedString {
         }
     }
 
-    fn read_from_file<R: Read>(reader: &mut R) -> io::Result<Self> {
+    fn read_from_file<R: Read + Seek>(reader: &mut R, i1: u32) -> io::Result<Self> {
         let mut language_id = [0; 4];
         let mut string_size = [0; 4];
+
+
+        reader.seek(io::SeekFrom::Start(i1 as u64))?;
 
         reader.read_exact(&mut language_id)?;
         reader.read_exact(&mut string_size)?;

@@ -4,6 +4,7 @@ import { ChitinKey } from "@/data/chitin-key";
 import { Biff } from "./biff";
 import { ErfFile } from "./erf";
 import { Rim } from "./rim";
+import { TpcData } from "./tpc-data";
 
 
 export class AuroraService {
@@ -45,28 +46,47 @@ export class AuroraService {
  * @param path Path to the ERF file
  * @returns Promise containing a Result with either the ERF file data or an error
  */
- async readErfFile(path: string): Promise<Result<ErfFile>> {
-  try {
-    const erf = await invoke<ErfFile>('read_erf', { path });
-    return { ok: true, value: erf };
-  } catch (error) {
-    return { ok: false, error: error as Error };
+  async readErfFile(path: string): Promise<Result<ErfFile>> {
+    try {
+      const erf = await invoke<ErfFile>('read_erf', { path });
+      return { ok: true, value: erf };
+    } catch (error) {
+      return { ok: false, error: error as Error };
+    }
   }
-}
 
-/**
- * Reads a RIM file from the specified path
- * @param path Path to the RIM file
- * @returns Promise containing a Result with either the RIM file data or an error
- */
- async readRimFile(path: string): Promise<Result<Rim>> {
-  try {
-    const rim = await invoke<Rim>('read_rim', { path });
-    return { ok: true, value: rim };
-  } catch (error) {
-    return { ok: false, error: error as Error };
+  /**
+   * Reads a RIM file from the specified path
+   * @param path Path to the RIM file
+   * @returns Promise containing a Result with either the RIM file data or an error
+   */
+  async readRimFile(path: string): Promise<Result<Rim>> {
+    try {
+      const rim = await invoke<Rim>('read_rim', { path });
+      return { ok: true, value: rim };
+    } catch (error) {
+      return { ok: false, error: error as Error };
+    }
   }
-}
+
+
+
+
+  /**
+   * Gets resource data from an ERF file for a specific resource ID
+   * @param filepath Path to the ERF file
+   * @param resourceId ID of the resource to extract
+   * @returns Promise containing a Result with either the resource data or an error
+   */
+  async getErfResourceData(filepath: string, resourceId: number): Promise<Result<Uint8Array>> {
+    try {
+      const data = await invoke<number[]>('get_erf_resource_data', { filepath, resourceId });
+      return { ok: true, value: new Uint8Array(data) };
+    } catch (error) {
+      return { ok: false, error: error as Error };
+    }
+  }
+
 
 
 }

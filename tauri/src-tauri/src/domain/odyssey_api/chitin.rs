@@ -3,10 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::io::{self, Read, Seek};
 
 
-// TODO: Fix key entries
-// resref - returning partial strings
-// resource type - returning wrong number?
-// resource id - possibly wrong
+
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ChitinKey {

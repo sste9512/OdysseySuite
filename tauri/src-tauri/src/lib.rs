@@ -13,16 +13,7 @@ mod application {
     pub mod aurora_commands;
     pub mod file_system_commands;
     pub mod project_commands;
-}
-
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
-#[tauri::command]
-fn open_url(url: String) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", url)
+    pub mod image_commands;
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -42,9 +33,6 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            greet,
-            open_url,
-            libs::greetings::greet_me_so_hard,
             application::file_system_commands::list_directory_from_root,
             application::file_system_commands::get_directory_contents,
             application::file_system_commands::get_parent_directory_contents,
@@ -56,7 +44,9 @@ pub fn run() {
             application::aurora_commands::read_erf,
             application::aurora_commands::read_rim,
             application::project_commands::create_project,
-            application::project_commands::list_projects
+            application::project_commands::list_projects,
+            application::aurora_commands::get_erf_resource_data,
+            application::image_commands::read_tpc_data_from_bytes
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

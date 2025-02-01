@@ -1,6 +1,10 @@
 use serde_json::Value;
-use std::io::BufReader;
+use std::io::{BufReader, Cursor};
 use std::{fs::File, path::Path};
+use serde::Serialize;
+use std::io::{self, Read, Seek, SeekFrom};
+use byteorder::{LittleEndian, ReadBytesExt};
+use crate::domain::odyssey_api::tpc_data::{decode_tpc_data_from_bytes, TpcData};
 
 use crate::domain::odyssey_api::{
     biff::Biff,
@@ -91,6 +95,32 @@ pub fn read_erf(path: &str) -> Result<ErfFile, String> {
         }
     }
 }
+
+#[tauri::command]
+pub fn get_erf_resource_data(filepath: &str, resource_id: u32) -> Result<Vec<u8>, String> {
+    match ErfFile::read_from_file(filepath) {
+        Ok(erf) => {
+            match erf.read_resource_data(resource_id) {
+                Ok(data) => {
+                    println!("Successfully read resource data for ID: {}", resource_id);
+                    Ok(data)
+                }
+                Err(e) => {
+                    println!("Error reading resource data: {}", e);
+                    Err(e.to_string())
+                }
+            }
+        }
+        Err(e) => {
+            println!("Error loading ERF file: {}", e);
+            Err(e.to_string())
+        }
+    }
+}
+
+ 
+
+
 
 #[tauri::command]
 pub fn read_rim(path: &str) -> Result<Rim, String> {

@@ -28,7 +28,9 @@
     "vue": "^3.5.13",
     "vue-router": "^4.2.5",
     "vue3-easy-data-table": "^1.5.47",
-    "vuetify": "^3.7.7"
+    "vuetify": "^3.7.7",
+    "three": "^0.155.0",
+    "dxt-js": "^0.0.3"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",
