@@ -225,4 +225,25 @@ impl Biff {
 
         Ok(biff)
     }
+
+    pub fn read_resource_data(&self, resource_id: u32) -> io::Result<Vec<u8>> {
+        // First check variable resources
+        for (i, resource) in self.variable_resources.iter().enumerate() {
+            if resource.id == resource_id {
+                return Ok(self.variable_resource_data[i].data.clone());
+            }
+        }
+
+        // Then check fixed resources
+        for (i, resource) in self.fixed_resources.iter().enumerate() {
+            if resource.id == resource_id {
+                return Ok(self.fixed_resource_data[i].data.clone());
+            }
+        }
+
+        Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            format!("Resource with ID {} not found", resource_id)
+        ))
+    }
 }

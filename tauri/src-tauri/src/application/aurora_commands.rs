@@ -4,7 +4,8 @@ use std::{fs::File, path::Path};
 use serde::Serialize;
 use std::io::{self, Read, Seek, SeekFrom};
 use byteorder::{LittleEndian, ReadBytesExt};
-use crate::domain::odyssey_api::tpc_data::{decode_tpc_data_from_bytes, TpcData};
+use crate::domain::odyssey_api::tpc::TPC;
+
 
 use crate::domain::odyssey_api::{
     biff::Biff,
@@ -66,6 +67,40 @@ pub async fn read_chitin_key(path: &str) -> Result<Value, String> {
 }
 
 
+#[tauri::command]
+pub fn extract_biff_resource(biff_path: &str, resource_id: u32, output_path: &str) -> Result<(), String> {
+    // Read the BIFF file
+    let biff = match Biff::read_biff_file(biff_path) {
+        Ok(b) => b,
+        Err(e) => {
+            println!("Error reading BIFF file: {}", e);
+            return Err(e.to_string());
+        }
+    };
+
+    // Find the resource entry
+    let resource_data = match biff.read_resource_data(resource_id) {
+        Ok(data) => data,
+        Err(e) => {
+            println!("Error reading resource data: {}", e);
+            return Err(e.to_string());
+        }
+    };
+
+    // Write the resource data to file
+    match std::fs::write(output_path, resource_data) {
+        Ok(_) => {
+            println!("Successfully wrote resource {} to {}", resource_id, output_path);
+            Ok(())
+        },
+        Err(e) => {
+            println!("Error writing resource data to file: {}", e);
+            Err(e.to_string())
+        }
+    }
+}
+
+
 
 
 #[tauri::command]
@@ -117,6 +152,77 @@ pub fn get_erf_resource_data(filepath: &str, resource_id: u32) -> Result<Vec<u8>
         }
     }
 }
+
+#[tauri::command]
+pub fn extract_erf_resource(erf_path: &str, resource_id: u32, output_path: &str) -> Result<(), String> {
+    // Read the ERF file
+    let erf = match ErfFile::read_from_file(erf_path) {
+        Ok(erf) => erf,
+        Err(e) => {
+            println!("Error loading ERF file: {}", e);
+            return Err(e.to_string());
+        }
+    };
+
+    // Get the resource data
+    let data = match erf.read_resource_data(resource_id) {
+        Ok(data) => data,
+        Err(e) => {
+            println!("Error reading resource data: {}", e);
+            return Err(e.to_string());
+        }
+    };
+
+    // Write the data to the output file
+    match std::fs::write(output_path, data) {
+        Ok(_) => {
+            println!("Successfully extracted resource {} to {}", resource_id, output_path);
+            Ok(())
+        }
+        Err(e) => {
+            println!("Error writing resource data to file: {}", e);
+            Err(e.to_string())
+        }
+    }
+}
+
+
+#[tauri::command]
+pub fn extract_rim_resource(rim_path: &str, resource_id: u32, output_path: &str) -> Result<(), String> {
+    // Read the RIM file
+    let file_data = match std::fs::read(rim_path) {
+        Ok(data) => data,
+        Err(e) => {
+            println!("Error reading RIM file: {}", e);
+            return Err(format!("Error reading RIM file: {}", e));
+        }
+    };
+
+    let rim = Rim::new(file_data);
+
+    // Get the resource data
+    let data = match rim.read_resource_data(resource_id) {
+        Ok(data) => data,
+        Err(e) => {
+            println!("Error reading resource data: {}", e);
+            return Err(e.to_string());
+        }
+    };
+
+    // Write the data to the output file
+    match std::fs::write(output_path, data) {
+        Ok(_) => {
+            println!("Successfully extracted resource {} to {}", resource_id, output_path);
+            Ok(())
+        }
+        Err(e) => {
+            println!("Error writing resource data to file: {}", e);
+            Err(e.to_string())
+        }
+    }
+}
+
+
 
  
 

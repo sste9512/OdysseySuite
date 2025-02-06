@@ -1,4 +1,4 @@
-import {TXI} from "@/components/Aurora-Rendering/types/TXI.ts";
+import {TXI} from "@/components/Aurora-Rendering/types/TXI";
 
 
 /**

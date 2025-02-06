@@ -95,7 +95,7 @@
             <v-btn icon="mdi-close" variant="text" @click="showTpcOverlay = false"></v-btn>
           </v-card-title>
           <v-card-text>
-            <TpcViewer v-if="selectedResourceData" :bytes="selectedResourceData" />
+            <ThreeRender :ddsHeader="ddsHeader" />
           </v-card-text>
         </v-card>
       </v-overlay>
@@ -111,7 +111,10 @@ import { ErfFile, ErfKeyEntry, ErfLocalizedString, ErfResourceTable, LanguageId 
 import { AuroraService } from '@/data/aurora-service';
 import { ResourceType } from '@/data/resource_identification';
 import TpcViewer from '@/components/DataPresentation/TpcViewer.vue';
-
+import { DDS_HEADER } from '@/components/Aurora-Rendering/types/DDS';
+import ThreeRender from '@/components/ThreeRendering/ThreeRender.vue';
+import { TPC } from '@/components/Aurora-Rendering/types/TPC';
+import { ImageApi } from '@/data/image-api';
 
 export default {
   name: 'ErfResourceView',
@@ -133,7 +136,8 @@ export default {
     const menu = ref();
     const showTpcOverlay = ref(false);
     const selectedResourceData = ref<Uint8Array | null>(null);
-    
+    const ddsHeader = ref<Uint8Array | null>(null);
+
 
 
     const headers = ref([
@@ -155,11 +159,71 @@ export default {
       return LanguageId[languageId] || languageId;
     };
 
+    // Handle view click
+    // This function is used to handle the view click event for a resource
+    // It retrieves the resource data from the AuroraService
+    // It then creates a new TPC object with the resource data
+    // It then sets the selectedResourceData to the resource data
+    // It then sets the showTpcOverlay to true
+    // It then logs the selectedResourceData
     const handleViewClick = async (resourceId: number) => {
-      showTpcOverlay.value = true;
-      selectedResourceData.value = await getResourceData(resourceId);
+
+
+      const auroraService = new AuroraService();
+      const resourceData = await auroraService.getErfResourceData(props.path, resourceId);
+
+      if (resourceData.ok) {
+        // console.log("resourceData", resourceData.value);
+        selectedResourceData.value = resourceData.value;
+        // const tpc = new TPC({
+        //   filename: resourceId.toString(), // the name of the texture file
+        //   file:  resourceData.value, // actual binary data
+        //   pack: 0, // this is the texture pack reference, meaning the different packages of erf files that contain the textures
+        // });
+
+        const imageApi = new ImageApi();
+        const tpcData = await imageApi.convertBytesToTPC(resourceData.value);
+
+        if (tpcData.ok) {
+          // get the offset of the resource
+          const resourceOffset = getResourceOffset(resourceId);
+          if (resourceOffset === undefined) {
+            console.error("Could not get resource offset");
+            return;
+          }
+          // get the size of the resource
+          const resourceSize = getResourceSize(resourceId); 
+          if (resourceSize === undefined) {
+            console.error("Could not get resource size");
+            return;
+          }
+          // get the tpc from the file
+          const tpc = await imageApi.getTPCFromFile(props.path, resourceOffset, resourceSize);
+          if (tpc.ok) {
+            console.log("tpc", tpc.value);
+          } else {
+            console.error("Could not get TPC from file");
+            return;
+          }
+
+          const ddsData = await imageApi.convertTPCtoDDS(tpc.value);
+          if (ddsData.ok) {
+            ddsHeader.value = ddsData.value;
+            console.log("ddsHeader", ddsHeader.value);
+          } else {
+            console.log("error", ddsData.error);
+          }
+
+        }
+        else {
+          console.log("error", tpcData.error);
+        }
+        showTpcOverlay.value = true;
+      }
+
+
       console.log("selectedResourceData", selectedResourceData.value);
-    };  
+    };
 
     const loadErf = async () => {
       try {
@@ -170,7 +234,7 @@ export default {
         if (erfData.ok) {
           console.log('ERF data loaded:', erfData.value);
           erf.value = erfData.value;
-
+          
           // Extract unique resource types from key list entries
           const types = new Set<number>(erfData.value.key_list.entries.map(entry => entry.resource_type));
           resourceTypes.value = Array.from(types).map(type => getResourceTypeName(type));

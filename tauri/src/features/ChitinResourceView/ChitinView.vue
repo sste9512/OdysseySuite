@@ -118,7 +118,7 @@ export default defineComponent({
         const loading = ref(false);
         const header = ref<KeyHeader | null>(null);
         const fileEntries = ref<FileEntry[]>([]);
-        
+
 
         const filenameEntries = ref<FilenameEntry[]>([]);
 
@@ -234,15 +234,15 @@ export default defineComponent({
 .chitin-view {
     :deep(.v-breadcrumbs) {
         padding: 0;
-        
+
         .v-breadcrumbs-item {
             color: rgba(255, 255, 255, 0.65);
             font-size: 14px;
-            
+
             &--disabled {
                 opacity: 0.5;
             }
-            
+
             &:hover:not(.v-breadcrumbs-item--disabled) {
                 color: rgba(255, 255, 255, 0.85);
             }

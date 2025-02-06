@@ -5,6 +5,7 @@ import { TXI } from './TXI';
 import * as dxtJs from "dxt-js";
 
 import {OdysseyTexture} from "@/components/Aurora-Rendering/types/OdysseyTexture";
+import { DDS_HEADER } from './DDS';
 
 const TPCHeaderLength = 128;
 
@@ -36,6 +37,8 @@ export enum ENCODING {
     RGBA = 4,
     BGRA = 12
 }
+
+
 
 export class OdysseyCompressedTexture extends OdysseyTexture {
     material: THREE.Material;
@@ -111,6 +114,7 @@ export class TPC {
 
     }
 
+   
     /**
      * Extracts and returns the TXI data from a binary file. The method calculates the offset and length
      * of the TXI section within the file and reads its content character by character until a null
@@ -163,196 +167,95 @@ export class TPC {
      *     - mipmapCount: The total number of mipmap levels.
      *     - isCubemap: A boolean indicating if the texture is a cubemap.
      */
-    getDDS( compressMipMaps: boolean = true ) {
 
-        let dds = { mipmaps: [], width: 0, height: 0, format: null, mipmapCount: 1, isCubemap: false } as any;
 
-        // Parse header
-        if(this.header === null)
-            this.header = this.readHeader();
 
-        if (!this.header.compressed) {
-            // Uncompressed
-            switch(this.header.encoding){
-                case ENCODING.GRAY:
-                    // 8bpp grayscale
-                    break;
+
+
+
+    getDDS( compressMipMaps: boolean = true ): DDS_HEADER {
+        const header: DDS_HEADER = {
+            dwSize: 124,
+            dwFlags: 0x1 | 0x2 | 0x4 | 0x1000, // DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT
+            dwHeight: this.header?.height || 0,
+            dwWidth: this.header?.width || 0,
+            dwPitchOrLinearSize: 0,
+            dwDepth: 0,
+            dwMipMapCount: this.header?.mipMapCount || 0,
+            dwReserved1: Array(11).fill(0),
+            ddspf: {
+                dwSize: 32,
+                dwFlags: 0,
+                dwFourCC: 0,
+                dwRGBBitCount: 0,
+                dwRBitMask: 0,
+                dwGBitMask: 0,
+                dwBBitMask: 0,
+                dwABitMask: 0
+            },
+            dwCaps: 0x1000, // DDSCAPS_TEXTURE
+            dwCaps2: this.header?.isCubemap ? 0xFE00 : 0, // Set cubemap flags if needed
+            dwCaps3: 0,
+            dwCaps4: 0,
+            dwReserved2: 0
+        };
+
+        
+
+        // Set format flags based on compression and encoding
+        if (this.header?.compressed) {
+            header.dwFlags |= 0x80000; // DDSD_LINEARSIZE
+            header.ddspf.dwFlags = 0x4; // DDPF_FOURCC
+            
+
+            switch(this.header.encoding) {
                 case ENCODING.RGB:
-                    dds.format = 1023;//THREE.RGBAFormat
+                    header.ddspf.dwFourCC = 0x31545844; // DXT1
                     break;
+
+
                 case ENCODING.RGBA:
-                    dds.format = 1023;//THREE.RGBAFormat;
+                    header.ddspf.dwFourCC = 0x35545844; // DXT5
                     break;
+            }
+        } else {
+            header.dwFlags |= 0x8; // DDSD_PITCH
+            header.ddspf.dwFlags = 0x40; // DDPF_RGB
+
+            switch(this.header.encoding) {
+                case ENCODING.RGB:
+                    header.ddspf.dwRGBBitCount = 24;
+
+                    header.ddspf.dwRBitMask = 0xff0000;
+                    header.ddspf.dwGBitMask = 0x00ff00;
+                    header.ddspf.dwBBitMask = 0x0000ff;
+                    break;
+
+                case ENCODING.RGBA:
                 case ENCODING.BGRA:
-                    dds.format = 1023;//THREE.RGBAFormat;
-                    break;
-            }
-        }else{
-            switch(this.header.encoding){
-                case ENCODING.RGB:
-                    // S3TC DXT1
-                    dds.format = 33776;//THREE.RGB_S3TC_DXT1_Format;
-                    break;
-                case ENCODING.RGBA:
-                    // S3TC DXT5
-                    dds.format = 33779;//THREE.RGBA_S3TC_DXT5_Format;
+                    header.ddspf.dwFlags |= 0x1; // DDPF_ALPHAPIXELS
+                    header.ddspf.dwRGBBitCount = 32;
+                    header.ddspf.dwRBitMask = 0xff0000;
+                    header.ddspf.dwGBitMask = 0x00ff00;
+                    header.ddspf.dwBBitMask = 0x0000ff;
+                    header.ddspf.dwABitMask = 0xff000000;
                     break;
             }
         }
 
-        dds.mipmapCount = this.header.mipMapCount;
-        dds.isCubemap = this.header.isCubemap;
-        dds.width = this.header.width;
-        dds.height = this.header.height;
-
-        let dataOffset = TPCHeaderLength;
-
-        //Detect Animated Textures
-        if(this.txi.procedureType == 1){
-            this.header.faces = this.txi.numx * this.txi.numy;
-            dds.width  = this.header.width / this.txi.numx;
-            dds.height  = this.header.height / this.txi.numy;
-            dds.mipmapCount = this.generateMipMapCount(dds.width, dds.height);
+        // Set mipmap flags if present
+        if (this.header?.mipMapCount > 1) {
+            header.dwFlags |= 0x20000; // DDSD_MIPMAPCOUNT
+            header.dwCaps |= 0x400000 | 0x8; // DDSCAPS_COMPLEX | DDSCAPS_MIPMAP
         }
 
-        for ( let face = 0; face < this.header.faces; face++ ) {
 
-            let width = dds.width;
-            let height = dds.height;
-            let dataSize = this.header.dataSize;
-            let dataLength = 0;
-            let byteArray = new Uint8Array(0);
-
-            for ( let i = 0; i < dds.mipmapCount; i++ ) {
-
-                if ( !this.header.compressed ) {
-                    dataLength = width * height * this.header.minDataSize;
-                    const rawBuffer = this.file.slice(dataOffset, dataOffset + dataLength);
-                    if(this.header.encoding == ENCODING.RGB){
-                        byteArray = new Uint8Array( (rawBuffer.length/3) * 4 );
-                        let n = 4 * width * height;
-                        let s = 0, d = 0;
-                        while (d < n) {
-                            byteArray[d++] = rawBuffer[s++];
-                            byteArray[d++] = rawBuffer[s++];
-                            byteArray[d++] = rawBuffer[s++];
-                            byteArray[d++] = 255;
-                        }
-                    }else{
-                        byteArray = rawBuffer;
-                    }
-                } else {
-                    if(this.header.encoding == ENCODING.RGB){
-                        dataLength = Math.max(this.header.minDataSize, width * height * 0.5);
-                        dataLength = Math.max(this.header.minDataSize, Math.floor((width + 3) / 4) * Math.floor((height + 3) / 4) * this.header.minDataSize);
-                    }else if(this.header.encoding == ENCODING.RGBA){
-                        dataLength = Math.max(this.header.minDataSize, Math.floor((width + 3) / 4) * Math.floor((height + 3) / 4) * this.header.minDataSize);
-                    }
-                    byteArray = this.file.slice(dataOffset, dataOffset + dataLength);
-                    if(!compressMipMaps){
-                        byteArray = dxtJs.decompress(byteArray, width, height, this.header.encoding == ENCODING.RGB ? dxtJs.flags.DXT1 : dxtJs.flags.DXT5 );
-                    }
-                }
-
-                dds.mipmaps.push({
-                    data: byteArray,
-                    width: width,
-                    height: height
-                });
-
-                dataOffset += dataLength;
-
-                width = Math.max( width >> 1, 1 );
-                height = Math.max( height >> 1, 1 );
-                dataSize = Math.max( dataSize >> 2, this.header.minDataSize );
-
-            }
-
-        }
-
-        ///////////////////////////////////
-        // REBUILD ANIMATED FRAMES
-        ///////////////////////////////////
-
-        //Combine Extracted mipMaps into a single mipmap if this texture is a procedureType = cycle texture
-        if(this.txi.procedureType == 1){
-            try{
-                //console.log('TPCObject: Rebuilding Frames', this.filename);
-                let encoding = (this.header.encoding == ENCODING.RGB) ? dxtJs.flags.DXT1 : dxtJs.flags.DXT5;
-                let mipmaps = [];
-
-                dds.width = this.header.width;
-                dds.height = this.header.height;
-
-                let imageWidth = this.header.width;
-                let imageHeight = this.header.height;
-                let frameWidth = (imageWidth / this.txi.numx);
-                let frameHeight = (imageHeight / this.txi.numy);
-                let frameCount = (this.txi.numx * this.txi.numy);
-
-                for(let m = 0; m < dds.mipmapCount; m++){
-                    let frames = [];
-
-                    //Create an OffsreenCanvas so we can stitch the frames back together
-                    this.canvas[m] = new OffscreenCanvas(imageWidth, imageHeight);
-                    let ctx = this.canvas[m].getContext('2d');
-
-                    //Get the proper frames from the old mipmaps list
-                    for(let i = 0; i < frameCount; i++){
-                        let mipmap = dds.mipmaps[m + (i * dds.mipmapCount)];
-                        //console.log(m + (i * dds.mipmapCount), mipmap);
-                        let uint8 = Uint8ClampedArray.from(
-                            compressMipMaps ? dxtJs.decompress(mipmap.data, frameWidth, frameHeight, encoding) : mipmap.data
-                            // (window as any).dxt.decompress(mipmap.data, frameWidth, frameHeight, encoding)
-                        );
-                        //console.log(uint8, frameWidth, frameHeight);
-                        frames.push(
-                            new ImageData(uint8, frameWidth, frameHeight)
-                        );
-                    }
-
-                    //Merge the frames onto the canvas
-                    for(let y = 0; y < this.txi.numy; y++){
-                        let frameY = (y * this.txi.numx);
-                        for(let x = 0; x < this.txi.numx; x++){
-                            //console.log(frameY + x, x * frameWidth2, y * frameHeight2);
-                            ctx.putImageData(frames[frameY + x], x * frameWidth, y * frameHeight);
-                        }
-                    }
-                    //console.log(imageWidth, imageHeight, frameWidth, frameHeight);
-                    //Extract the merged image
-                    let mergedImageData = ctx.getImageData(0, 0, imageWidth, imageHeight);
-
-                    //Compress it with the proper DXT encoding
-                    let mipmap_data = compressMipMaps ? dxtJs.compress(mergedImageData.data, imageWidth, imageHeight, encoding) : mergedImageData.data;
-
-                    //Add it the the new mipmaps list
-                    mipmaps.push({
-                        data: mipmap_data,
-                        width: imageWidth,
-                        height: imageHeight
-                    });
-
-                    //Resize Next Frame
-                    frameWidth = Math.max( frameWidth >> 1, 1 );
-                    frameHeight = Math.max( frameHeight >> 1, 1 );
-                    //Resize Next Image
-                    imageWidth = Math.max( imageWidth >> 1, 1 );
-                    imageHeight = Math.max( imageHeight >> 1, 1 );
-                }
-                dds.mipmaps = mipmaps;
-                return dds;
-            }catch(e){
-                console.error(e);
-            }
-        }
-
-        return dds;
-
+        return header;
     }
 
     /**
      * Calculates the total number of mipmap levels required for a texture based on its width and height.
+
      *
      * @param {number} [width=0] - The initial width of the texture. Defaults to 0.
      * @param {number} [height=0] - The initial height of the texture. Defaults to 0.
@@ -528,43 +431,50 @@ export class TPC {
     toCompressedTexture(){
         let images = [];
         let texDatas = this.getDDS( true );
-        let _texture: OdysseyCompressedTexture|THREE.CanvasTexture = new OdysseyCompressedTexture( texDatas.mipmaps, texDatas.width, texDatas.height );
+        let _texture: OdysseyCompressedTexture|THREE.CanvasTexture = new OdysseyCompressedTexture( texDatas.mipmaps, texDatas.dwWidth, texDatas.dwHeight );
+
 
         // if(this.canvas.length){
         //   _texture = new THREE.CanvasTexture(this.canvas[0] as any);
         // }else{
         if ( texDatas.isCubemap ) {
-            let faces = texDatas.mipmaps.length / texDatas.mipmapCount;
+            let faces = texDatas.mipmaps.length / texDatas.dwMipMapCount;
             for ( let f = 0; f < faces; f ++ ) {
                 images[ f ] = { mipmaps : [] } as any;
-                for ( let i = 0; i < texDatas.mipmapCount; i++ ) {
-                    images[ f ].mipmaps.push( texDatas.mipmaps[ f * texDatas.mipmapCount + i ] );
+
+                for ( let i = 0; i < texDatas.dwMipMapCount; i++ ) {
+                    images[ f ].mipmaps.push( texDatas.mipmaps[ f * texDatas.dwMipMapCount + i ] );
                     images[ f ].format = THREE.CubeReflectionMapping;//texDatas.format;
-                    images[ f ].width = texDatas.width;
-                    images[ f ].height = texDatas.height;
+                    images[ f ].width = texDatas.dwWidth;
+                    images[ f ].height = texDatas.dwHeight;
+
 
                     _texture.mipmaps = images[ f ].mipmaps;
                 }
             }
             (_texture as any).image = images;
-            _texture.image.width = texDatas.width;
-            _texture.image.height = texDatas.height;
+            _texture.image.width = texDatas.dwWidth;
+            _texture.image.height = texDatas.dwHeight;
+
         } else {
-            _texture.image.width = texDatas.width;
-            _texture.image.height = texDatas.height;
+            _texture.image.width = texDatas.dwWidth;
+            _texture.image.height = texDatas.dwHeight;
             _texture.mipmaps = texDatas.mipmaps;
         }
+
         // }
 
         _texture.name = this.filename;
 
-        if ( texDatas.mipmapCount === 1 ) {
+        if ( texDatas.dwMipMapCount === 1 ) {
             _texture.minFilter = THREE.LinearFilter;
         }
 
-        _texture.format = texDatas.format;
+
+        _texture.format = texDatas.ddspf.dwFourCC;
         _texture.needsUpdate = true;
         (_texture as any).bumpMapType = 'NORMAL';
+
 
         (_texture as any).header = this.header;
         (_texture as any).pack = this.pack;

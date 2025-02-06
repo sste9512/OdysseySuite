@@ -43,10 +43,17 @@ pub fn run() {
             application::aurora_commands::read_biff,
             application::aurora_commands::read_erf,
             application::aurora_commands::read_rim,
+            application::aurora_commands::get_erf_resource_data,
+            application::aurora_commands::extract_biff_resource,
+            application::aurora_commands::extract_erf_resource,
+            application::aurora_commands::extract_rim_resource,
             application::project_commands::create_project,
             application::project_commands::list_projects,
-            application::aurora_commands::get_erf_resource_data,
-            application::image_commands::read_tpc_data_from_bytes
+            application::image_commands::convert_bytes_to_tpc,
+            application::image_commands::convert_file_to_tpc,
+            application::image_commands::write_tpc_to_file,
+            application::image_commands::convert_tpc_to_dds,
+            application::image_commands::get_tpc_from_file
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

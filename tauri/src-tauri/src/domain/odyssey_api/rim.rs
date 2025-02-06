@@ -1,5 +1,5 @@
 use std::collections::VecDeque;
-
+use std::io;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Default, Serialize, Deserialize)]
@@ -62,6 +62,30 @@ impl Rim {
             length,
             index,
         )
+    }
+
+    pub fn read_resource_data(&self, resource_id: u32) -> io::Result<Vec<u8>> {
+        // Convert u32 resource_id to i16 since that's what we store
+        let resource_id = i16::try_from(resource_id).map_err(|_| {
+            io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "Resource ID too large for i16"
+            )
+        })?;
+
+        // Find the key entry with matching resource_id
+        let key_entry = self.key_entry_list.iter().find(|entry| {
+            entry.resource_id == resource_id
+        }).ok_or_else(|| {
+            io::Error::new(
+                io::ErrorKind::NotFound,
+                format!("Resource with ID {} not found", resource_id)
+            )
+        })?;
+
+        // Get the data using the found key entry's index
+        let data = self.get_rim_resource(key_entry.index as usize);
+        Ok(data)
     }
 
     fn calculate_integer_value(&self, start_index: usize) -> i32 {
