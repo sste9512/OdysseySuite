@@ -2,7 +2,21 @@ use crate::domain::odyssey_api::seekablereadstream::*;
 use crate::domain::odyssey_api::util::*;
 use std::io::Read;
 
-pub mod images {
+pub fn check_cube_map(width: u32, height: u32) -> Result<(), String> {
+    // Check if dimensions are valid for a cube map
+    if width == 0 || height == 0 {
+        return Err("Invalid dimensions".to_string());
+    }
+    
+    // For a cube map, height should be 6 times the width
+    if height == width * 6 {
+        Ok(())
+    } else {
+        Err("Not a cube map".to_string())
+    }
+}
+
+
     use byteorder::ReadBytesExt;
 
     use super::*;
@@ -585,4 +599,4 @@ pub mod images {
             }
         }
     }
-}
+

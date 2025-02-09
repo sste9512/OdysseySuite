@@ -11,11 +11,12 @@
             }))"></v-breadcrumbs>
           </div>
 
-          <a-page-header title="ERF Resource" sub-title="Resource Archive File" :ghost="false"
-            style="background-color: transparent; padding: 10px;">
+          <a-page-header :title="path.split(/[/\\]/).pop() || 'ERF Resource'" sub-title="Resource Archive File"
+            :ghost="false" style="background-color: transparent; padding: 10px;">
             <template #extra>
               <v-btn key="3">Export As</v-btn>
               <v-btn key="2">View Relationships</v-btn>
+
               <v-btn key="1" color="primary">Save</v-btn>
             </template>
 
@@ -63,10 +64,11 @@
               {{ getResourceSize(item.resource_id) }}
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-btn>Export</v-btn>
+              <v-btn @click="exportResource(item.resource_id)">Export</v-btn>
               <v-btn @click="handleViewClick(item.resource_id)">View</v-btn>
               <v-btn>Save</v-btn>
             </template>
+
           </v-data-table>
 
 
@@ -84,10 +86,48 @@
           </v-data-table>
 
         </v-col>
+
+        <v-snackbar v-model="snackbar" :timeout="timeout" :close-on-back="false" vertical>
+
+          {{ text }}
+          <v-banner
+      class="my-4"
+      color="deep-purple-accent-4"
+      icon="mdi-lock"
+      lines="one"
+    >
+      <v-banner-text>
+        Banner with one line of text.
+      </v-banner-text>
+
+      <template v-slot:actions>
+        <v-btn>Action</v-btn>
+      </template>
+    </v-banner>
+
+    <v-banner
+      class="my-4"
+      color="error"
+      icon="mdi-weather-hurricane"
+      lines="two"
+    ></v-banner>
+          <v-progress-linear indeterminate></v-progress-linear>
+
+
+          <template v-slot:actions>
+            <v-btn color="blue" variant="text" @click="snackbar = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
       </v-row>
 
       <ContextMenu :display="showContextMenu" ref="menu">
       </ContextMenu>
+
+
+
+
       <v-overlay v-model="showTpcOverlay" class="align-center justify-center">
         <v-card min-width="400" min-height="400">
           <v-card-title class="d-flex justify-space-between">
@@ -115,6 +155,7 @@ import { DDS_HEADER } from '@/components/Aurora-Rendering/types/DDS';
 import ThreeRender from '@/components/ThreeRendering/ThreeRender.vue';
 import { TPC } from '@/components/Aurora-Rendering/types/TPC';
 import { ImageApi } from '@/data/image-api';
+import { NotificationPlacement, notification } from 'ant-design-vue';
 
 export default {
   name: 'ErfResourceView',
@@ -137,6 +178,10 @@ export default {
     const showTpcOverlay = ref(false);
     const selectedResourceData = ref<Uint8Array | null>(null);
     const ddsHeader = ref<Uint8Array | null>(null);
+    const snackbar = ref(false);
+    const text = ref('My timeout is set to 2000.');
+    const timeout = ref(2000);
+
 
 
 
@@ -159,16 +204,32 @@ export default {
       return LanguageId[languageId] || languageId;
     };
 
+
+    const exportResource = async (resourceId: number) => {
+      // const [api, contextHolder] = notification.useNotification();
+      // const open = (placement: NotificationPlacement) => openNotification(placement);
+      // const openNotification = (placement: NotificationPlacement) => {
+      //   api.info({
+      //     message: `Notification ${placement}`,
+      //     description:
+      //       'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      //     placement,
+      //   });
+      // };
+      snackbar.value = true;
+    }
+
     // Handle view click
     // This function is used to handle the view click event for a resource
     // It retrieves the resource data from the AuroraService
     // It then creates a new TPC object with the resource data
     // It then sets the selectedResourceData to the resource data
+
     // It then sets the showTpcOverlay to true
     // It then logs the selectedResourceData
     const handleViewClick = async (resourceId: number) => {
 
-
+      showTpcOverlay.value = true;
       const auroraService = new AuroraService();
       const resourceData = await auroraService.getErfResourceData(props.path, resourceId);
 
@@ -184,6 +245,8 @@ export default {
         const imageApi = new ImageApi();
         const tpcData = await imageApi.convertBytesToTPC(resourceData.value);
 
+
+
         if (tpcData.ok) {
           // get the offset of the resource
           const resourceOffset = getResourceOffset(resourceId);
@@ -192,7 +255,7 @@ export default {
             return;
           }
           // get the size of the resource
-          const resourceSize = getResourceSize(resourceId); 
+          const resourceSize = getResourceSize(resourceId);
           if (resourceSize === undefined) {
             console.error("Could not get resource size");
             return;
@@ -206,24 +269,46 @@ export default {
             return;
           }
 
-          const ddsData = await imageApi.convertTPCtoDDS(tpc.value);
-          if (ddsData.ok) {
-            ddsHeader.value = ddsData.value;
-            console.log("ddsHeader", ddsHeader.value);
-          } else {
-            console.log("error", ddsData.error);
+
+          // Move this to export function
+          const desktopPath = "C:\\Users\\steve\\OneDrive\\Windows\\Backgrounds\\Desktop\\tpc_dump";
+          const tpcPath = desktopPath + "\\" + String.fromCharCode(...filteredResources.value[resourceId].filename).trim().replace(/[^a-zA-Z0-9]/g, "_") + ".tpc";
+
+
+          const writeTpcToFile = await imageApi.writeTPCToFile(tpcPath, tpc.value);
+          if (writeTpcToFile.ok) {
+
+            const tpcXoreos = await imageApi.getTPCFromFileXoreos(props.path, resourceOffset, resourceSize);
+            if (tpcXoreos.ok) {
+              console.log("tpcXoreos", tpcXoreos.value);
+            } else {
+              console.error("Could not get TPC from file");
+              return;
+            }
+
+            const ddsData = await imageApi.convertTPCtoDDS(tpc.value);
+            if (ddsData.ok) {
+              ddsHeader.value = ddsData.value;
+              console.log("ddsHeader", ddsHeader.value);
+            } else {
+              console.log("error", ddsData.error);
+            }
+
+          }
+          else {
+            console.log("error", tpcData.error);
           }
 
         }
-        else {
-          console.log("error", tpcData.error);
-        }
-        showTpcOverlay.value = true;
-      }
 
 
-      console.log("selectedResourceData", selectedResourceData.value);
-    };
+        console.log("selectedResourceData", selectedResourceData.value);
+      };
+    }
+
+
+
+
 
     const loadErf = async () => {
       try {
@@ -234,7 +319,7 @@ export default {
         if (erfData.ok) {
           console.log('ERF data loaded:', erfData.value);
           erf.value = erfData.value;
-          
+
           // Extract unique resource types from key list entries
           const types = new Set<number>(erfData.value.key_list.entries.map(entry => entry.resource_type));
           resourceTypes.value = Array.from(types).map(type => getResourceTypeName(type));
@@ -347,10 +432,15 @@ export default {
       getResourceData,
       showTpcOverlay,
       selectedResourceData,
-      handleViewClick
+      handleViewClick,
+      exportResource,
+      snackbar,
+      text,
+      timeout
     };
   }
 }
+
 </script>
 
 <style scoped lang="scss">

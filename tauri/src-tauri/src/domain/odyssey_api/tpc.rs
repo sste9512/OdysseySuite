@@ -169,7 +169,10 @@ impl TPC {
         let filename = args.filename.unwrap_or(default.filename.unwrap_or_else(String::new));
         let pack = args.pack.unwrap_or(default.pack.unwrap_or(0));
         let header = TPC::read_header(&file).unwrap();
-        let txi = TXI::create_from_options(TXIInput::from(TPC::get_txi_data(&file, &header)));
+        let txi = match TPC::get_txi_data(&file, &header) {
+            Ok(txi_data) => TXI::create_from_options(TXIInput::from(txi_data)),
+            Err(_) => TXI::create_from_options(TXIInput::String(String::new())),
+        };
 
         TPC {
             header,
@@ -296,17 +299,38 @@ impl TPC {
 
     
 
-    pub fn get_txi_data(file: &Vec<u8>, header: &TPCHeader) -> String {
-        let txi_offset = (TPC::get_data_length(&header) + TPC_HEADER_LENGTH) as usize;
-        let txi_data_length = file.len() - txi_offset;
+    pub fn get_txi_data(file: &Vec<u8>, header: &TPCHeader) -> Result<String, String> {
+        let data_length = TPC::get_data_length(&header);
+        let txi_offset = data_length.checked_add(TPC_HEADER_LENGTH)
+            .ok_or_else(|| "Arithmetic overflow calculating TXI offset".to_string())?;
 
-        if txi_data_length > 0 {
-            let txi_data = &file[txi_offset..txi_offset + txi_data_length];
-            return String::from_utf8(txi_data.to_vec()).unwrap_or_default();
+        if txi_offset > file.len() {
+            return Err("TXI offset is beyond file length".to_string());
         }
 
-        String::new()
+        let txi_data_length = file.len().checked_sub(txi_offset as usize)
+            .ok_or_else(|| "Arithmetic overflow calculating TXI data length".to_string())?;
+
+        if txi_data_length == 0 {
+            return Ok(String::new());
+        }
+
+        let txi_end = txi_offset.checked_add(txi_data_length)
+            .ok_or_else(|| "Arithmetic overflow calculating TXI end offset".to_string())?;
+
+        if txi_end > file.len() {
+            return Err("TXI data extends beyond file length".to_string());
+        }
+
+        let txi_data = &file[txi_offset..txi_end];
+        Ok(String::from_utf8(txi_data.to_vec())
+            .map_err(|e| format!("Invalid UTF-8 in TXI data: {}", e))?)
     }
+
+
+
+
+    
 
     pub fn read_header(buffer: &[u8]) -> Result<TPCHeader, &'static str> {
         let mut cursor = Cursor::new(&buffer[..]);

@@ -12,11 +12,12 @@ pub mod images {
     use std::borrow::BorrowMut;
     use std::ops::{Deref, DerefMut};
 
+    use serde::{Deserialize, Serialize};
     use tauri::utils;
 
     use crate::domain::odyssey_api::dumptga::images::dump_tga;
     use crate::domain::odyssey_api::s3tc;
-    use crate::domain::odyssey_api::s3tc::images;
+
     use crate::domain::odyssey_api::seekablereadstream::SeekableReadStream;
     use crate::domain::odyssey_api::tpc::PixelFormat;
     use crate::domain::odyssey_api::{dumptga, util};
@@ -25,6 +26,7 @@ pub mod images {
 
     use super::*;
 
+    #[derive(Debug, Clone, Serialize, Deserialize)]
     pub struct MipMap {
         pub width: usize,
         pub height: usize,
@@ -165,27 +167,30 @@ pub mod images {
             match format {
                 PixelFormat::DXT1 => {
                     // let mut sub_stream = stream;
-                    s3tc::images::decompress_dxt1_std(
+                    s3tc::decompress_dxt1_std(
                         &mut out.data.as_mut().unwrap(),
                         &mut sub_stream,
                         out.width as u32,
                         out.height as u32,
                         out.width as u32 * 4,
                     )
+
                 }
-                PixelFormat::DXT3 => s3tc::images::decompress_dxt3_std(
+                PixelFormat::DXT3 => s3tc::decompress_dxt3_std(
                     &mut out.data.as_mut().unwrap(),
                     &mut sub_stream,
                     out.width as u32,
                     out.height as u32,
                     out.width as u32 * 4,
                 ),
-                PixelFormat::DXT5 => s3tc::images::decompress_dxt5_std(
+
+                PixelFormat::DXT5 => s3tc::decompress_dxt5_std(
                     &mut out.data.as_mut().unwrap(),
                     &mut sub_stream,
                     out.width as u32,
                     out.height as u32,
                     out.width as u32 * 4,
+
                 ),
                 _ => (),
             }

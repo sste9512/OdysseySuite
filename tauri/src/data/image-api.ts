@@ -1,6 +1,6 @@
 import { Result } from "@/models/Result";
 import { invoke } from "@tauri-apps/api/core";
-import { TpcData } from "./tpc-data";
+import { TPC_Xoreos, TpcData } from "./tpc-data";
 import { TPC } from "@/components/Aurora-Rendering/types/TPC";
 
 
@@ -98,6 +98,30 @@ export class ImageApi {
             return { ok: false, error: error as Error };
         }
     }
+
+
+    
+    /**
+     * Gets TPC data from a file using xoreos format at specified offset and size
+     * @param path - Path to the file containing TPC data
+     * @param offset - Offset in the file where TPC data starts
+     * @param size - Size of the TPC data in bytes
+     * @returns Promise resolving to TPC data
+     */
+    async getTPCFromFileXoreos(path: string, offset: number, size: number): Promise<Result<TPC_Xoreos>> {
+        try {
+            const tpc = await invoke<TPC_Xoreos>('get_tpc_from_file_xoreos', {
+                path,
+               offset,
+                size
+            });
+            return { ok: true, value: tpc };
+        } catch (error) {
+            return { ok: false, error: error as Error };
+        }
+    }
+
+   
 }
 
  

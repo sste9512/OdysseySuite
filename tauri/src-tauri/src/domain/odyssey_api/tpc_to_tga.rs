@@ -3,11 +3,11 @@
 // use std::io::{self, Read, Seek};
 // use std::path::Path;
 
-// use crate::domain::odyssey_api::aurora::{detect_file_type, FileType};
-// use crate::domain::odyssey_api::common::{FilePath, ReadFile, WriteFile};
 // use crate::domain::odyssey_api::tga::TGA;
 // use crate::domain::odyssey_api::tpc::TPC;
 // use crate::domain::odyssey_api::dds::DDS;
+
+
 
 // use super::decoder::images::Decoder;
 
@@ -58,7 +58,7 @@
 //     match file_type {
 //         FileType::DDS => Ok(Box::new(DDS::new(stream)?)),
 //         FileType::SBM => Ok(Box::new(SBM::new(stream, deswizzle)?)),
-//         FileType::TPC => Ok(Box::new(TPC::new(stream)?)),
+//         FileType::TPC => Ok(TPC::new(stream)?),
 //         FileType::TXB => Ok(Box::new(TXB::new(stream)?)),
 //         FileType::TGA => Ok(Box::new(TGA::new(stream)?)),
 //         _ => Err(io::Error::new(
@@ -117,28 +117,28 @@
 //     Ok(())
 // }
 
-// // fn main() -> io::Result<()> {
-// //     let args = Args::parse();
+// fn main() -> io::Result<()> {
+//     let args = Args::parse();
 
-// //     let file_type = if args.dds {
-// //         FileType::DDS
-// //     } else if args.sbm {
-// //         FileType::SBM
-// //     } else if args.tpc {
-// //         FileType::TPC
-// //     } else if args.txb {
-// //         FileType::TXB
-// //     } else if args.tga {
-// //         FileType::TGA
-// //     } else {
-// //         FileType::None
-// //     };
+//     let file_type = if args.dds {
+//         FileType::DDS
+//     } else if args.sbm {
+//         FileType::SBM
+//     } else if args.tpc {
+//         FileType::TPC
+//     } else if args.txb {
+//         FileType::TXB
+//     } else if args.tga {
+//         FileType::TGA
+//     } else {
+//         FileType::None
+//     };
 
-// //     convert(
-// //         Path::new(&args.input),
-// //         Path::new(&args.output),
-// //         file_type,
-// //         args.flip,
-// //         args.deswizzle
-// //     )
-// // }
+//     convert(
+//         Path::new(&args.input),
+//         Path::new(&args.output),
+//         file_type,
+//         args.flip,
+//         args.deswizzle
+//     )
+// }

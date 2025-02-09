@@ -66,20 +66,14 @@
          four_cc == K_DDS_ID
      }
  
-     fn load(&mut self, dds: &mut dyn SeekableReadStream) {
-         let result = (|| {
-             let mut data_type = 0;
-             self.read_header(dds, &mut data_type);
-             self.read_data(dds, data_type);
-             Ok(())
-         })();
- 
-         if result.is_err() {
-             panic!("Failed reading DDS file: {}", result.unwrap_err());
-         }
- 
+     fn load(&mut self, dds: &mut dyn SeekableReadStream) -> Result<(), String> {
+         let mut data_type = 0;
+         self.read_header(dds, &mut data_type);
+         self.read_data(dds, data_type);
+         
          // In xoreos-tools, we always want decompressed images
          self.decompress();
+         Ok(())
      }
  
      fn read_header(&mut self, dds: &mut dyn SeekableReadStream, data_type: &mut u32) {
@@ -96,9 +90,10 @@
          }
  
          let flags = dds.read_u32_le().unwrap();
-         let height = dds.read_u32_le().unwrap();
-         let width = dds.read_u32_le().unwrap();
+         let mut height = dds.read_u32_le().unwrap();
+         let mut width = dds.read_u32_le().unwrap();
  
+
          if width >= 0x8000 || height >= 0x8000 {
              panic!("Unsupported image dimensions ({}x{})", width, height);
          }
@@ -154,9 +149,10 @@
  
          dds.seek(0);
  
-         let width = dds.read_u32_le().unwrap();
-         let height = dds.read_u32_le().unwrap();
+         let mut width = dds.read_u32_le().unwrap();
+         let mut height = dds.read_u32_le().unwrap();
  
+
          if width >= 0x8000 || height >= 0x8000 {
              panic!("Unsupported image dimensions ({}x{})", width, height);
          }
@@ -185,7 +181,7 @@
  
          dds.skip(4);
  
-         let mut full_data_size = dds.size() - dds.pos();
+         let mut full_data_size = dds.size() - dds.pos() as u64;
  
          loop {
              let mut mip_map = MipMap {

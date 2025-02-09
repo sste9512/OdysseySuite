@@ -7,7 +7,7 @@
                 <v-breadcrumbs :items="path.split(/[/\\]/).map(item => ({
                     title: item || 'Root',
                     disabled: false
-                }))"></v-breadcrumbs>
+                }))"></v-breadcrumbs>  
             </div>
 
 
