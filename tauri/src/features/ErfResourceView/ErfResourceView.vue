@@ -66,6 +66,7 @@
             <template v-slot:item.actions="{ item }">
               <v-btn @click="exportResource(item.resource_id)">Export</v-btn>
               <v-btn @click="handleViewClick(item.resource_id)">View</v-btn>
+              <!-- <TpcImageViewer :bytes="getImageDataForResource(item.resource_id)" :height="256" :width="256"/> -->
               <v-btn>Save</v-btn>
             </template>
 
@@ -90,27 +91,17 @@
         <v-snackbar v-model="snackbar" :timeout="timeout" :close-on-back="false" vertical>
 
           {{ text }}
-          <v-banner
-      class="my-4"
-      color="deep-purple-accent-4"
-      icon="mdi-lock"
-      lines="one"
-    >
-      <v-banner-text>
-        Banner with one line of text.
-      </v-banner-text>
+          <!-- <v-banner class="my-4" color="deep-purple-accent-4" icon="mdi-lock" lines="one">
+            <v-banner-text>
+              Banner with one line of text.
+            </v-banner-text>
 
-      <template v-slot:actions>
-        <v-btn>Action</v-btn>
-      </template>
-    </v-banner>
+            <template v-slot:actions>
+              <v-btn>Action</v-btn>
+            </template>
+          </v-banner>
 
-    <v-banner
-      class="my-4"
-      color="error"
-      icon="mdi-weather-hurricane"
-      lines="two"
-    ></v-banner>
+          <v-banner class="my-4" color="error" icon="mdi-weather-hurricane" lines="two"></v-banner> -->
           <v-progress-linear indeterminate></v-progress-linear>
 
 
@@ -129,13 +120,13 @@
 
 
       <v-overlay v-model="showTpcOverlay" class="align-center justify-center">
-        <v-card min-width="400" min-height="400">
-          <v-card-title class="d-flex justify-space-between">
-            <span>Texture Preview</span>
-            <v-btn icon="mdi-close" variant="text" @click="showTpcOverlay = false"></v-btn>
+        <v-card class="pa-4" width="800" height="800">
+          <v-card-title class="text-h6">
+            TPC Viewer
+            <v-btn icon="mdi-close" variant="text" @click="showTpcOverlay = false" class="float-right"></v-btn>
           </v-card-title>
           <v-card-text>
-            <ThreeRender :ddsHeader="ddsHeader" />
+            <TpcImageViewer :bytes="selectedResourceData" />
           </v-card-text>
         </v-card>
       </v-overlay>
@@ -150,16 +141,13 @@ import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
 import { ErfFile, ErfKeyEntry, ErfLocalizedString, ErfResourceTable, LanguageId } from '@/data/erf';
 import { AuroraService } from '@/data/aurora-service';
 import { ResourceType } from '@/data/resource_identification';
-import TpcViewer from '@/components/DataPresentation/TpcViewer.vue';
-import { DDS_HEADER } from '@/components/Aurora-Rendering/types/DDS';
-import ThreeRender from '@/components/ThreeRendering/ThreeRender.vue';
-import { TPC } from '@/components/Aurora-Rendering/types/TPC';
 import { ImageApi } from '@/data/image-api';
-import { NotificationPlacement, notification } from 'ant-design-vue';
+import TpcImageViewer from '@/components/DataPresentation/TpcImageViewer.vue';
+import { TPCObject } from '@/components/ThreeRendering/resource/TPCObject';
 
 export default {
   name: 'ErfResourceView',
-  components: { ContextMenu },
+  components: { ContextMenu, TpcImageViewer },
   props: {
     path: {
       type: String,
@@ -167,6 +155,8 @@ export default {
     }
   },
   setup(props) {
+
+
     console.log('ERF Resource View', props.path);
     const erf = ref<ErfFile | null>(null);
     const loading = ref(false);
@@ -205,47 +195,35 @@ export default {
     };
 
 
+    /**
+     * Exports a resource from the ERF file to disk.
+     * 
+     * @param resourceId - The ID of the resource to export
+     * 
+     * This function:
+     * 1. Shows a snackbar notification that export is starting
+     * 2. Gets the resource data using the resource ID
+     * 3. Converts the resource data to TPC format using ImageApi
+     * 4. Gets the resource offset and size from the ERF file
+     * 5. Extracts the TPC data from the ERF file at the specified offset/size
+     * 6. Writes the TPC data to a file in the desktop tpc_dump directory
+     * 7. Attempts to convert the TPC to DDS format
+     * 8. Also tries to extract TPC using Xoreos format as a fallback
+     * 
+     * Error handling:
+     * - Logs errors if resource offset/size can't be determined
+     * - Logs errors if TPC extraction fails
+     * - Shows error in snackbar if overall export fails
+     * 
+     * @throws {Error} If resource data cannot be retrieved or processed
+     */
     const exportResource = async (resourceId: number) => {
-      // const [api, contextHolder] = notification.useNotification();
-      // const open = (placement: NotificationPlacement) => openNotification(placement);
-      // const openNotification = (placement: NotificationPlacement) => {
-      //   api.info({
-      //     message: `Notification ${placement}`,
-      //     description:
-      //       'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-      //     placement,
-      //   });
-      // };
       snackbar.value = true;
-    }
-
-    // Handle view click
-    // This function is used to handle the view click event for a resource
-    // It retrieves the resource data from the AuroraService
-    // It then creates a new TPC object with the resource data
-    // It then sets the selectedResourceData to the resource data
-
-    // It then sets the showTpcOverlay to true
-    // It then logs the selectedResourceData
-    const handleViewClick = async (resourceId: number) => {
-
-      showTpcOverlay.value = true;
-      const auroraService = new AuroraService();
-      const resourceData = await auroraService.getErfResourceData(props.path, resourceId);
-
-      if (resourceData.ok) {
-        // console.log("resourceData", resourceData.value);
-        selectedResourceData.value = resourceData.value;
-        // const tpc = new TPC({
-        //   filename: resourceId.toString(), // the name of the texture file
-        //   file:  resourceData.value, // actual binary data
-        //   pack: 0, // this is the texture pack reference, meaning the different packages of erf files that contain the textures
-        // });
-
+      text.value = "Exporting resource..." + filteredResources.value[resourceId].filename;
+      try {
         const imageApi = new ImageApi();
+        const resourceData = await getResourceData(resourceId);
         const tpcData = await imageApi.convertBytesToTPC(resourceData.value);
-
-
 
         if (tpcData.ok) {
           // get the offset of the resource
@@ -269,11 +247,9 @@ export default {
             return;
           }
 
-
           // Move this to export function
           const desktopPath = "C:\\Users\\steve\\OneDrive\\Windows\\Backgrounds\\Desktop\\tpc_dump";
           const tpcPath = desktopPath + "\\" + String.fromCharCode(...filteredResources.value[resourceId].filename).trim().replace(/[^a-zA-Z0-9]/g, "_") + ".tpc";
-
 
           const writeTpcToFile = await imageApi.writeTPCToFile(tpcPath, tpc.value);
           if (writeTpcToFile.ok) {
@@ -296,10 +272,64 @@ export default {
 
           }
           else {
-            console.log("error", tpcData.error);
+            console.log("error", writeTpcToFile.error);
           }
 
         }
+
+      } catch (error) {
+        console.error("Failed to get resource data:", error);
+      }
+      finally {
+        snackbar.value = false;
+        text.value = "Export complete";
+      }
+    }
+
+    const getImageDataForResource = async (resourceId: number) => {
+      const resourceData = await getResourceData(resourceId);
+      const imageApi = new ImageApi();
+      const tpcData = await imageApi.convertBytesToTPC(resourceData.value);
+      if (tpcData.ok) {
+        return tpcData.value;
+      } else {
+        console.error("Could not get TPC from file");
+        return null;
+      }
+    }
+
+
+
+    // Handle view click
+    // This function is used to handle the view click event for a resource
+    // It retrieves the resource data from the AuroraService
+    // It then creates a new TPC object with the resource data
+    // It then sets the selectedResourceData to the resource data
+
+    // It then sets the showTpcOverlay to true
+    // It then logs the selectedResourceData
+    const handleViewClick = async (resourceId: number) => {
+
+      showTpcOverlay.value = true;
+      const auroraService = new AuroraService();
+      const resourceData = await auroraService.getErfResourceData(props.path, resourceId);
+      const imageApi = new ImageApi();
+   
+
+
+      if (resourceData.ok) {
+        
+        selectedResourceData.value = resourceData.value;
+        showTpcOverlay.value = true;
+
+        
+        // const tpc = new TPC({
+        //   filename: resourceId.toString(), // the name of the texture file
+        //   file:  resourceData.value, // actual binary data
+        //   pack: 0, // this is the texture pack reference, meaning the different packages of erf files that contain the textures
+        // });
+
+
 
 
         console.log("selectedResourceData", selectedResourceData.value);
@@ -436,7 +466,8 @@ export default {
       exportResource,
       snackbar,
       text,
-      timeout
+      timeout, 
+      getImageDataForResource
     };
   }
 }

@@ -54,7 +54,12 @@ pub fn run() {
             application::image_commands::write_tpc_to_file,
             application::image_commands::convert_tpc_to_dds,
             application::image_commands::get_tpc_from_file,
-            application::image_commands::get_tpc_from_file_xoreos
+            application::image_commands::get_tpc_from_file_xoreos,
+            application::image_commands::read_tpc_from_detached_file,
+            application::image_commands::get_tpc_bytes_from_file,
+            application::image_commands::read_bytes_from_detached_file,
+            application::image_commands::get_bytes_from_file,
+
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

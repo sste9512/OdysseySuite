@@ -19,15 +19,21 @@ export default {
     selectedDirectory: {
       type: String,
       required: false
+    },
+    canSelectFile: {
+      type: Boolean,
+      required: false
     }
   },
   emits: ['update:selectedDirectory', 'update:isOpen'],
+
   setup() {
     const fileSystemStore = useFileSystemStore();
     const selectedDrive = ref<DriveStatistics | null>(null);
+    const selectedFile = ref<string>("");
     selectedDrive.value = fileSystemStore.drives[1];
     const { drives, currentDirectory, previousDirectory, visitedDirectories, currentDirectoryIndex } = storeToRefs(fileSystemStore);
-    return { fileSystemStore, drives, currentDirectory, previousDirectory, visitedDirectories, currentDirectoryIndex, selectedDrive }
+    return { fileSystemStore, drives, currentDirectory, previousDirectory, visitedDirectories, currentDirectoryIndex, selectedDrive, selectedFile }
   },
   unmounted() {
     //this.fileSystemStore.reset();
@@ -53,19 +59,40 @@ export default {
       return this.currentDirectoryIndex < this.visitedDirectories.length - 1;
     },
     async navigateToDirectory(directory: DirectoryItem | string) {
-      if (typeof directory === "string") {
+
+      if (this.canSelectFile && typeof directory === "object" && directory.type === "file") {
+        this.selectedFile = directory.path;
+        console.log('Selected file:', this.selectedFile);
+        this.selectFile();
+      }
+
+      else if (typeof directory === "string") {
         await this.fileSystemStore.navigateToDirectory(directory);
       } else {
         await this.fileSystemStore.navigateToDirectory(directory.path);
       }
+
+
     },
     closeModal() {
       this.$emit('update:isOpen', false);
     },
-    selectDirectory() {
-      this.$emit('update:selectedDirectory', this.currentDirectory.path);
+    selectFile() {
+      this.$emit('update:selectedDirectory', this.selectedFile);
       this.closeModal();
     },
+    selectDirectory() {
+      if (this.canSelectFile) {
+        this.$emit('update:selectedDirectory', this.selectedFile);
+      } else {
+        this.$emit('update:selectedDirectory', this.currentDirectory.path);
+      }
+      this.closeModal();
+    },
+
+
+
+
     selectDrive(drive: DriveStatistics) {
       this.selectedDrive = drive;
       this.fileSystemStore.navigateToDirectory(drive.path);
@@ -146,7 +173,7 @@ export default {
 
     <v-main>
 
-      <v-row style="min-height: 20vh;">
+      <v-row style="min-height: 20vh; max-height: 70vh; overflow-y: auto;">
         <v-col v-for="item in currentDirectory.contents" :key="item.path" cols="12" md="4" lg="4">
           <v-card @click="navigateToDirectory(item)" elevation="9">
             <v-card-title>
@@ -160,7 +187,6 @@ export default {
             </v-card-title>
 
             <v-card-subtitle>
-
               <v-row style="margin-top: 5px;">
                 <v-spacer></v-spacer>
                 <v-chip size="small" v-if="item.type === 'directory'">{{ item.size }} items</v-chip>
@@ -175,13 +201,16 @@ export default {
 
 
     </v-main>
-    <v-bottom-navigation >
+    <v-bottom-navigation>
       <v-row class="d-flex flex-row align-center" elevation="4">
         <v-icon size="small" color="grey" class="mr-2" style="margin-left: 20px;">mdi-folder-open</v-icon>
-        <span class="text-caption text-grey" >{{ currentDirectory.path }}</span>
+        
+        <span class="text-caption text-grey" v-if="canSelectFile">{{ selectedFile }}</span>
+        <span class="text-caption text-grey" v-else>{{ currentDirectory.path }}</span>
         <v-spacer></v-spacer>
-    
-        <v-btn color="success" variant="tonal" style="margin-right: 15px;">
+
+
+        <v-btn color="success" variant="tonal" style="margin-right: 15px;" @click="selectDirectory">
           <v-icon left>
             mdi-pencil
           </v-icon>
@@ -222,7 +251,7 @@ export default {
  ************************************/
 
 
- 
+
 
 .v-layout {
   background-color: rgb(var(--v-theme-surface));

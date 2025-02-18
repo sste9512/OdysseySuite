@@ -52,6 +52,8 @@ export interface DDS_PIXELFORMAT {
 
 
 export interface DDS_HEADER {
+    isCubemap: any;
+    mipmaps: DDS_MIPMAP[];
     dwSize: number;           // Size of header (124 bytes)
     dwFlags: number;          // Format flags
     dwHeight: number;         // Image height
@@ -68,3 +70,12 @@ export interface DDS_HEADER {
     dwCaps4: number;         // Not used
     dwReserved2: number;     // Reserved
 }
+
+export interface DDS_MIPMAP {
+    width: number;
+    height: number;
+    pitchOrLinearSize: number;
+    depth: number;
+    data: Uint8Array;
+}
+

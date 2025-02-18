@@ -15,6 +15,11 @@
       bg-color="rgba(255, 255, 255, 0.1)" variant="solo"></v-text-field>
 
     <v-spacer></v-spacer>
+  
+    <v-btn icon class="target-light target" @click="navigateToTools">
+      <v-icon>mdi-cog</v-icon>
+    </v-btn>
+
 
     <v-btn icon class="target-light target" @click="navigateHome">
       <v-icon>mdi-home</v-icon>
@@ -47,7 +52,14 @@
       <DirectoryViewer :isOpen="showDirectoryViewer" @update:isOpen="showDirectoryViewer = $event"></DirectoryViewer>
     </v-container>
   </v-overlay>
+  <v-overlay v-model="showTpcViewer" :scrim="true" :teleport="'body'" class=" align-center justify-center">
+    <v-container
+      style="overflow: hidden; margin: 15px 15px 15px 15px; max-width: 100%; min-width: 90vw; min-height: 90vh;">
+      <!-- Directory content can be dynamically loaded here -->
+      <TpcViewer :isOpen="showTpcViewer" @update:isOpen="showTpcViewer = $event"></TpcViewer>
+    </v-container>
 
+  </v-overlay>
 
 
 </template>
@@ -63,14 +75,19 @@ import CustomContextMenu from "@/components/ContextMenus/CustomContextMenu.vue";
 import { onUnmounted, ref } from "vue";
 import DirectoryViewer from "@/features/DirectoryViewer/DirectoryViewer.vue";
 import { useDialogStore } from "@/state/dialog-store";
+import TpcViewer from "@/features/Tools/TpcViewer/TpcViewer.vue";
+
 
 export default {
   name: "AuroraAppBar",
-  components: { DirectoryViewer, CustomContextMenu, ContextMenu },
+  components: { DirectoryViewer, CustomContextMenu, ContextMenu, TpcViewer },
+
   setup() {
     const dialogStore = useDialogStore();
     const showDirectoryViewer = ref(dialogStore.directoryViewerDialog);
+    const showTpcViewer = ref(false);
     const directoryContent = ref([]);
+
 
     dialogStore.$subscribe(() => {
       showDirectoryViewer.value = !showDirectoryViewer.value;
@@ -81,8 +98,11 @@ export default {
     return {
       showDirectoryViewer,
       directoryContent,
-      dialogStore
+      dialogStore,
+      showTpcViewer
+       
     }
+
   },
   unmounted() {
     this.dialogStore.$unsubscribe();
@@ -91,9 +111,13 @@ export default {
     openDirectoryViewer() {
       this.showDirectoryViewer = true;
     },
+    openTpcViewer() {
+      this.showTpcViewer = true;
+    },
     toggle() {
       drawerService.toggle();
     },
+
     openContextMenu(e) {
       console.log("This worked partially")
       e.preventDefault()
@@ -114,10 +138,14 @@ export default {
     },
     navigateHome() {
       router.push("/");
+    },
+    navigateToTools() {
+      this.openTpcViewer();
     }
   },
   data() {
     return {
+
       showContextMenu: false,
       items: [
         {

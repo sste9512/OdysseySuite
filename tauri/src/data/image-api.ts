@@ -121,7 +121,39 @@ export class ImageApi {
         }
     }
 
-   
+    /**
+     * Reads TPC data from a detached file
+     * @param path - Path to the detached TPC file
+     * @returns Promise resolving to TPC data
+     */
+    async readTPCFromDetachedFile(path: string): Promise<Result<TPC>> {
+        try {
+           
+            const tpc = await invoke<TPC>('read_tpc_from_detached_file', {
+                path
+            });
+
+            return { ok: true, value: tpc };
+        } catch (error) {
+            return { ok: false, error: error as Error };
+        }
+    }
+
+    /**
+     * Reads raw bytes from a file
+     * @param path - Path to the file to read
+     * @returns Promise resolving to byte array
+     */
+    async getBytesFromFile(path: string): Promise<Result<Uint8Array>> {
+        try {
+            const bytes = await invoke<number[]>('get_bytes_from_file', {
+                path
+            });
+            return { ok: true, value: new Uint8Array(bytes) };
+        } catch (error) {
+            return { ok: false, error: error as Error };
+        }
+    }
 }
 
  

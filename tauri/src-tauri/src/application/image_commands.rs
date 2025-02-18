@@ -4,6 +4,16 @@ use std::io::{Read, Seek, Write};
 use crate::domain::odyssey_api::tpc::TPC;
 
 
+
+#[tauri::command]
+pub async fn get_tpc_bytes_from_file(path: String, offset: u32, size: u32) -> Result<Vec<u8>, String> {
+    match std::fs::read(&path) {
+        Ok(file_bytes) => Ok(file_bytes[offset as usize..(offset + size) as usize].to_vec()),
+        Err(err) => Err(format!("Failed to read TPC file '{}': {}", path, err))
+    }
+}
+
+
 #[tauri::command]
 pub async fn get_tpc_from_file(path: String, offset: u32, size: u32) -> Result<TPC, String> {
     match std::fs::read(&path) {
@@ -19,6 +29,15 @@ pub async fn get_tpc_from_file(path: String, offset: u32, size: u32) -> Result<T
         Err(err) => Err(format!("Failed to read TPC file '{}': {}", path, err))
     }
 }
+
+#[tauri::command]
+pub async fn get_bytes_from_file(path: String) -> Result<Vec<u8>, String> {
+    match std::fs::read(&path) {
+        Ok(file_bytes) => Ok(file_bytes),
+        Err(err) => Err(format!("Failed to read file '{}': {}", path, err))
+    }
+}
+
 
 
 
@@ -71,6 +90,33 @@ pub async fn write_tpc_to_file(path: String, tpc_data: TPC) -> Result<(), String
         }
     }
 }
+
+
+
+#[tauri::command]
+pub async fn read_bytes_from_detached_file(path: String) -> Result<Vec<u8>, String> {
+    match std::fs::read(&path) {
+        Ok(bytes) => Ok(bytes),
+        Err(e) => Err(format!("Failed to read file '{}': {}", path, e))
+    }
+}
+
+#[tauri::command]
+pub async fn read_tpc_from_detached_file(path: String) -> Result<TPC, String> {
+    match std::fs::read(&path) {
+        Ok(bytes) => {
+            let tpc = TPC::new(crate::domain::odyssey_api::tpc::TPCOptions {
+                file: Some(bytes),
+                filename: Some(path.clone()),
+                pack: None,
+            });
+            println!("TPC: {:?}", tpc.header.mip_map_count);
+            Ok(tpc)
+        },
+        Err(e) => Err(format!("Failed to read file '{}': {}", path, e))
+    }
+}
+
 
 #[tauri::command]
 pub async fn convert_tpc_to_dds(tpc_data: TPC) -> Result<Vec<u8>, String> {

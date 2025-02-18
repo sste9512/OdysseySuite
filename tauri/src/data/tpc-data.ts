@@ -1,3 +1,5 @@
+import { PixelFormat } from "@/components/Aurora-Rendering/types/TPC";
+
 export interface TpcData {
   width: number;
   height: number;
