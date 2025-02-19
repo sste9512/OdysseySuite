@@ -16,12 +16,13 @@ import { TGAObject } from '@/components/ThreeRendering/resource/TGAObject';
 import { PixelManager } from '@/components/ThreeRendering/utility/PixelManager';
 
 export default defineComponent({
-    name: 'TpcImageViewer',
+    name: 'TpcImage',
     props: {
-        // data: {
-        //     type: TPCObject,
-        //     required: true
-        // },
+        filename: {
+            type: String,
+            required: false,
+            default: 'test.tpc'
+        },
         bytes: {
             type: Uint8Array,
             required: true
@@ -54,7 +55,7 @@ export default defineComponent({
             const ctx = canvas.getContext('2d');
             if (!ctx) return;
 
-            const result = TPCObject.fromBytes({ filename: 'test.tpc' }, props.bytes);
+            const result = TPCObject.fromBytes({ filename: props.filename }, props.bytes);
             if (!result.ok) return;
 
             const tpcObj = result.value;
@@ -79,7 +80,7 @@ export default defineComponent({
             ctx.putImageData(imageData, 0, 0);
         };
 
-        const getPixelData = async (): Promise<Uint8Array> => {
+        const getAndRenderPixelData = async (): Promise<Uint8Array> => {
             return new Promise<Uint8Array>((resolve, reject) => {
 
                 console.log('Step 1: Starting getPixelData');
@@ -155,7 +156,7 @@ export default defineComponent({
 
         watch(() => props.bytes, async () => {
             try {
-                const pixelData = await getPixelData();
+                const pixelData = await getAndRenderPixelData();
                 await renderToCanvas(pixelData);
             } catch (e) {
                 console.error('Failed to render TPC:', e);
@@ -281,14 +282,12 @@ export default defineComponent({
         }
 
         onMounted(async () => {
-            //props.tab.addEventListener('onEditorFileLoad', onEditorFileLoad);
             console.log('onMounted');
-            await getPixelData();
+            await getAndRenderPixelData();
             containerRef.value?.addEventListener('wheel', onMouseWheel);
         });
 
         onUnmounted(() => {
-            // props.tab.removeEventListener('onEditorFileLoad', onEditorFileLoad);
             containerRef.value?.removeEventListener('wheel', onMouseWheel);
         });
 
@@ -298,7 +297,7 @@ export default defineComponent({
             canvasWidth,
             canvasHeight,
             canvasScale,
-            getPixelData
+            getPixelData: getAndRenderPixelData
         };
     }
 });

@@ -24,7 +24,7 @@
           <a-statistic title="Total Size" :value="rim?.data?.length || 0" suffix="bytes" />
         </div>
 
-   
+
       </a-page-header>
 
 
@@ -196,11 +196,11 @@ export default defineComponent({
       background: rgba(91, 5, 117, 0.938) !important;
       border-radius: 4px !important;
       border-color: rebeccapurple !important;
-      
+
       &__input {
         color: rgba(255, 255, 255, 0.85) !important;
       }
-      
+
       &__field {
         color: rgba(255, 255, 255, 0.85) !important;
       }
@@ -220,7 +220,7 @@ export default defineComponent({
       &__input {
         color: rgba(255, 255, 255, 0.85) !important;
       }
-      
+
       &__field {
         color: rgba(255, 255, 255, 0.85) !important;
       }
@@ -230,7 +230,7 @@ export default defineComponent({
       color: rgba(255, 255, 255, 0.65) !important;
     }
   }
- 
+
   .resource-type-chip {
     background: rgba(74, 158, 255, 0.15);
     color: #4a9eff;
@@ -239,26 +239,27 @@ export default defineComponent({
   }
 
   :deep(.v-breadcrumbs) {
-        padding: 0;
-        
-        .v-breadcrumbs-item {
-            color: rgba(255, 255, 255, 0.65);
-            font-size: 14px;
-            
-            &--disabled {
-                opacity: 0.5;
-            }
-            
-            &:hover:not(.v-breadcrumbs-item--disabled) {
-                color: rgba(255, 255, 255, 0.85);
-            }
-        }
+    padding: 0;
 
-        .v-breadcrumbs-divider {
-            color: rgba(255, 255, 255, 0.45);
-            padding: 0 8px;
-        }
+    .v-breadcrumbs-item {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 14px;
+
+      &--disabled {
+        opacity: 0.5;
+      }
+
+      &:hover:not(.v-breadcrumbs-item--disabled) {
+        color: rgba(255, 255, 255, 0.85);
+      }
     }
+
+    .v-breadcrumbs-divider {
+      color: rgba(255, 255, 255, 0.45);
+      padding: 0 8px;
+    }
+  }
+
   padding: 15px 15px 15px 15px;
 
   .desk {

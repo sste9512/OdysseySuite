@@ -25,6 +25,9 @@ export class TPCObject {
 
   canvas: OffscreenCanvas[] = [];
 
+
+
+
   constructor(args = {} as ITPCObjectOptions, fromBytes: boolean = false) {
     if (!fromBytes) {
       const _default: ITPCObjectOptions = {} as ITPCObjectOptions;
@@ -39,6 +42,26 @@ export class TPCObject {
 
   }
 
+  static createDefault(): TPCObject{
+    const tpc = new TPCObject({filename: 'default', pack: 0});
+    tpc.header = {
+      width: 0,
+      height: 0,
+      format: PixelFormat.R8G8B8,
+      mipMapCount: 1,
+      dataSize: 0,
+      alphaTest: 0,
+      encoding: ENCODING.RGB,
+      bytesPerPixel: 3,
+      bitsPerPixel: 24,
+      minDataSize: 0,
+      compressed: false,
+      hasAlpha: false,
+      isCubemap: false,
+      faces: 1
+    };  
+    return tpc;
+  }
 
 
   static fromBytes(args = {} as ITPCObjectOptions, bytes: Uint8Array): Result<TPCObject, Error> {
@@ -60,6 +83,8 @@ export class TPCObject {
       console.log('TPCObject.fromBytes: Setting pack:', options.pack);
       tpc.pack = options.pack;
 
+
+      
       console.log('TPCObject.fromBytes: Reading header from bytes');
       const headerResult = tpc.readHeaderFromBytes(bytes);
       if (headerResult.ok) {

@@ -61,7 +61,7 @@
               {{ getResourceOffset(item.resource_id) }}
             </template>
             <template v-slot:item.resource_size="{ item }">
-              {{ getResourceSize(item.resource_id) }}
+              <v-chip color="primary">{{ getResourceSize(item.resource_id) }}</v-chip>
             </template>
             <template v-slot:item.actions="{ item }">
               <v-btn @click="exportResource(item.resource_id)">Export</v-btn>
@@ -91,17 +91,7 @@
         <v-snackbar v-model="snackbar" :timeout="timeout" :close-on-back="false" vertical>
 
           {{ text }}
-          <!-- <v-banner class="my-4" color="deep-purple-accent-4" icon="mdi-lock" lines="one">
-            <v-banner-text>
-              Banner with one line of text.
-            </v-banner-text>
 
-            <template v-slot:actions>
-              <v-btn>Action</v-btn>
-            </template>
-          </v-banner>
-
-          <v-banner class="my-4" color="error" icon="mdi-weather-hurricane" lines="two"></v-banner> -->
           <v-progress-linear indeterminate></v-progress-linear>
 
 
@@ -122,13 +112,15 @@
       <v-overlay v-model="showTpcOverlay" class="align-center justify-center">
         <v-card class="pa-4" width="800" height="800">
           <v-card-title class="text-h6">
-            TPC Viewer
+
             <v-btn icon="mdi-close" variant="text" @click="showTpcOverlay = false" class="float-right"></v-btn>
           </v-card-title>
           <v-card-text>
-            <TpcImageViewer :bytes="selectedResourceData" />
+            <TpcImageViewerWithData :bytes="selectedResourceData" />
           </v-card-text>
         </v-card>
+
+
       </v-overlay>
 
     </div>
@@ -142,12 +134,13 @@ import { ErfFile, ErfKeyEntry, ErfLocalizedString, ErfResourceTable, LanguageId 
 import { AuroraService } from '@/data/aurora-service';
 import { ResourceType } from '@/data/resource_identification';
 import { ImageApi } from '@/data/image-api';
-import TpcImageViewer from '@/components/DataPresentation/TpcImageViewer.vue';
-import { TPCObject } from '@/components/ThreeRendering/resource/TPCObject';
+
+import TpcImageViewerWithData from '@/components/DataPresentation/TpcImageViewerWithData.vue';
+
 
 export default {
   name: 'ErfResourceView',
-  components: { ContextMenu, TpcImageViewer },
+  components: { ContextMenu, TpcImageViewerWithData },
   props: {
     path: {
       type: String,
@@ -309,29 +302,13 @@ export default {
     // It then sets the showTpcOverlay to true
     // It then logs the selectedResourceData
     const handleViewClick = async (resourceId: number) => {
-
       showTpcOverlay.value = true;
       const auroraService = new AuroraService();
       const resourceData = await auroraService.getErfResourceData(props.path, resourceId);
       const imageApi = new ImageApi();
-   
-
-
       if (resourceData.ok) {
-        
         selectedResourceData.value = resourceData.value;
         showTpcOverlay.value = true;
-
-        
-        // const tpc = new TPC({
-        //   filename: resourceId.toString(), // the name of the texture file
-        //   file:  resourceData.value, // actual binary data
-        //   pack: 0, // this is the texture pack reference, meaning the different packages of erf files that contain the textures
-        // });
-
-
-
-
         console.log("selectedResourceData", selectedResourceData.value);
       };
     }
@@ -374,9 +351,12 @@ export default {
         throw new Error("Failed to get resource data");
       }
     };
-
     const getResourceSize = (size: number) => {
-      return resourceList.value?.entries[size].resource_size;
+      const resourceSize = resourceList.value?.entries[size]?.resource_size;
+      if (resourceSize === undefined) {
+        return '0 Bytes';
+      }
+      return formatBytes(resourceSize);
     };
 
     const getResourceOffset = (offset: number) => {
@@ -389,9 +369,7 @@ export default {
 
     const filteredResources = computed(() => {
       if (!erf.value) return [];
-
-
-      let resources = erf.value.key_list.entries;
+ let resources = erf.value.key_list.entries;
 
       // // Apply search filter
       // if (search.value) {
@@ -466,7 +444,7 @@ export default {
       exportResource,
       snackbar,
       text,
-      timeout, 
+      timeout,
       getImageDataForResource
     };
   }
@@ -706,5 +684,14 @@ export default {
       color: #4a9eff;
     }
   }
+
+
+
+
+
+
+
+
+
 }
 </style>
