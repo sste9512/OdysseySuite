@@ -7,6 +7,7 @@ import { KEYManager } from "../managers/KEYManager";
 import { RIMManager } from "../managers/RIMManager";
 import { IRIMResource } from "../interface/resource/IRIMResource";
 import { IERFResource } from "../interface/resource/IERFResource";
+import { AuroraService } from "@/data/aurora-service";
 
 /**
  * ResourceLoader class.
@@ -120,40 +121,53 @@ export class ResourceLoader {
   }
 
   static async loadResource(resId: number, resRef: string): Promise<Uint8Array> {
+    const auroraService = new AuroraService();
+    console.log(`ResourceLoader: Loading resource ${resRef} (${resId})`);
 
     if(!resId){
+      console.log('ResourceLoader: Invalid resId provided');
       throw new Error(`Invalid resId ${resId}`);
     }
 
     if(!resRef){
+      console.log('ResourceLoader: Invalid resRef provided'); 
       throw new Error(`Invalid resRef ${resRef}`);
     }
 
     //Resource Cache
+    console.log('ResourceLoader: Checking resource cache...');
     let data = ResourceLoader.getCache(resId, resRef);
     if(data){
+      console.log('ResourceLoader: Found in cache');
       return data;
     }
 
+    console.log('ResourceLoader: Not found in cache, searching local resources...');
     data = await this.searchLocal(resId, resRef);
     if(data){
+      console.log('ResourceLoader: Found in local resources');
       ResourceLoader.setCache(null, resId, resRef, data);
       return data;
     }
 
+    console.log('ResourceLoader: Not found locally, searching key table...');
     data = await this.searchKeyTable(resId, resRef);
     if(data){
+      console.log('ResourceLoader: Found in key table');
       ResourceLoader.setCache(null, resId, resRef, data);
       return data;
     }
 
+    console.log('ResourceLoader: Not found in key table, searching module archives...');
     data = await this.searchModuleArchives(resId, resRef);
     if(data){
+      console.log('ResourceLoader: Found in module archives');
       ResourceLoader.setCache(null, resId, resRef, data);
       return data;
     }
 
     //Resource Not Found
+    console.log('ResourceLoader: Resource not found in any location');
     if(!data){
       throw new Error(`Resource not found: ResRef: ${resRef} ResId: ${resId}`);
     }
@@ -187,23 +201,32 @@ export class ResourceLoader {
   }
 
   static getCache(resId: number, resRef: string): Uint8Array {
+    console.log('ResourceLoader: Checking OVERRIDE cache scope');
     if(ResourceLoader.CacheScopes[CacheScope.OVERRIDE].get(resId).has(resRef)){
+      console.log('ResourceLoader: Found in OVERRIDE cache scope');
       return ResourceLoader.CacheScopes[CacheScope.OVERRIDE].get(resId).get(resRef);
     }
 
+    console.log('ResourceLoader: Checking MODULE cache scope'); 
     if(ResourceLoader.CacheScopes[CacheScope.MODULE].get(resId).has(resRef)){
+      console.log('ResourceLoader: Found in MODULE cache scope');
       return ResourceLoader.CacheScopes[CacheScope.MODULE].get(resId).get(resRef);
     }
 
+    console.log('ResourceLoader: Checking GLOBAL cache scope');
     if(ResourceLoader.CacheScopes[CacheScope.GLOBAL].get(resId).has(resRef)){
+      console.log('ResourceLoader: Found in GLOBAL cache scope');
       return ResourceLoader.CacheScopes[CacheScope.GLOBAL].get(resId).get(resRef);
     }
 
+    console.log('ResourceLoader: Checking legacy cache');
     if(typeof ResourceLoader.cache[resId] !== 'undefined'){
       if(typeof ResourceLoader.cache[resId][resRef] !== 'undefined'){
+        console.log('ResourceLoader: Found in legacy cache');
         return ResourceLoader.cache[resId][resRef];
       }
     }
+    console.log('ResourceLoader: Resource not found in any cache');
     return null;
   }
 

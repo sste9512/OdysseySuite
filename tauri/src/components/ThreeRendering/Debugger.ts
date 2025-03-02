@@ -1,9 +1,9 @@
-import { NWScriptInstance } from "./nwscript/NWScriptInstance";
-import { NWScriptInstruction } from "./nwscript/NWScriptInstruction";
-import { IPCMessage } from "./server/ipc/IPCMessage";
-import { IPCMessageParam } from "./server/ipc/IPCMessageParam";
-import { DebuggerState } from "./enums/server/DebuggerState";
-import { NWScriptStack } from "./nwscript/NWScriptStack";
+import { NWScriptInstance } from "@/components/ThreeRendering/nwscript/NWScriptInstance";
+import { NWScriptInstruction } from "@/components/ThreeRendering/nwscript/NWScriptInstruction";
+// import { IPCMessage } from "@/components/ThreeRendering/server/ipc/IPCMessage";
+// import { IPCMessageParam } from "@/components/ThreeRendering/server/ipc/IPCMessageParam";
+import { DebuggerState } from "@/components/ThreeRendering/enums/server/DebuggerState";
+import { NWScriptStack } from "@/components/ThreeRendering/nwscript/NWScriptStack";
 
 /**
  * Debugger class.
@@ -18,11 +18,11 @@ export class Debugger {
   /**
    * The IPCMessage class.
    */
-  static IPCMessage: typeof IPCMessage = IPCMessage;
-  /**
-   * The IPCMessageParam class.
-   */
-  static IPCMessageParam: typeof IPCMessageParam = IPCMessageParam;
+  // static IPCMessage: typeof IPCMessage = IPCMessage;
+  // /**
+  //  * The IPCMessageParam class.
+  //  */
+  // static IPCMessageParam: typeof IPCMessageParam = IPCMessageParam;
   /**
    * The broadcast channel.
    */
@@ -34,13 +34,13 @@ export class Debugger {
   /**
    * The window of the debugger.
    */
-  static window: WindowProxy | null;
+  static window: WindowProxy | null = null;
 
-  static #eventListener: any = {};
+  static eventListener: any = {};
 
   static state: DebuggerState = DebuggerState.Idle;
 
-  static currentScript: NWScriptInstance;
+  static currentScript: NWScriptInstance | null = null;
   static currentStack: NWScriptStack;
   static currentInstruction: NWScriptInstruction;
   static mainLoopPaused: boolean = false;
@@ -52,113 +52,113 @@ export class Debugger {
    * Sends a message to the debugger.
    * @param message The message to send.
    */
-  static send(message: IPCMessage|string) {
-    if(!this.window || !this.broadcastChannel) {
-      return;
-    }
-    /**
-     * Debug string messages are sent as-is.
-     */
-    if(typeof message == 'string')
-    {
-      this.broadcastChannel.postMessage(message);
-    }
-    /**
-     * Complex messages are sent as binary data.
-     */
-    else
-    {
-      this.broadcastChannel.postMessage(message.toBuffer());
-    }
-  }
+  // static send(message: IPCMessage|string) {
+  //   if(!this.window || !this.broadcastChannel) {
+  //     return;
+  //   }
+  //   /**
+  //    * Debug string messages are sent as-is.
+  //    */
+  //   if(typeof message == 'string')
+  //   {
+  //     this.broadcastChannel.postMessage(message);
+  //   }
+  //   /**
+  //    * Complex messages are sent as binary data.
+  //    */
+  //   else
+  //   {
+  //     this.broadcastChannel.postMessage(message.toBuffer());
+  //   }
+  // }
 
   /**
    * Opens the debugger window.
    */
-  static open() {
-    if(this.window) { 
-      this.window.focus();
-      return;
-    }
+  // static open() {
+  //   if(this.window) { 
+  //     this.window.focus();
+  //     return;
+  //   }
 
-    this.window = window.open(`../debugger/index.html?uuid=${this.uuid}`, '_blank', 'width=1600,height=1200');
-    if(this.window) {
-      console.log(`Debugger window opened: ${this.uuid}`);
-      this.broadcastChannel = new BroadcastChannel(`debugger-${this.uuid}`);
-      this.broadcastChannel.onmessage = (event: MessageEvent) => {
-        if(typeof event.data == 'string') {
-          if(event.data == 'close') {
-            Debugger.close();
-          }
-          return;
-        }
+  //   this.window = window.open(`../debugger/index.html?uuid=${this.uuid}`, '_blank', 'width=1600,height=1200');
+  //   if(this.window) {
+  //     console.log(`Debugger window opened: ${this.uuid}`);
+  //     this.broadcastChannel = new BroadcastChannel(`debugger-${this.uuid}`);
+  //     this.broadcastChannel.onmessage = (event: MessageEvent) => {
+  //       if(typeof event.data == 'string') {
+  //         if(event.data == 'close') {
+  //           Debugger.close();
+  //         }
+  //         return;
+  //       }
         
-        if(event.data?.constructor == Uint8Array){
-          const msg = IPCMessage.fromBuffer(event.data);
-          this.dispatchEvent('message', msg);
-        }
-      };
-      this.window.addEventListener('close', () => {
-        console.log(`Debugger window closed: ${this.uuid}`);
-      });
-      this.dispatchEvent('open');
-    }
-  }
+  //       if(event.data?.constructor == Uint8Array){
+  //         const msg = IPCMessage.fromBuffer(event.data);
+  //         this.dispatchEvent('message', msg);
+  //       }
+  //     };
+  //     this.window.addEventListener('close', () => {
+  //       console.log(`Debugger window closed: ${this.uuid}`);
+  //     });
+  //     this.dispatchEvent('open');
+  //   }
+  // }
 
   /**
    * Closes the debugger window.
    */
-  static close() {
-    if (this.window) {
-      this.window.close();
-    }
-    this.window = null;
-    if(this.broadcastChannel) {
-      this.broadcastChannel.close();
-    }
-    this.broadcastChannel = null;
-    this.dispatchEvent('close');
-  }
+  // static close() {
+  //   if (this.window) {
+  //     this.window.close();
+  //   }
+  //   this.window = null;
+  //   if(this.broadcastChannel) {
+  //     this.broadcastChannel.close();
+  //   }
+  //   this.broadcastChannel = null;
+  //   this.dispatchEvent('close');
+  // }
 
   /**
    * Adds an event listener to the debugger.
    * @param event The event to listen for.
    * @param listener The listener to add.
    */
-  static addEventListener(event: string, listener: any) {
-    if(!Array.isArray(this.#eventListener[event])) {
-      this.#eventListener[event] = [];
-    }
-    const index = this.#eventListener[event].indexOf(listener);
-    if(index == -1) {
-      this.#eventListener[event].push(listener);
-    }
-  }
+  // static addEventListener(event: string, listener: any) {
+  //   if(!Array.isArray(this.#eventListener[event])) {
+  //     this.#eventListener[event] = [];
+  //   }
+  //   const index = this.#eventListener[event].indexOf(listener);
+  //   if(index == -1) {
+  //     this.#eventListener[event].push(listener);
+  //   }
+  // }
 
   /**
    * Removes an event listener from the debugger.
    * @param event The event to remove the listener from.
    * @param listener The listener to remove.
    */
-  static removeEventListener(event: string, listener: any) {
-    if(!Array.isArray(this.#eventListener[event])) {
-      this.#eventListener[event] = [];
-    }
-    const index = this.#eventListener[event].indexOf(listener);
-    if(index >= 0) {
-      this.#eventListener[event].splice(index, 1);
-    }
-  }
+  // static removeEventListener(event: string, listener: any) {
+  //   if(!Array.isArray(this.#eventListener[event])) {
+  //     this.#eventListener[event] = [];
+  //   }
+  //   const index = this.#eventListener[event].indexOf(listener);
+  //   if(index >= 0) {
+  //     this.#eventListener[event].splice(index, 1);
+  //   }
+  // }
 
   /**
    * Dispatches an event to the debugger.
    * @param event The event to dispatch.
    * @param args The arguments to pass to the event.
    */
-  static dispatchEvent(event: string, ...args: any) {
-    if(!Array.isArray(this.#eventListener[event])) {
-      return;
-    }
-    this.#eventListener[event].forEach((listener: any) => listener(...args));
-  }
+  // static dispatchEvent(event: string, ...args: any) {
+  //   if(!Array.isArray(this.#eventListener[event])) {
+  //     return;
+  //   }
+  //   this.#eventListener[event].forEach((listener: any) => listener(...args));
+  // }
 }

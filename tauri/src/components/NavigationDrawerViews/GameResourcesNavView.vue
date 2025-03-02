@@ -290,6 +290,7 @@ import ContextMenu from "../../components/ContextMenus/ContextMenu.vue";
 import { useTabViewStore } from "@/state/tab-store.ts";
 import { ref } from "vue";
 import { DirectoryService } from "@/data/directory-service.ts";
+import { resourceDB } from "@/state/resource-database";
 
 const tabStore = useTabViewStore();
 const keyFiles = ref<string[]>([]);
@@ -328,6 +329,12 @@ const loadFiles = async () => {
   if (keyFileResults.ok) {
     const keyFileNames = keyFileResults.value;
     keyFiles.value = keyFileNames;
+    const resultDb = await resourceDB.storeAllFoundRelevantFiles(keyFileNames);
+    if (resultDb.ok) {
+      console.log('Key files stored in database:', resultDb.value);
+    } else {
+      console.error('Failed to store key files in database:', resultDb.error);
+    }
   } else {
     console.log(keyFileResults.error);
   }
@@ -336,6 +343,12 @@ const loadFiles = async () => {
   if (bifFileResults.ok) {
     const bifFileNames = bifFileResults.value;
     bifFiles.value = bifFileNames;
+    const resultDb = await resourceDB.storeAllFoundRelevantFiles(bifFileNames);
+    if (resultDb.ok) {
+      console.log('BIF files stored in database:', resultDb.value);
+    } else {
+      console.error('Failed to store BIF files in database:', resultDb.error);
+    }
   } else {
     console.log(bifFileResults.error);
   }
@@ -344,6 +357,12 @@ const loadFiles = async () => {
   if (erfFileResults.ok) {
     const erfFileNames = erfFileResults.value;
     erfFiles.value = erfFileNames;
+    const resultDb = await resourceDB.storeAllFoundRelevantFiles(erfFileNames);
+    if (resultDb.ok) {
+      console.log('ERF files stored in database:', resultDb.value);
+    } else {
+      console.error('Failed to store ERF files in database:', resultDb.error);
+    }
   } else {
     console.log(erfFileResults.error);
   }
@@ -352,6 +371,12 @@ const loadFiles = async () => {
   if (utfFileResults.ok) {
     const gffFileNames = utfFileResults.value;
     gffFiles.value = gffFileNames;
+    const resultDb = await resourceDB.storeAllFoundRelevantFiles(gffFileNames);
+    if (resultDb.ok) {
+      console.log('GFF files stored in database:', resultDb.value);
+    } else {
+      console.error('Failed to store GFF files in database:', resultDb.error);
+    }
   } else {
     console.log(utfFileResults.error);
   }
@@ -360,6 +385,12 @@ const loadFiles = async () => {
   if (rimFileResults.ok) {
     const rimFileNames = rimFileResults.value;
     rimFiles.value = rimFileNames;
+    const resultDb = await resourceDB.storeAllFoundRelevantFiles(rimFileNames);
+    if (resultDb.ok) {
+      console.log('RIM files stored in database:', resultDb.value);
+    } else {
+      console.error('Failed to store RIM files in database:', resultDb.error);
+    }
   } else {
     console.log(rimFileResults.error);
   }
@@ -368,6 +399,12 @@ const loadFiles = async () => {
   if (utiFileResults.ok) {
     const utiFileNames = utiFileResults.value;
     gffFiles.value = utiFileNames;
+    const resultDb = await resourceDB.storeAllFoundRelevantFiles(utiFileNames);
+    if (resultDb.ok) {
+      console.log('UTI files stored in database:', resultDb.value);
+    } else {
+      console.error('Failed to store UTI files in database:', resultDb.error);
+    }
   } else {
     console.log(utiFileResults.error);
   }

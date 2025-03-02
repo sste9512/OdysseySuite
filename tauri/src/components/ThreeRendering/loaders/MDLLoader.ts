@@ -31,39 +31,47 @@ export class MDLLoader {
 
   load(resourceReference: string = ''): Promise<OdysseyModel> {
     resourceReference = resourceReference.toLocaleLowerCase(); // Ensure the resource reference is lowercase
+    console.log('MDLLoader: Loading model:', resourceReference);
+    
     return new Promise<OdysseyModel>((resolve, reject) => {
       try {
-        if (ModelCache.models.has(resourceReference)) { // Check if the model is already in the cache
-          const cachedModelReference = ModelCache.models.get(resourceReference); // Retrieve the cached model reference
-          resolve(cachedModelReference.model); // Resolve the cached model
+        console.log('MDLLoader: Checking model cache');
+        if (ModelCache.models.has(resourceReference)) {
+          console.log('MDLLoader: Found cached model');
+          const cachedModelReference = ModelCache.models.get(resourceReference);
+          resolve(cachedModelReference.model);
         } else {
-          // Attempt to load the .mdl resource from the ResourceLoader
+          console.log('MDLLoader: Model not in cache, loading from resources');
+          console.log('MDLLoader: Loading MDL file');
           ResourceLoader.loadResource(ResourceTypes['mdl'], resourceReference).then((mdlBuffer: Uint8Array) => {
-            // If .mdl loads successfully, attempt to load the .mdx resource
+            console.log('MDLLoader: MDL file loaded successfully');
+            console.log('MDLLoader: Loading MDX file'); 
             ResourceLoader.loadResource(ResourceTypes['mdx'], resourceReference).then((mdxBuffer: Uint8Array) => {
-              // Create a new OdysseyModel instance from the loaded buffers
+              console.log('MDLLoader: MDX file loaded successfully');
+              console.log('MDLLoader: Creating OdysseyModel from buffers');
               const odysseyModel = MDLLoader.MDLFromBuffer(mdlBuffer, mdxBuffer);
 
-              // Cache the newly created model
+              console.log('MDLLoader: Caching model');
               ModelCache.models.set(resourceReference, {
                 model: odysseyModel
               });
 
-              resolve(odysseyModel); // Resolve the newly created model
+              console.log('MDLLoader: Model loaded successfully');
+              resolve(odysseyModel);
             }).catch((error) => {
-              console.error(error); // Log any error that occurs while loading .mdx
-              console.error('MDX 404', resourceReference); // Log .mdx specific 404 error
-              reject(error); // Reject the promise to propagate the error
+              console.error('MDLLoader: Failed to load MDX file:', error);
+              console.error('MDLLoader: MDX 404:', resourceReference);
+              reject(error);
             });
           }).catch((error) => {
-            console.error(error); // Log any error that occurs while loading .mdl
-            console.error('MDL 404', resourceReference); // Log .mdl specific 404 error
-            reject(error); // Reject the promise to propagate the error
+            console.error('MDLLoader: Failed to load MDL file:', error); 
+            console.error('MDLLoader: MDL 404:', resourceReference);
+            reject(error);
           });
         }
       } catch (error: any) {
-        console.error('MDLLoader.load', resourceReference, error); // Log general errors
-        reject(error); // Reject the promise with the error
+        console.error('MDLLoader: Error loading model:', resourceReference, error);
+        reject(error);
       }
     });
   }

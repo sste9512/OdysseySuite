@@ -69,5 +69,50 @@ export class OdysseyModelUtility {
     stream.position = posCache;
     return strings;
   }
+
+  static ReadArrayDV(view: DataView, offset: number, count: number){
+    let values: number[] = new Array(count);
+    for (let i = 0; i < count; i++) {
+      values[i] = view.getUint32(offset + (i * 4), true);
+    }
+    return values;
+  }
+
+  static ReadArrayFloatsDV(view: DataView, offset: number, count: number){
+    let values: number[] = new Array(count);
+    for (let i = 0; i < count; i++) {
+      values[i] = view.getFloat32(offset + (i * 4), true);
+    }
+    return values;
+  }
+
+  //Gets the Array Offset & Length
+  static ReadArrayDefinitionDV(view: DataView, offset: number): IOdysseyArrayDefinition {
+    return {
+      offset: view.getUint32(offset, true) & 0xFFFFFFFF,
+      count: view.getUint32(offset + 4, true) & 0xFFFFFFFF,
+      count2: view.getUint32(offset + 8, true) & 0xFFFFFFFF
+    };
+  }
+
+  static ReadStringsDV(view: DataView, offsets: number[], baseOffset: number) {
+    let strings: string[] = [];
+
+    for (let i = 0; i < offsets.length; i++){
+      let currentOffset = baseOffset + offsets[i];
+      let str = "";
+
+      while (view.getUint8(currentOffset) !== 0) {
+        str += String.fromCharCode(view.getUint8(currentOffset));
+        currentOffset++;
+      }
+
+      strings[i] = str;
+    }
+
+    return strings;
+  }
+
+ 
   
 }

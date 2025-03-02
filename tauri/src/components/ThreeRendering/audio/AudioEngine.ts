@@ -30,7 +30,7 @@ export class AudioEngine {
   movieGain: GainNode;
   emitters: AudioEmitter[];
   bgm: AudioBufferSourceNode;
-  bgmTimeout: NodeJS.Timeout;
+  bgmTimeout: number;
   bgmBuffer: AudioBuffer;
   dialogMusicBuffer: AudioBuffer;
   ambient: AudioBufferSourceNode;
@@ -230,7 +230,7 @@ export class AudioEngine {
 
     this.bgm.onended = () => {
       if(AudioEngine.loopBGM){
-        this.bgmTimeout = global.setTimeout( () => {
+        this.bgmTimeout = window.setTimeout( () => {
           this.startBackgroundMusic();
         }, this.getBackgroundMusicLoopTime());
       }
@@ -303,7 +303,7 @@ export class AudioEngine {
   destroy(){
 
     //Clear the BGM repeat timeout just incase it is active
-    global.clearTimeout(this.bgmTimeout);
+    window.clearTimeout(this.bgmTimeout);
 
     for(let i = 0; i < this.emitters.length; i++)
       this.emitters[i].destroy();
@@ -319,7 +319,7 @@ export class AudioEngine {
   reset(){
     
     //Clear the BGM repeat timeout just incase it is active
-    global.clearTimeout(this.bgmTimeout);
+    window.clearTimeout(this.bgmTimeout);
 
     for(let i = 0; i < this.emitters.length; i++)
       this.emitters[i].destroy();
@@ -408,7 +408,7 @@ export class AudioEngine {
     AudioEngine._GAIN_MOVIE = value;
   }
 
-  static AudioCtx = (global.AudioContext || (global as any).webkitAudioContext);
+  static AudioCtx = (window.AudioContext || (window as any).webkitAudioContext);
   
   static engines: AudioEngine[] = [];
   

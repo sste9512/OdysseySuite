@@ -747,37 +747,48 @@ export class OdysseyModel3D extends OdysseyObject3D {
   }
 
   static async SuperModelLoader(resref: string, odysseyModel: OdysseyModel3D): Promise<OdysseyModel3D> {
+    console.log('Loading supermodel:', resref);
     const supermodel: OdysseyModel = await MDLLoader.loader.load(resref);
-    if(!!supermodel){
-      //--------------------------------------//
-      // Supermodel: Animations Merge - Begin
-      //--------------------------------------//
 
-      let currentAnimations = odysseyModel.odysseyAnimations.slice(); //Copy the array
+    if(!!supermodel){
+      console.log('Supermodel loaded successfully');
+      console.log('Beginning animation merge process');
+
+      let currentAnimations = odysseyModel.odysseyAnimations.slice();
+      console.log('Current animation count:', currentAnimations.length);
+      console.log('Supermodel animation count:', supermodel.animations.length);
+
       for(let i = 0; i < supermodel.animations.length; i++){
         let animName = supermodel.animations[i].name;
+        console.log('Processing animation:', animName);
+        
         let hasAnim = false;
         for(let j = 0; j < currentAnimations.length; j++){
           if(animName == currentAnimations[j].name){
-            //odysseyModel.odysseyAnimations[j] = supermodel.odysseyAnimations[i];
+            console.log('Animation already exists:', animName);
             hasAnim = true;
             break;
           }
         }
 
         if(!hasAnim){
+          console.log('Adding new animation:', animName);
           odysseyModel.odysseyAnimations.push(OdysseyModelAnimation.From(supermodel.animations[i]));
         }
       }
 
-      //------------------------------------//
-      // Supermodel: Animations Merge - End
-      //------------------------------------//
+      console.log('Animation merge complete');
+      console.log('Checking for parent supermodel');
 
       let superModelName = supermodel.modelHeader.superModelName;
       if(superModelName != 'null' && superModelName.indexOf("NULL") == -1 && superModelName != ''){
-        return OdysseyModel3D.SuperModelLoader( superModelName.toLowerCase(), odysseyModel ); 
+        console.log('Found parent supermodel:', superModelName);
+        return OdysseyModel3D.SuperModelLoader(superModelName.toLowerCase(), odysseyModel);
       }
+
+      console.log('No parent supermodel found');
+    } else {
+      console.log('Failed to load supermodel:', resref);
     }
     return odysseyModel;
   }
@@ -785,27 +796,30 @@ export class OdysseyModel3D extends OdysseyObject3D {
   static async FromMDL(model: OdysseyModel, _options: IOdysseyModelLoaderOptions = {} as IOdysseyModelLoaderOptions): Promise<OdysseyModel3D> {
     return new Promise<OdysseyModel3D>( async (resolve: Function, reject: Function) => {
 
+      console.log('Setting up default options...');
       const _default: IOdysseyModelLoaderOptions = {
         textureVar: '****',
         castShadow: false,
         receiveShadow: false,
         manageLighting: true,
-        // context: Game,
         mergeStatic: false, //Use on room models
         static: false, //Static placeable
         parseChildren: true,
         isChildrenDynamic: false,   
       } as IOdysseyModelLoaderOptions;
 
+      console.log('Merging provided options with defaults...');
       const options: IOdysseyModelLoaderOptions = { ..._default, ..._options };
 
       if(model){
-
+        console.log('Model provided, creating OdysseyModel3D...');
         let odysseyModel = new OdysseyModel3D();
         odysseyModel.context = options.context;
         odysseyModel.name = model.geometryHeader.modelName.toLowerCase().trim();
         odysseyModel.options = options;
-        odysseyModel.odysseyAnimations = [];//model.animations.slice();
+
+        console.log('Setting up animations...');
+        odysseyModel.odysseyAnimations = [];
         if(!(odysseyModel.odysseyAnimations instanceof Array)){
           odysseyModel.odysseyAnimations = [];
         }else{
@@ -813,55 +827,58 @@ export class OdysseyModel3D extends OdysseyObject3D {
             odysseyModel.odysseyAnimations[i] = OdysseyModelAnimation.From(model.animations[i]);
           }
         }
+
+        console.log('Setting up model properties...');
         odysseyModel.Scale = 1;
         odysseyModel.names = model.names;
         odysseyModel.modelHeader = model.modelHeader;
         odysseyModel.affectedByFog = model.modelHeader.fogged ? true : false;
 
         if(options.mergeStatic){
+          console.log('Setting up geometry merge arrays...');
           odysseyModel.mergedGeometries = [];
           odysseyModel.mergedDanglyGeometries = [];
           odysseyModel.mergedMaterials = [];
           odysseyModel.mergedDanglyMaterials = [];
         }
 
+        console.log('Parsing nodes...');
         odysseyModel.add(OdysseyModel3D.NodeParser(odysseyModel, odysseyModel, model.rootNode, options));
 
+        console.log('Getting UUIDs...');
         odysseyModel.userData.uuids = OdysseyModel3D.getUUIDs(odysseyModel);
 
         if(options.mergeStatic){
+          console.log('Merging static geometries...');
           
-          //Merge Basic Geometries
           if(odysseyModel.mergedGeometries.length){
-
+            console.log('Merging basic geometries...');
             odysseyModel.mergedBufferGeometry = BufferGeometryUtils.mergeBufferGeometries(odysseyModel.mergedGeometries, true);
             odysseyModel.mergedMesh = new THREE.Mesh(odysseyModel.mergedBufferGeometry, odysseyModel.mergedMaterials);
             odysseyModel.mergedMesh.receiveShadow = true;
             odysseyModel.add(odysseyModel.mergedMesh);
 
+            console.log('Disposing merged geometries...');
             for(let i = 0, len = odysseyModel.mergedGeometries.length; i < len; i++){
               odysseyModel.mergedGeometries[i].dispose();
             }
             odysseyModel.mergedGeometries = [];
-
           }
           
-          //Merge Dangly Geometries
           if(odysseyModel.mergedDanglyGeometries.length){
-
+            console.log('Merging dangly geometries...');
             odysseyModel.mergedBufferDanglyGeometry = BufferGeometryUtils.mergeBufferGeometries(odysseyModel.mergedDanglyGeometries, true);
             odysseyModel.mergedDanglyMesh = new THREE.Mesh(odysseyModel.mergedBufferDanglyGeometry, odysseyModel.mergedDanglyMaterials);
-            //odysseyModel.mergedDanglyMesh.receiveShadow = true;
             odysseyModel.add(odysseyModel.mergedDanglyMesh);
 
+            console.log('Disposing merged dangly geometries...');
             for(let i = 0, len = odysseyModel.mergedDanglyGeometries.length; i < len; i++){
               odysseyModel.mergedDanglyGeometries[i].dispose();
             }
             odysseyModel.mergedDanglyGeometries = [];
-
           }
 
-          //Prune all the empty nodes 
+          console.log('Pruning empty nodes...');
           let pruneList: any = [];
           odysseyModel.traverseIgnore(odysseyModel.name+'a', (node: any) => {
             if(node.NodeType == 33 && !node.children.length){
@@ -869,20 +886,21 @@ export class OdysseyModel3D extends OdysseyObject3D {
             }
           });
           let pruneCount = pruneList.length;
-          //console.log('pruneList', pruneList, pruneCount);
           while(pruneCount--){
             let node = pruneList.splice(0, 1)[0];
             node.parent.remove(node);
           }
-
         }
         
+        console.log('Building skeleton...');
         odysseyModel.buildSkeleton();
 
         if(model.modelHeader.superModelName.indexOf("NULL") == -1 && model.modelHeader.superModelName != ''){
+          console.log('Loading super model...');
           await OdysseyModel3D.SuperModelLoader(model.modelHeader.superModelName.toLowerCase(), odysseyModel);
         }
 
+        console.log('Setting bounding box...');
         odysseyModel.box.setFromArray([
           model.modelHeader.boundingMinX,
           model.modelHeader.boundingMinY,
@@ -892,9 +910,11 @@ export class OdysseyModel3D extends OdysseyObject3D {
           model.modelHeader.boundingMaxZ,
         ]);
 
+        console.log('Model loading complete');
         if(typeof _options.onComplete === 'function') _options.onComplete(odysseyModel);
         resolve(odysseyModel);
       }else{
+        console.log('No model provided, rejecting...');
         if(typeof _options.onComplete === 'function') _options.onComplete();
         reject('model is not of type OdysseyModel');
       }

@@ -1,4 +1,4 @@
-import { get, set } from 'idb-keyval';
+
 
 /**
  * ConfigClient class.
@@ -16,7 +16,7 @@ export class ConfigClient {
   static async Init() {
     ConfigClient.options = Object.assign(
       defaults, 
-      await get('app_settings')
+      // await get('app_settings')
     );
 
   }
@@ -87,11 +87,11 @@ export class ConfigClient {
   }
 
   static save(onSave?: Function, silent?: boolean){
-    set('app_settings', ConfigClient.options);
-    localStorage.setItem('client-config-updated', JSON.stringify({
-      time: Date.now(),
-      id: ConfigClient.UUID
-    }));
+    // set('app_settings', ConfigClient.options);
+    // localStorage.setItem('client-config-updated', JSON.stringify({
+    //   time: Date.now(),
+    //   id: ConfigClient.UUID
+    // }));
   }
 
   static uuidv4() {
