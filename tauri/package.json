@@ -22,6 +22,7 @@
     "pinia": "^2.1.7",
     "reflect-metadata": "^0.2.1",
     "sass": "^1.83.4",
+    "tga-js": "^1.1.1",
     "three": "^0.155.0",
     "tsyringe": "^4.8.0",
     "uuid": "^9.0.1",

@@ -127,52 +127,52 @@ pub async fn convert_tpc_to_dds(tpc_data: TPC) -> Result<Vec<u8>, String> {
 }
 
 
-#[tauri::command]
-pub async fn get_tpc_from_file_xoreos(path: String, offset: u64, size: u64) -> Result<crate::domain::odyssey_api::tpc_xoreos::TPC, String> {
+// #[tauri::command]
+// pub async fn get_tpc_from_file_xoreos(path: String, offset: u64, size: u64) -> Result<crate::domain::odyssey_api::tpc_xoreos::TPC, String> {
     
-    println!("Opening file: {}", path);
+//     println!("Opening file: {}", path);
     
-    // Open the file
-    let mut file = match std::fs::File::open(&path) {
-        Ok(f) => {
-            println!("Successfully opened file");
-            f
-        },
-        Err(e) => {
-            println!("Failed to open file: {}", e);
-            return Err(format!("Failed to open file '{}': {}", path, e));
-        }
-    };
+//     // Open the file
+//     let mut file = match std::fs::File::open(&path) {
+//         Ok(f) => {
+//             println!("Successfully opened file");
+//             f
+//         },
+//         Err(e) => {
+//             println!("Failed to open file: {}", e);
+//             return Err(format!("Failed to open file '{}': {}", path, e));
+//         }
+//     };
 
-    println!("Seeking to offset: {}", offset);
-    // Seek to the offset
-    if let Err(e) = file.seek(std::io::SeekFrom::Start(offset)) {
-        println!("Failed to seek: {}", e);
-        return Err(format!("Failed to seek to offset {}: {}", offset, e));
-    }
-    println!("Successfully seeked to offset");
+//     println!("Seeking to offset: {}", offset);
+//     // Seek to the offset
+//     if let Err(e) = file.seek(std::io::SeekFrom::Start(offset)) {
+//         println!("Failed to seek: {}", e);
+//         return Err(format!("Failed to seek to offset {}: {}", offset, e));
+//     }
+//     println!("Successfully seeked to offset");
 
-    println!("Creating TPC from file...");
-    // Try to create TPC from the buffer
-    match crate::domain::odyssey_api::tpc_xoreos::TPC::new(&mut file) {
-        Ok(tpc) => {
-            println!("Successfully created TPC with {} mipmaps", tpc.mip_maps.len());
-            // Convert mip_maps to bytes
-            let bytes: Vec<u8> = tpc.mip_maps.iter()
-                .filter_map(|mip| mip.data.as_ref())
-                .flat_map(|data| data.iter().copied())
-                .collect();
-            println!("Converted mipmaps to {} bytes", bytes.len());
+//     println!("Creating TPC from file...");
+//     // Try to create TPC from the buffer
+//     match crate::domain::odyssey_api::tpc_xoreos::TPC::new(&mut file) {
+//         Ok(tpc) => {
+//             println!("Successfully created TPC with {} mipmaps", tpc.mip_maps.len());
+//             // Convert mip_maps to bytes
+//             let bytes: Vec<u8> = tpc.mip_maps.iter()
+//                 .filter_map(|mip| mip.data.as_ref())
+//                 .flat_map(|data| data.iter().copied())
+//                 .collect();
+//             println!("Converted mipmaps to {} bytes", bytes.len());
 
-            Ok(tpc)
-        },
-        Err(e) => {
-            println!("Failed to create TPC: {}", e);
-            Err(format!("Failed to create TPC from file: {}", e))
-        }
-    }
+//             Ok(tpc)
+//         },
+//         Err(e) => {
+//             println!("Failed to create TPC: {}", e);
+//             Err(format!("Failed to create TPC from file: {}", e))
+//         }
+//     }
 
-}
+// }
 
 
 

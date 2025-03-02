@@ -17,11 +17,12 @@
                     <v-btn key="1" color="primary">Save</v-btn>
                 </template>
 
-                <div style="display: flex; flex-direction: row; gap: 16px;">
+                <div style="display: flex; flex-direction: row; gap: 16px; flex-wrap: wrap;">
                     <a-statistic title="File Type" :value="biffHeader.file_type" />
                     <a-statistic title="File Version" :value="biffHeader.file_version" />
                     <a-statistic title="Variable Resources" :value="biffHeader.variable_resource_count" />
                     <a-statistic title="Fixed Resources" :value="biffHeader.fixed_resource_count" />
+                    <a-statistic title="Variable Table Offset" :value="biffHeader.variable_table_offset" />
                 </div>
             </a-page-header>
 
@@ -32,21 +33,24 @@
                             {{ getResourceTypeName(item.resource_type) }}
                         </template>
                         <template v-slot:item.data="{ item }">
-                            <v-row>
-                                <v-col>
+                            <v-row dense>
+                                <v-col cols="auto" class="pr-1">
                                     <v-btn size="small" color="primary" @click="viewResourceData(item)">
                                         View Data
                                     </v-btn>
                                 </v-col>
-                                <v-col>
-                                    <v-btn size="small" color="primary" @click="viewResourceData(item)">
-                                        Extract Data
+
+                                <v-col cols="auto" class="px-1">
+                                    <v-btn size="small" color="primary" @click="exportResourceData(item)">
+                                        Export Data
+                                    </v-btn>
+                                </v-col>
+                                <v-col cols="auto" class="pl-1">
+                                    <v-btn size="small" color="primary" @click="exportRelatedResources(item)">
+                                        Export All Related Resources
                                     </v-btn>
                                 </v-col>
                             </v-row>
-
-
-
                         </template>
                     </v-data-table>
                 </a-tab-pane>
@@ -64,6 +68,14 @@
 
         </div>
     </div>
+
+    <v-overlay v-model="showMdlOverlay" class="align-center justify-center">
+        <v-sheet class="pa-4" width="800" height="800">
+            <mdl-renderer v-if="showMdlOverlay" :model-path="filePath || ''" :mdl-id="selectedResource?.id || 0"
+                :mdx-id="findMdxId(selectedResource?.id || 0)">
+            </mdl-renderer>
+        </v-sheet>
+    </v-overlay>
 </template>
 
 <script lang="ts">
@@ -71,9 +83,15 @@ import { defineComponent, ref, onMounted } from 'vue';
 import { BiffHeader, VResourceEntry, FResourceEntry } from '@/data/biff';
 import { AuroraService } from '@/data/aurora-service';
 import { ResourceType } from '@/data/resource_identification';
+import { ModelViewerService } from '@/components/ThreeRendering/ModelViewerState';
+import MdlRenderer from '@/components/DataPresentation/MdlRenderer.vue';
+import { resourceDB } from '@/state/resource-database';
 
 export default defineComponent({
     name: 'BiffResourceView',
+    components: {
+        MdlRenderer
+    },
     props: {
         filePath: {
             type: String,
@@ -85,6 +103,9 @@ export default defineComponent({
         const variableResources = ref<VResourceEntry[]>([]);
         const fixedResources = ref<FResourceEntry[]>([]);
         const activeTab = ref('variable');
+        const showMdlOverlay = ref(false);
+        const selectedResource = ref<VResourceEntry | FResourceEntry | null>(null);
+        const modelViewerService = ref<ModelViewerService>(new ModelViewerService());
 
         const variableHeaders = [
             { title: 'ID', key: 'id' },
@@ -92,7 +113,6 @@ export default defineComponent({
             { title: 'File Size', key: 'file_size' },
             { title: 'Resource Type', key: 'resource_type' },
             { title: 'Actions', key: 'data' }
-
         ];
 
         const fixedHeaders = [
@@ -102,12 +122,28 @@ export default defineComponent({
             { title: 'File Size', key: 'file_size' },
             { title: 'Resource Type', key: 'resource_type' },
             { title: 'Actions', key: 'data' }
-
         ];
+
+        const exportResourceData = (resource: VResourceEntry | FResourceEntry) => {
+            // console.log('Exporting resource data:', resource);
+            // const resourceData = await auroraService.readResourceData(props.filePath, resource.id);
+            // if (resourceData.ok) {
+            //     console.log('Resource data:', resourceData.value);
+            // } else {
+            //     console.error('Failed to export resource data:', resourceData.error);
+            // }
+        };
+
+        const exportRelatedResources = (resource: VResourceEntry | FResourceEntry) => {
+            console.log('Exporting related resources:', resource);
+        };
 
         const viewResourceData = (resource: VResourceEntry | FResourceEntry) => {
             console.log('Viewing resource data:', resource);
-            // Implement resource data viewing logic
+            if (resource.resource_type === ResourceType.MDL) {
+                showMdlOverlay.value = true;
+                selectedResource.value = resource;
+            }
         };
 
         const auroraService = new AuroraService();
@@ -120,16 +156,38 @@ export default defineComponent({
             try {
 
                 const result = await auroraService.readBiffFile(props.filePath);
+
+                // const chitinKeyResult = await resourceDB.allFoundRelevantFiles.where('file_path').anyOfIgnoreCase(".key").toArray();
+                // if (chitinKeyResult.length === 0) {
+                //     const chitinKey = await auroraService.readChitinKey(chitinKeyResult[0].file_path);
+                //     if (chitinKey) {
+                //         await resourceDB.storeChitinKey(chitinKeyResult[0].file_path, chitinKey);
+                //         console.log('Chitin key:', chitinKey);
+                //     }
+                // }
+
                 if (result.ok) {
                     biffHeader.value = result.value.header;
                     variableResources.value = result.value.variable_resources;
                     fixedResources.value = result.value.fixed_resources;
+                    const resultDb = await resourceDB.storeBiffFile(props.filePath, result.value);
+                    if (resultDb.ok) {
+                        console.log('BIFF data stored in database:', resultDb.value);
+                    } else {
+                        console.error('Failed to store BIFF data in database:', resultDb.error);
+                    }
                 } else {
                     console.error('Failed to load BIFF data:', result.error);
                 }
             } catch (error) {
                 console.error('Error loading BIFF data:', error);
             }
+        };
+
+        const findMdxId = (mdlId: number) => {
+            const mdxId = variableResources.value.find(resource => resource.id === mdlId + 1)?.id;
+            console.log('MDX ID:', mdxId);
+            return mdxId;
         };
 
         onMounted(async () => {
@@ -146,7 +204,13 @@ export default defineComponent({
             viewResourceData,
             props,
             loadBiffData,
-            getResourceTypeName
+            getResourceTypeName,
+            showMdlOverlay,
+            selectedResource,
+            modelViewerService,
+            exportResourceData,
+            exportRelatedResources,
+            findMdxId
         };
     }
 });

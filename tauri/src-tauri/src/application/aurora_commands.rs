@@ -1,18 +1,149 @@
 use serde_json::Value;
 use std::io::{BufReader, Cursor};
 use std::{fs::File, path::Path};
-use serde::Serialize;
+ 
 use std::io::{self, Read, Seek, SeekFrom};
 use byteorder::{LittleEndian, ReadBytesExt};
 use crate::domain::odyssey_api::tpc::TPC;
-
-
+ 
 use crate::domain::odyssey_api::{
     biff::Biff,
     chitin::{ChitinKey, ChitinKeyReader},
     erf::ErfFile,
     rim::Rim,
 };
+
+ 
+use std::time::SystemTime;
+use serde::{Deserialize, Serialize};
+
+
+
+#[derive(Serialize, Deserialize)]
+struct ResourceFile {
+    filepath: String,
+    filename: String,
+    resource_count: i32,
+    file_size: i64,
+    last_modified: String,
+    file_type: String
+}
+// #[derive(Serialize, Deserialize)]
+// struct ResourceFile<T> {
+//     filepath: String,
+//     filename: String,
+//     resource_count: i32,
+//     file_size: i64,
+//     last_modified: String,
+//     file_type: String,
+//     data: T
+// }
+// #[tauri::command]
+// pub async fn scan_and_store_resources(db_runtime: tauri::State<'_, SurrealDbRuntime>, path: String) -> Result<(), String> {
+//     let db = match db_runtime.get_db() {
+//         Some(db) => db,
+//         None => return Err("Database not initialized".to_string())
+//     };
+
+//     // Scan for resource files
+//     let paths = std::fs::read_dir(&path).map_err(|e| e.to_string())?;
+
+//     for path in paths {
+//         let path = path.map_err(|e| e.to_string())?.path();
+//         let metadata = std::fs::metadata(&path).map_err(|e| e.to_string())?;
+        
+//         // Get last modified time
+//         let last_modified = metadata.modified().map_err(|e| e.to_string())?;
+//         let last_modified = last_modified.duration_since(SystemTime::UNIX_EPOCH)
+//             .map_err(|e| e.to_string())?
+//             .as_secs()
+//             .to_string();
+
+//         let filepath = path.to_str().ok_or("Invalid path")?;
+//         let filename = path.file_name()
+//             .ok_or("No filename")?
+//             .to_str()
+//             .ok_or("Invalid filename")?
+//             .to_string();
+
+//         // Check file extension and process accordingly
+//         if let Some(extension) = path.extension() {
+//             match extension.to_str() {
+//                 Some("bif") => {
+//                     if let Ok(biff) = Biff::read_biff_file(filepath) {
+//                         let resource = ResourceFile {
+//                             filepath: filepath.to_string(),
+//                             filename,
+//                             resource_count: biff.header.variable_resource_count as i32,
+//                             file_size: metadata.len() as i64,
+//                             last_modified,
+//                             file_type: "bif".to_string()
+//                         };
+//                         db.create(("resource_files", &filepath))
+//                             .content(resource)
+//                             .await
+//                             .map_err(|e| e.to_string())?;
+//                     }
+//                 },
+//                 Some("rim") => {
+//                     if let Ok(rim) = Rim::read_from_file(filepath) {
+//                         let resource = ResourceFile {
+//                             filepath: filepath.to_string(),
+//                             filename,
+//                             resource_count: rim.entry_count as i32,
+//                             file_size: metadata.len() as i64,
+//                             last_modified,
+//                             file_type: "rim".to_string()
+//                         };
+//                         db.create(("resource_files", &filepath))
+//                             .content(resource)
+//                             .await
+//                             .map_err(|e| e.to_string())?;
+//                     }
+//                 },
+//                 Some("erf") => {
+//                     if let Ok(erf) = ErfFile::read_from_file(filepath) {
+//                         let resource = ResourceFile {
+//                             filepath: filepath.to_string(),
+//                             filename,
+//                             resource_count: erf.header.entry_count as i32,
+//                             file_size: metadata.len() as i64,
+//                             last_modified,
+//                             file_type: "erf".to_string()
+//                         };
+//                         db.create(("resource_files", &filepath))
+//                             .content(resource)
+//                             .await
+//                             .map_err(|e| e.to_string())?;
+//                     }
+//                 },
+//                 Some("key") => {
+//                     if let Ok(file) = File::open(filepath) {
+//                         let mut reader = BufReader::new(file);
+//                         if let Ok(key) = ChitinKey::read_chitin_key(&mut reader) {
+//                             let resource = ResourceFile {
+//                                 filepath: filepath.to_string(),
+//                                 filename,
+//                                 resource_count: key.header.key_count as i32,
+//                                 file_size: metadata.len() as i64,
+//                                 last_modified,
+//                                 file_type: "key".to_string()
+//                             };
+//                             db.create(("resource_files", &filepath))
+//                                 .content(resource)
+//                                 .await
+//                                 .map_err(|e| e.to_string())?;
+//                         }
+//                     }
+//                 },
+//                 _ => continue
+//             }
+//         }
+//     }
+
+//     Ok(())
+// }
+
 
 #[tauri::command]
 pub async fn read_chitin_key(path: &str) -> Result<Value, String> {
@@ -97,6 +228,79 @@ pub fn extract_biff_resource(biff_path: &str, resource_id: u32, output_path: &st
             println!("Error writing resource data to file: {}", e);
             Err(e.to_string())
         }
+    }
+}
+
+#[tauri::command]
+pub fn read_model_files(file_path: &str, mdl_id: u32, mdx_id: u32) -> Result<(Vec<u8>, Vec<u8>), String> {
+    // Try to detect file type from extension
+    let file_type = if file_path.to_lowercase().ends_with(".bif") {
+        "BIFF"
+    } else if file_path.to_lowercase().ends_with(".rim") {
+        "RIM" 
+    } else if file_path.to_lowercase().ends_with(".erf") {
+        "ERF"
+    } else {
+        return Err("Unsupported file type. Must be BIFF, RIM or ERF".to_string());
+    };
+
+    // Read the MDL and MDX data based on file type
+    match file_type {
+        "BIFF" => {
+            let biff = match Biff::read_biff_file(file_path) {
+                Ok(b) => b,
+                Err(e) => return Err(format!("Error reading BIFF file: {}", e))
+            };
+
+            let mdl_data = match biff.read_resource_data(mdl_id) {
+                Ok(data) => data,
+                Err(e) => return Err(format!("Error reading MDL data: {}", e))
+            };
+
+            let mdx_data = match biff.read_resource_data(mdx_id) {
+                Ok(data) => data, 
+                Err(e) => return Err(format!("Error reading MDX data: {}", e))
+            };
+
+            Ok((mdl_data, mdx_data))
+        },
+        "RIM" => {
+            let rim = match Rim::read_from_file(file_path) {
+                Ok(r) => r,
+                Err(e) => return Err(format!("Error reading RIM file: {}", e))
+            };
+
+            let mdl_data = match rim.read_resource_data(mdl_id) {
+                Ok(data) => data,
+                Err(e) => return Err(format!("Error reading MDL data: {}", e))
+            };
+
+            let mdx_data = match rim.read_resource_data(mdx_id) {
+                Ok(data) => data,
+                Err(e) => return Err(format!("Error reading MDX data: {}", e))
+            };
+
+            Ok((mdl_data, mdx_data))
+        },
+        "ERF" => {
+            let erf = match ErfFile::read_from_file(file_path) {
+                Ok(e) => e,
+                Err(e) => return Err(format!("Error reading ERF file: {}", e))
+            };
+
+            let mdl_data = match erf.read_resource_data(mdl_id) {
+                Ok(data) => data,
+                Err(e) => return Err(format!("Error reading MDL data: {}", e))
+            };
+
+            let mdx_data = match erf.read_resource_data(mdx_id) {
+                Ok(data) => data,
+                Err(e) => return Err(format!("Error reading MDX data: {}", e))
+            };
+
+            Ok((mdl_data, mdx_data))
+        },
+        _ => Err("Unsupported file type".to_string())
     }
 }
 

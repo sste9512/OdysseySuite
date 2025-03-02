@@ -87,6 +87,29 @@ export class AuroraService {
     }
   }
 
+  /**
+   * Reads MDL and MDX model data from a BIFF, RIM, or ERF file
+   * @param filePath Path to the container file (BIFF, RIM, or ERF)
+   * @param mdlId Resource ID of the MDL file
+   * @param mdxId Resource ID of the MDX file
+   * @returns Promise containing a Result with either the model data or an error
+   */
+  async readModelFiles(filePath: string, mdlId: number, mdxId: number): Promise<Result<[Uint8Array, Uint8Array]>> {
+    try {
+      const [mdlData, mdxData] = await invoke<[number[], number[]]>('read_model_files', { 
+        filePath,
+        mdlId,
+        mdxId
+      });
+      return { 
+        ok: true, 
+        value: [new Uint8Array(mdlData), new Uint8Array(mdxData)]
+      };
+    } catch (error) {
+      return { ok: false, error: error as Error };
+    }
+  }
+
 
 
 }
