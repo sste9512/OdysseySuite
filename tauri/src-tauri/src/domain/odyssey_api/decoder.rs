@@ -15,14 +15,16 @@ pub mod images {
     use serde::{Deserialize, Serialize};
     use tauri::utils;
 
-    use crate::domain::odyssey_api::dumptga::images::dump_tga;
+    use crate::domain::use_cases::dumptga::images::dump_tga;
     use crate::domain::odyssey_api::s3tc;
 
     use crate::domain::odyssey_api::seekablereadstream::SeekableReadStream;
     use crate::domain::odyssey_api::tpc::PixelFormat;
-    use crate::domain::odyssey_api::{dumptga, util};
 
-    use crate::domain::odyssey_api::util::*;
+    use crate::domain::odyssey_api::util;
+  
+
+
 
     use super::*;
 
@@ -147,12 +149,12 @@ pub mod images {
                 panic!("Unknown compressed format {:?}", format);
             }
 
-            if !util::has_valid_dimensions(format, inp.width as i32, inp.height as i32) {
-                panic!(
-                    "Invalid dimensions ({:?}x{:?}) for format {:?}",
-                    inp.width, inp.height, format
-                );
-            }
+            // if !has_valid_dimensions(format, inp.width as i32, inp.height as i32) {
+            //     panic!(
+            //         "Invalid dimensions ({:?}x{:?}) for format {:?}",
+            //         inp.width, inp.height, format
+            //     );
+            // }
 
             out.width = inp.width;
             out.height = inp.height;
@@ -218,85 +220,85 @@ pub mod images {
             self._format = PixelFormat::R8G8B8A8;
         }
 
-        pub fn dump_tga(&self, file_name: &str) {
-            if self._mip_maps.is_empty() {
-                panic!("Image contains no mip maps");
-            }
+        // pub fn dump_tga(&self, file_name: &str) {
+        //     if self._mip_maps.is_empty() {
+        //         panic!("Image contains no mip maps");
+        //     }
 
-            if !self.is_compressed() {
-                dumptga::images::dump_tga(
-                    &file_name.to_string(),
-                    &dumptga::decoder::Decoder {
-                        layers: self
-                            ._mip_maps
-                            .iter()
-                            .map(|m| dumptga::decoder::MipMap {
-                                width: m.width as u32,
-                                height: m.height as u32,
-                                data: Arc::new(m.data.as_ref().unwrap().to_vec()),
-                            })
-                            .collect(),
-                        format: self._format,
-                    },
-                ).unwrap();
-                return;
-            }
+        //     if !self.is_compressed() {
+        //         dump_tga(
+        //             &file_name.to_string(),
+        //             &Decoder {
+        //                 layers: self
+        //                     ._mip_maps
+        //                     .iter()
+        //                     .map(|m| dumptga::decoder::MipMap {
+        //                         width: m.width as u32,
+        //                         height: m.height as u32,
+        //                         data: Arc::new(m.data.as_ref().unwrap().to_vec()),
+        //                     })
+        //                     .collect(),
+        //                 format: self._format,
+        //             },
+        //         ).unwrap();
+        //         return;
+        //     }
 
-            let mut decoder = self.clone();
-            decoder.decompress_all();
+        //     let mut decoder = self.clone();
+        //     decoder.decompress_all();
 
-            dumptga::images::dump_tga(
-                &file_name.to_string(),
-                &dumptga::decoder::Decoder {
-                    layers: decoder
-                        ._mip_maps
-                        .iter()
-                        .map(|m| dumptga::decoder::MipMap {
-                            width: m.width as u32,
-                            height: m.height as u32,
-                            data: Arc::new(m.data.as_ref().unwrap().to_vec()),
-                        })
-                        .collect(),
-                    format: decoder._format,
-                },
-            ).unwrap();
-        }
+        //     dump_tga(
+        //         &file_name.to_string(),
+        //         &Decoder {
+        //             layers: decoder
+        //                 ._mip_maps
+        //                 .iter()
+        //                 .map(|m| MipMap {
+        //                     width: m.width as u32,
+        //                     height: m.height as u32,
+        //                     data: Arc::new(m.data.as_ref().unwrap().to_vec()),
+        //                 })
+        //                 .collect(),
+        //             format: decoder._format,
+        //         },
+        //     ).unwrap();
+        // }
 
-        pub fn flip_horizontally(&mut self) {
-            self.decompress_all();
+        // pub fn flip_horizontally(&mut self) {
+        //     self.decompress_all();
 
-            for m in &mut self._mip_maps {
-                let mut mutable_mip_map = m.clone();
-                util::flip_horizontally(
-                    Arc::get_mut(&mut mutable_mip_map)
-                        .unwrap()
-                        .data
-                        .as_mut()
-                        .unwrap(),
-                    m.width,
-                    m.height,
-                    util::get_bpp(self._format) as usize,
-                );
-            }
-        }
+        //     for m in &mut self._mip_maps {
+        //         let mut mutable_mip_map = m.clone();
+        //        flip_horizontally(
+        //             Arc::get_mut(&mut mutable_mip_map)
+        //                 .unwrap()
+        //                 .data
+        //                 .as_mut()
+        //                 .unwrap(),
+        //             m.width,
+        //             m.height,
+        //             get_bpp(self._format) as usize,
+        //         );
+        //     }
+        // }
 
-        pub fn flip_vertically(&mut self) {
-            self.decompress_all();
+        // pub fn flip_vertically(&mut self) {
+        //     self.decompress_all();
 
-            for m in &mut self._mip_maps {
-                let mut mutable_mip_map = m.clone();
-                util::flip_vertically(
-                    Arc::get_mut(&mut mutable_mip_map)
-                        .unwrap()
-                        .data
-                        .as_mut()
-                        .unwrap(),
-                    m.width,
-                    m.height,
-                    util::get_bpp(self._format) as usize,
-                );
+        //     for m in &mut self._mip_maps {
+        //         let mut mutable_mip_map = m.clone();
+        //         flip_vertically(
+        //             Arc::get_mut(&mut mutable_mip_map)
+        //                 .unwrap()
+        //                 .data
+        //                 .as_mut()
+        //                 .unwrap(),
+        //             m.width,
+        //             m.height,
+        //             get_bpp(self._format) as usize,
+        //         );
 
-            }
-        }
+        //     }
+        // }
     }
 }

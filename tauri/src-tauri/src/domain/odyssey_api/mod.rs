@@ -14,7 +14,7 @@ pub mod tga;
 
 pub mod decoder;
 
-pub mod dumptga;
+pub mod util;
 
 pub mod dds;
 
@@ -22,10 +22,10 @@ pub mod s3tc;
 
 pub mod tpc_to_tga;
 
-pub mod util;
+ 
 
 pub mod seekablereadstream;
 
-pub mod maths;
+ 
 
-pub mod tpc_xoreos;
+// pub mod tpc_xoreos;

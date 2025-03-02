@@ -32,6 +32,11 @@ impl Rim {
         rim
     }
 
+    pub fn read_from_file(path: &str) -> io::Result<Self> {
+        let file_data = std::fs::read(path)?;
+        Ok(Self::new(file_data))
+    }
+
     fn populate_key_entries(&mut self) {
         for index in 0..self.entry_count {
             self.key_entry_list

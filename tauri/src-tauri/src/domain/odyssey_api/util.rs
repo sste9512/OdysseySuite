@@ -4,17 +4,14 @@ use std::ptr;
 use std::fmt;
 use std::error::Error;
 
-
 use crate::domain::odyssey_api::seekablereadstream::SeekableReadStream;
-use crate::domain::odyssey_api::{dumptga, util};
+ 
 use crate::domain::odyssey_api::tpc::PixelFormat;
-use crate::domain::odyssey_api::dumptga::images::dump_tga;
+use crate::domain::use_cases::dumptga::images::dump_tga;
 use crate::domain::odyssey_api::s3tc;
 
-use crate::domain::odyssey_api::maths;
-
-use super::decoder::images::MipMap;
-use super::maths::int_log2;
+use crate::domain::odyssey_api::decoder::images::MipMap;
+use crate::domain::use_cases::maths::int_log2;
 
 
 /** Return the number of bytes per pixel in this format. */
@@ -196,7 +193,7 @@ pub fn rotate_90(data: &mut [u8], width: i32, height: i32, bpp: i32, mut steps: 
 pub fn de_swizzle(dst: &mut [u8], src: &[u8], width: u32, height: u32) {
     for y in 0..height {
         for x in 0..width {
-            let offset = util::de_swizzle_offset(x, y, width, height) * 4;
+            let offset = de_swizzle_offset(x, y, width, height) * 4;
             let dst_offset = ((y * width + x) * 4) as usize;
             dst[dst_offset] = src[offset as usize];
             dst[dst_offset + 1] = src[offset as usize + 1];
@@ -212,7 +209,7 @@ pub fn decompress_mipmap(out: &mut MipMap, inp: &MipMap, format: PixelFormat) ->
         return Err(format!("Unknown compressed format {:?}", format));
     }
 
-    if !util::has_valid_dimensions(format, inp.width as i32, inp.height as i32) {
+    if !has_valid_dimensions(format, inp.width as i32, inp.height as i32) {
         return Err(format!(
             "Invalid dimensions ({}x{}) for format {:?}",
             inp.width, inp.height, format
