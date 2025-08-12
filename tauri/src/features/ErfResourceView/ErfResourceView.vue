@@ -369,7 +369,7 @@ export default {
 
     const filteredResources = computed(() => {
       if (!erf.value) return [];
- let resources = erf.value.key_list.entries;
+      let resources = erf.value.key_list.entries;
 
       // // Apply search filter
       // if (search.value) {

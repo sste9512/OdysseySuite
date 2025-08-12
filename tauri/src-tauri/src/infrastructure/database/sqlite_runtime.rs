@@ -1,4 +1,4 @@
-use rusqlite::{Connection, Result};
+use rusqlite::{ Connection, Result };
 
 pub struct SqliteRuntime {
     connection: Option<Connection>,
@@ -34,9 +34,11 @@ impl SqliteRuntime {
         let conn = match self.connection.as_ref() {
             Some(c) => c,
             None => {
-                return Err(rusqlite::Error::InvalidParameterName(
-                    "No database connection available".to_string(),
-                ))
+                return Err(
+                    rusqlite::Error::InvalidParameterName(
+                        "No database connection available".to_string()
+                    )
+                );
             }
         };
 
@@ -50,7 +52,7 @@ impl SqliteRuntime {
                 file_size INTEGER NOT NULL,
                 last_modified DATETIME NOT NULL
             )",
-            [],
+            []
         )?;
 
         // Create rim files table
@@ -63,7 +65,7 @@ impl SqliteRuntime {
                 file_size INTEGER NOT NULL,
                 last_modified DATETIME NOT NULL
             )",
-            [],
+            []
         )?;
 
         // Create chitin key table
@@ -77,7 +79,7 @@ impl SqliteRuntime {
                 file_size INTEGER NOT NULL,
                 last_modified DATETIME NOT NULL
             )",
-            [],
+            []
         )?;
 
         // Create erf files table
@@ -92,7 +94,7 @@ impl SqliteRuntime {
                 file_size INTEGER NOT NULL,
                 last_modified DATETIME NOT NULL
             )",
-            [],
+            []
         )?;
 
         // Create tpc files table
@@ -107,7 +109,7 @@ impl SqliteRuntime {
                 file_size INTEGER NOT NULL,
                 last_modified DATETIME NOT NULL
             )",
-            [],
+            []
         )?;
 
         // Create resources table to track individual resources within containers
@@ -133,7 +135,7 @@ impl SqliteRuntime {
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
             )",
-            [],
+            []
         )?;
 
         // Create tables if they don't exist
@@ -144,14 +146,14 @@ impl SqliteRuntime {
                 description TEXT NOT NULL,
                 timestamp DATETIME NOT NULL
             )",
-            [],
+            []
         )?;
         if result == 0 {
             // Table already existed
-            Ok(())
+
         } else {
             // Table was created
-            Ok(())
+
         }
 
         // Add any additional migrations here
@@ -174,9 +176,11 @@ impl SqliteRuntime {
         let conn = match self.connection.as_ref() {
             Some(c) => c,
             None => {
-                return Err(rusqlite::Error::InvalidParameterName(
-                    "No database connection available".to_string(),
-                ))
+                return Err(
+                    rusqlite::Error::InvalidParameterName(
+                        "No database connection available".to_string()
+                    )
+                );
             }
         };
 

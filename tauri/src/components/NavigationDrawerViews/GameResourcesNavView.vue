@@ -77,19 +77,19 @@
 
 
         <ul class="channels-list-text">
-          <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover> 
-          <template v-slot:activator="{ props }">
-            <li v-for="file in bifFiles" :key="file" class="channel focusable channel-text" v-bind="props" v-ripple
-              @click="navigateToBiffResourceView(file)">
-              <span class="channel-name">{{ file.split('\\').pop() }}</span>
-              <v-spacer></v-spacer>
-              <button style="margin-right:9px">
-                <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
-              </button>
-              <button style="margin-right: 10px">
-                <v-icon icon="mdi-cog" size="x-small" class="float-right"></v-icon>
-              </button>
-            </li>
+          <v-tooltip text="Tooltip" location="bottom" open-delay="6" open-on-hover>
+            <template v-slot:activator="{ props }">
+              <li v-for="file in bifFiles" :key="file" class="channel focusable channel-text" v-bind="props" v-ripple
+                @click="navigateToBiffResourceView(file)">
+                <span class="channel-name">{{ file.split('\\').pop() }}</span>
+                <v-spacer></v-spacer>
+                <button style="margin-right:9px">
+                  <v-icon icon="mdi-export" size="x-small" class="float-right"></v-icon>
+                </button>
+                <button style="margin-right: 10px">
+                  <v-icon icon="mdi-cog" size="x-small" class="float-right"></v-icon>
+                </button>
+              </li>
             </template>
           </v-tooltip>
 
@@ -125,7 +125,8 @@
 
 
         <ul class="channels-list-text">
-          <li v-for="rim in rimFiles" :key="rim" class="channel focusable channel-text" @click="navigateToResourceViewRim(rim)">
+          <li v-for="rim in rimFiles" :key="rim" class="channel focusable channel-text"
+            @click="navigateToResourceViewRim(rim)">
             <span class="channel-name">{{ rim.split('\\').pop() }}</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
@@ -415,18 +416,18 @@ loadFiles();
 const navigateToResourceView = (file: string) => {
   console.log("Navigating to Chitin Resource View for file:", file);
   showContextMenu.value = false;
-  tabStore.addTab('chitin-tab', "chitin",file.split('\\').pop() || 'Chitin Resource', file);
+  tabStore.addTab('chitin-tab', "chitin", file.split('\\').pop() || 'Chitin Resource', file);
 };
 
 const navigateToResourceViewERF = (file: string) => {
   console.log("Navigating to ERF Resource View for file:", file);
   showContextMenu.value = false;
-  tabStore.addTab('erf-tab', "erf",file.split('\\').pop() || 'Erf Resource', file);
+  tabStore.addTab('erf-tab', "erf", file.split('\\').pop() || 'Erf Resource', file);
 };
 const navigateToResourceViewRim = (file: string) => {
   console.log("Navigating to RIM Resource View for file:", file);
   showContextMenu.value = false;
-  tabStore.addTab('rim-tab', "rim",file.split('\\').pop() || 'Rim Resource', file);
+  tabStore.addTab('rim-tab', "rim", file.split('\\').pop() || 'Rim Resource', file);
 };
 const openContextMenu = (e: MouseEvent) => {
   console.log("This worked partially");
