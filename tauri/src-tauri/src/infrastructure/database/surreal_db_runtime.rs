@@ -12,17 +12,23 @@ impl SurrealDbRuntime {
     }
 
     pub async fn open(&mut self, path: &str) -> Result<(), String> {
-        // Ensure parent directory exists
+        // Step 1: Check if the parent directory exists and create it if necessary
         if let Some(parent) = Path::new(path).parent() {
+            // Create all directories in the path if they don't exist
             std::fs::create_dir_all(parent).map_err(|e| e.to_string())?;
         }
 
+        // Step 2: Initialize the SurrealDB connection with RocksDB as the storage engine
         match Surreal::new::<RocksDb>(path).await {
             Ok(db) => {
+                // Step 3: Store the database connection in our runtime if successful
                 self.db = Some(db);
                 Ok(())
             }
-            Err(e) => Err(e.to_string()),
+            Err(e) => {
+                // Step 4: Return an error if the database connection failed
+                Err(e.to_string())
+            }
         }
     }
 

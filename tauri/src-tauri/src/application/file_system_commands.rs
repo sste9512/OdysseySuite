@@ -43,10 +43,10 @@ pub async fn search_files_by_extension(
         .build()
         .collect();
 
-    println!("Search results:");
-    for result in &search_results {
-        println!("Found file: {}", result);
-    }
+    //println!("Search results:");
+    // for result in &search_results {
+    //     //println!("Found file: {}", result);
+    // }
 
     match search_results.is_empty() {
         true => Err("No files found".to_string()),

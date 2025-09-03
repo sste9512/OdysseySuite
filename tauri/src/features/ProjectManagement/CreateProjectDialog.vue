@@ -20,6 +20,12 @@
         <v-text-field v-model="stagingDirectory" label="Staging Directory" required :rules="[rules.required]"
           variant="solo" class="mb-4" append-inner-icon="mdi-folder"
           @click:append-inner="openStagingDirectoryDialog"></v-text-field>
+
+        <!-- Error message area -->
+        <v-alert v-if="errorMessage" type="error" variant="tonal" closable class="mb-4"
+          @click:close="errorMessage = ''">
+          {{ errorMessage }}
+        </v-alert>
       </v-form>
     </v-card-text>
 
@@ -35,11 +41,11 @@
 
 
     <v-card-actions>
-      <v-btn text @click="closeDialog">
+      <v-btn text="true" @click="closeDialog">
         Cancel
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn :disabled="!formIsValid" @click="closeDialog" text color="primary" type="submit">
+      <v-btn :disabled="!formIsValid" @click="createProject" text="true" color="primary" type="submit">
         Register
       </v-btn>
     </v-card-actions>
@@ -55,18 +61,17 @@
     <v-container
       style="overflow: hidden; margin: 15px 15px 15px 15px; max-width: 100%; min-width: 90vw; min-height: 90vh;">
       <!-- Directory content can be dynamically loaded here -->
-      <DirectoryViewer :isOpen="showDirectoryViewer" 
-        selectedDirectory="selectedDirectory"  @update:selectedDirectory="handleDirectoryUpdate"
-        @close="handleClose"></DirectoryViewer>
+      <DirectoryViewer :isOpen="showDirectoryViewer" selectedDirectory="selectedDirectory"
+        @update:selectedDirectory="handleDirectoryUpdate" @close="handleClose"></DirectoryViewer>
     </v-container>
   </v-overlay>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useProjectStore } from "@/state/project-store.ts";
-import { useDialogStore } from "@/state/dialog-store.ts";
 import DirectoryViewer from "@/features/DirectoryViewer/DirectoryViewer.vue";
+import { useDialogStore } from "@/state/dialog-store.ts";
+import { useProjectStore } from "@/state/project-store.ts";
+import { computed, ref } from "vue";
 
 const props = defineProps({
   showDialog: {
@@ -84,7 +89,8 @@ const showDirectoryViewer = ref(false);
 const gameDirectory = ref("");
 const stagingDirectory = ref("");
 const valid = ref(false);
-const form = ref(null);
+const form = ref<any>(null);
+const errorMessage = ref("");
 
 const projectStore = useProjectStore();
 const dialogStore = useDialogStore();
@@ -115,11 +121,13 @@ const resetForm = () => {
   if (form.value) {
     form.value.reset();
   }
+  errorMessage.value = "";
 };
+
 const handleDirectoryUpdate = (path: string) => {
   console.log('Selected directory:', path);
   selectedDirectory.value = path;
-  if(isRequestingStagingDirectory) {
+  if (isRequestingStagingDirectory) {
     stagingDirectory.value = path;
   } else {
     gameDirectory.value = path;
@@ -144,25 +152,41 @@ const closeDialog = () => {
   stagingDirectory.value = "";
   selectedDirectory.value = "";
   isOpen.value = false;
+  errorMessage.value = "";
   console.log(selectedDirectory.value);
   emit('update:showDialog', false);
 };
 
-const createProject = () => {
+const createProject = async () => {
   if (form.value?.validate()) {
     isLoading.value = true;
-    projectStore.createProject({
-      name: projectName.value,
-      description: projectDescription.value,
-      original_directory_path: gameDirectory.value,
-      staging_path: stagingDirectory.value,
-    });
-    closeDialog();
+    errorMessage.value = "";
+
+    try {
+      const result = await projectStore.createProject({
+        name: projectName.value,
+        description: projectDescription.value,
+        original_directory_path: gameDirectory.value,
+        staging_path: stagingDirectory.value,
+      });
+
+      if (result.ok) {
+        console.log('Project created successfully:', result.value);
+        closeDialog();
+      } else {
+        console.error('Failed to create project:', result.error);
+        errorMessage.value = `Failed to create project: ${result.error}`;
+      }
+    } catch (error) {
+      console.error('Error creating project:', error);
+      errorMessage.value = `Error creating project: ${error instanceof Error ? error.message : String(error)}`;
+    } finally {
+      isLoading.value = false;
+    }
   }
 };
 
 defineExpose({
-
   projectName,
   projectDescription,
   valid,
@@ -177,6 +201,7 @@ defineExpose({
   isLoading,
   handleDirectoryUpdate,
   handleClose,
+  errorMessage,
 });
 </script>
 

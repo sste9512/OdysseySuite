@@ -2,15 +2,16 @@
 
 
 import AuroraAppBar from "@/components/AppBarViews/AuroraAppBar.vue";
-import ToolboxView from "@/features/Toolbox/ToolboxView.vue";
 import OuterMainGameNav from "@/components/NavigationDrawerViews/GameResourcesNavView.vue";
-import { useTabViewStore } from "@/state/tab-store.ts";
-import { ref } from "vue";
-import TabNavigation from "@/features/TabNavigation.vue";
-import { useDialogStore } from "@/state/dialog-store.ts";
 import ProfilePage from "@/features/Login-Auth/ProfilePage.vue";
 import LogViewer from "@/features/LogViewer/LogViewer.vue";
 import CreateProjectDialog from "@/features/ProjectManagement/CreateProjectDialog.vue";
+import TabNavigation from "@/features/TabNavigation.vue";
+import ToolboxView from "@/features/Toolbox/ToolboxView.vue";
+import { useDialogStore } from "@/state/dialog-store.ts";
+import { useProjectStore } from "@/state/project-store.ts";
+import { useTabViewStore } from "@/state/tab-store.ts";
+import { ref } from "vue";
 
 
 
@@ -27,21 +28,66 @@ export default {
   setup() {
     const tabViewStore = useTabViewStore();
     const dialogStore = useDialogStore();
+    const projectStore = useProjectStore();
     const items = ref(tabViewStore.tabs);
     const currentItem = ref(tabViewStore.currentItem);
     const length = ref(tabViewStore.tabs.length);
     const globalCommandsDialogSwitch = ref(dialogStore.globalCommandsDialog);
     const settingsDialogSwitch = ref(dialogStore.settingsDialog);
+  
 
+    // Watch for changes in the selected project
+    const selectedProject = ref(projectStore.selectedProject);
+    
+    // Create a watcher for the selected project
+    const watchSelectedProject = () => {
+      try {
+        // Update the local ref whenever the store's selected project changes
+        selectedProject.value = projectStore.selectedProject;
+        
+        // Additional actions when project changes can be added here
+        if (selectedProject.value) {
+          console.log('Project selected:', selectedProject.value.name);
+        }
+      } catch (error) {
+        console.error('Error handling project change:', error);
+      }
+    };
+    
+    // Set up the watcher
+    projectStore.$subscribe((mutation, state) => {
+      console.log('Project store mutation:', mutation);
+      console.log('Project store state:', state);
+      if (mutation.type.includes('selectProject')) {
+        watchSelectedProject();
+      }
+    });
+
+    // Load user projects
+    const loadUserProjects = async () => {
+      try {
+        const result = await projectStore.loadProjects();
+        if (!result.ok) {
+          console.error('Failed to load projects:', result.error);
+        }
+      } catch (error) {
+        console.error('Error loading projects:', error);
+      }
+    };
+
+    // Load projects on component setup
+    loadUserProjects();
 
     window.addEventListener('keydown', (e) => {
       if (e.altKey && e.key === 'g') {
         globalCommandsDialogSwitch.value = true;
       }
     });
+
     return {
       length,
       tabViewStore,
+      projectStore,
       items,
       currentItem,
       showContextMenu: false,
@@ -72,6 +118,16 @@ export default {
 
     navigateToProfile() {
       this.settingsDialogSwitch = true;
+    },
+
+    selectProject(project) {
+      try {
+        this.projectStore.setCurrentProject(project);
+        // TODO: Switch the resource view to the currently selected project
+        this.tabViewStore.addTab(`project-${project.id}`, project.name, true, 'ProjectView');
+      } catch (error) {
+        console.error('Error selecting project:', error);
+      }
     }
   }
 }
@@ -99,9 +155,12 @@ export default {
 
       <v-navigation-drawer theme="dark" rail permanent>
         <v-list density="default" nav>
-          <v-list-item prepend-icon="mdi-view-dashboard" value="dashboard"></v-list-item>
-          <v-list-item prepend-icon="mdi-view-dashboard" value="messages">
-            <v-avatar image="./assets/game_icons/kotor-1-icon.png"></v-avatar>
+          <v-list-item v-for="project in projectStore.projects" :key="project.id"
+            :prepend-icon="project.icon || 'mdi-view-dashboard'" :value="project.id" @click="selectProject(project)"
+            :title="project.name"
+            :tooltip="project.description || 'No description available'">
+            <v-avatar v-if="project.image" :image="project.image"></v-avatar>
+            <template v-slot:title>{{ project.name }}</template>
           </v-list-item>
         </v-list>
         <!--        <DiscordInnerNavView></DiscordInnerNavView>-->
@@ -143,8 +202,9 @@ export default {
     <!-- Uses dark theme, takes up 75% of screen width, and appears above other content -->
     <v-overlay v-model="dialogGameSetup" :scrim="true" :teleport="'body'" class=" align-center justify-center">
       <v-container
-      style="overflow: hidden; margin: 15px 15px 15px 15px; max-width: 100%; min-width: 90vw; min-height: 90vh;">
-      <CreateProjectDialog :showDialog="dialogGameSetup" @update:showDialog="dialogGameSetup = false"> </CreateProjectDialog>
+        style="overflow: hidden; margin: 15px 15px 15px 15px; max-width: 100%; min-width: 90vw; min-height: 90vh;">
+        <CreateProjectDialog :showDialog="dialogGameSetup" @update:showDialog="dialogGameSetup = false">
+        </CreateProjectDialog>
       </v-container>
     </v-overlay>
 

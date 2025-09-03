@@ -1,23 +1,82 @@
 <script setup lang="ts">
 
-import {ref} from 'vue';
-import {useLoginStore} from '@/state/login-store.ts';
 import router from "@/navigation/base-router.ts";
+import { useLoginStore } from '@/state/login-store.ts';
+import { onMounted, ref } from 'vue';
+import { useProjectStore } from '@/state/project-store.ts';
+import { useAuthStore } from "../../state/auth-store";
+
 
 const loginStore = useLoginStore();
+const projectStore = useProjectStore();
+
 
 const email = ref('');
 const password = ref('');
 const rememberMe = ref(false);
 
+// Sign up form fields
+const signupName = ref('');
+const signupEmail = ref('');
+const signupPassword = ref('');
+
+// Load saved credentials from localStorage on component mount
+onMounted(() => {
+  try {
+    const savedEmail = localStorage.getItem('savedEmail');
+    const savedPassword = localStorage.getItem('savedPassword');
+    const savedRememberMe = localStorage.getItem('rememberMe');
+
+    if (savedEmail) {
+      email.value = savedEmail;
+    }
+    if (savedPassword) {
+      password.value = savedPassword;
+    }
+    if (savedRememberMe === 'true') {
+      rememberMe.value = true;
+    }
+  } catch (error) {
+    console.error('Error loading saved credentials:', error);
+  }
+});
+
 const handleLogin = async () => {
   try {
-    loginStore.login(
-        email.value,
-        password.value,
+    // Save credentials to localStorage if remember me is checked
+    if (rememberMe.value) {
+      localStorage.setItem('savedEmail', email.value);
+      localStorage.setItem('savedPassword', password.value);
+      localStorage.setItem('rememberMe', 'true');
+    } else {
+      // Clear saved credentials if remember me is not checked
+      localStorage.removeItem('savedEmail');
+      localStorage.removeItem('savedPassword');
+      localStorage.removeItem('rememberMe');
+    }
+
+    // Use the auth store instead of login store
+    const result = await useAuthStore().login(
+      email.value,
+      password.value,
     );
-    console.log('Login successful');
-    await router.push({name: 'MainDashboard'});
+
+    if (result.ok) {
+      console.log('Login successful');
+      // If login was successful, fetch projects for the user
+      const userId = result.value.id;
+      const projectsResult = await projectStore.loadProjects(userId);
+      
+      if (projectsResult.ok) {
+        console.log('Projects loaded:', projectsResult.value);
+      } else {
+        console.error('Failed to load projects:', projectsResult.error);
+      }
+      
+      await router.push({ name: 'MainDashboard' });
+    } else {
+      console.error('Login failed:', result.error);
+    }
   } catch (error) {
     console.error('Login failed:', error);
   }
@@ -33,7 +92,7 @@ const handleLogin = async () => {
         <div class="col-12 text-center align-self-center py-5">
           <div class="section pb-5 pt-5 pt-sm-2 text-center">
             <h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
-            <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
+            <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
             <label for="reg-log"></label>
             <div class="card-3d-wrap mx-auto">
               <div class="card-3d-wrapper">
@@ -42,16 +101,22 @@ const handleLogin = async () => {
                     <div class="section text-center">
                       <h4 class="mb-4 pb-3">Log In</h4>
                       <div class="form-group">
-                        <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail"
-                               autocomplete="off">
+                        <input type="email" name="logemail" class="form-style" placeholder="Email" id="logemail"
+                          autocomplete="off" v-model="email">
                         <i class="input-icon uil uil-at"></i>
                       </div>
                       <div class="form-group mt-2">
-                        <input type="password" name="logpass" class="form-style" placeholder="Your Password"
-                               id="logpass" autocomplete="off">
+                        <input type="password" name="logpass" class="form-style" placeholder="Password" id="logpass"
+                          autocomplete="off" v-model="password">
                         <i class="input-icon uil uil-lock-alt"></i>
                       </div>
-                      <a href="#" class="btn mt-4"  @click="handleLogin" >submit</a>
+                      <div class="form-group mt-2">
+                        <label class="remember-me-label">
+                          <input type="checkbox" v-model="rememberMe">
+                          <span class="remember-me-text">Remember Me</span>
+                        </label>
+                      </div>
+                      <a href="#" class="btn mt-4" @click="handleLogin">submit</a>
                       <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
                     </div>
                   </div>
@@ -62,20 +127,20 @@ const handleLogin = async () => {
                       <h4 class="mb-4 pb-3">Sign Up</h4>
                       <div class="form-group">
                         <input type="text" name="logname" class="form-style" placeholder="Your Full Name" id="logname"
-                               autocomplete="off">
+                          autocomplete="off" v-model="signupName">
                         <i class="input-icon uil uil-user"></i>
                       </div>
                       <div class="form-group mt-2">
                         <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail"
-                               autocomplete="off">
+                          autocomplete="off" v-model="signupEmail">
                         <i class="input-icon uil uil-at"></i>
                       </div>
                       <div class="form-group mt-2">
                         <input type="password" name="logpass" class="form-style" placeholder="Your Password"
-                               id="logpass" autocomplete="off">
+                          id="logpass" autocomplete="off" v-model="signupPassword">
                         <i class="input-icon uil uil-lock-alt"></i>
                       </div>
-                      <a href="#" class="btn mt-4" @click="handleLogin">Submit</a>
+                      <a href="#" class="btn mt-4" @click="handleLogin">Go</a>
                     </div>
                   </div>
                 </div>
@@ -150,8 +215,8 @@ h6 span {
   left: -9999px;
 }
 
-.checkbox:checked + label,
-.checkbox:not(:checked) + label {
+.checkbox:checked+label,
+.checkbox:not(:checked)+label {
   position: relative;
   display: block;
   text-align: center;
@@ -164,8 +229,8 @@ h6 span {
   background-color: #ffeba7;
 }
 
-.checkbox:checked + label:before,
-.checkbox:not(:checked) + label:before {
+.checkbox:checked+label:before,
+.checkbox:not(:checked)+label:before {
   position: absolute;
   display: block;
   width: 36px;
@@ -184,7 +249,7 @@ h6 span {
   transition: all 0.5s ease;
 }
 
-.checkbox:checked + label:before {
+.checkbox:checked+label:before {
   transform: translateX(44px) rotate(-270deg);
 }
 
@@ -211,7 +276,8 @@ h6 span {
   transition: all 600ms ease-out;
 }
 
-.card-front, .card-back {
+.card-front,
+.card-back {
   width: 100%;
   height: 100%;
   background-color: #2a2b38;
@@ -235,7 +301,7 @@ h6 span {
   transform: rotateY(180deg);
 }
 
-.checkbox:checked ~ .card-3d-wrap .card-3d-wrapper {
+.checkbox:checked~.card-3d-wrap .card-3d-wrapper {
   transform: rotateY(180deg);
 }
 
@@ -406,5 +472,26 @@ h6 span {
   width: auto;
   display: block;
 }
-</style>
 
+.remember-me-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 14px;
+  color: #c4c3ca;
+  margin-top: 10px;
+}
+
+.remember-me-checkbox {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  accent-color: #ffeba7;
+  cursor: pointer;
+}
+
+.remember-me-text {
+  user-select: none;
+  cursor: pointer;
+}
+</style>

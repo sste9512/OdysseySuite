@@ -4,7 +4,15 @@
       <div class="server focusable server-friends unread" role="button" aria-label="Friends unread">
         <div class="server-icon">
           <svg>
-            <use xlink:href="#icon-friends"/>
+            <use xlink:href="#icon-friends" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="server focusable server-friends unread" role="button" aria-label="Friends unread">
+        <div class="server-icon">
+          <svg>
+            <use xlink:href="#icon-friends" />
           </svg>
         </div>
       </div>
@@ -12,56 +20,75 @@
 
     <div class="servers-collection">
       <div class="server focusable unread" role="button" aria-label="Discord Developers unread">
-        <div class="server-icon"><img
-          src="/aurora-studio-vue/src/assets/game_icons/kotor-1-icon.png" alt=""/></div>
+        <div class="server-icon"><img src="/aurora-studio-vue/src/assets/game_icons/kotor-1-icon.png" alt="" /></div>
+      </div>
+      <div class="server focusable unread" role="button" aria-label="Discord Developers unread">
+        <div class="server-icon"><img src="/aurora-studio-vue/src/assets/game_icons/kotor-1-icon.png" alt="" /></div>
       </div>
     </div>
 
     <div class="servers-collection">
-      <div class="server focusable active" role="button" aria-label="My Server" aria-selected="true">
-        <div class="server-icon"><img src="https://discordapp.com/assets/0e291f67c9274a1abdddeb3fd919cbaa.png"/></div>
+      <div v-for="index in projects" :key="index" class="server focusable" :class="{ active: index === 1 }"
+        role="button" aria-label="Project Server" :aria-selected="index === 1">
+        <div class="server-icon"><img src="https://discordapp.com/assets/0e291f67c9274a1abdddeb3fd919cbaa.png" /></div>
       </div>
     </div>
   </aside>
 </template>
 
-<script lang="ts">
-import { DirectoryService } from '@/data/directory-service';
-import { onMounted } from 'vue';
+<script setup lang="ts">
+import { useProjectStore } from '@/state/project-store';
+import { onMounted, ref } from 'vue';
 
-export default {
-  name: "DiscordInnerNavView"
-}
+const projectStore = useProjectStore();
+const projects = ref(0);
 
+onMounted(() => {
+  try {
+    // Load projects when component is mounted
+    projectStore.loadProjects().then(result => {
+      if (result.ok) {
+        projects.value = projectStore.totalProjects;
+      } else {
+        console.error('Failed to load projects:', result.error);
+      }
+    });
 
+    const $ = document.querySelectorAll.bind(document);
 
-const $ = document.querySelectorAll.bind(document);
+    $(".focusable, .button").forEach(el => {
+      // blur only on mouse click
+      // for accessibility, keep focus when keyboard focused
+      el.addEventListener("mousedown", e => e.preventDefault());
+      el.setAttribute("tabindex", "0");
+    });
 
-$(".focusable, .button").forEach(el => {
-  // blur only on mouse click
-  // for accessibility, keep focus when keyboard focused
+    $(".server").forEach(el => {
+      el.addEventListener("click", () => {
+        const activeServer = $(".server.active")[0];
+        if (activeServer) {
+          activeServer.classList.remove("active");
+          activeServer.removeAttribute("aria-selected");
+        }
 
-  el.addEventListener("mousedown", e => e.preventDefault());
-  el.setAttribute("tabindex", "0");
+        el.classList.add("active");
+        el.setAttribute("aria-selected", "true");
+      });
+    });
+
+    $(".channel-text").forEach(el => {
+      el.addEventListener("click", () => {
+        const activeChannel = $(".channel-text.active")[0];
+        if (activeChannel) {
+          activeChannel.classList.remove("active");
+        }
+        el.classList.add("active");
+      });
+    });
+  } catch (error) {
+    console.error('Error in component initialization:', error);
+  }
 });
-
-$(".server").forEach(el => {
-  el.addEventListener("click", () => {
-    const activeServer = $(".server.active")[0];
-    activeServer.classList.remove("active");
-    activeServer.removeAttribute("aria-selected");
-
-    el.classList.add("active");
-    el.setAttribute("aria-selected", true);
-  });
-})
-
-$(".channel-text").forEach(el => {
-  el.addEventListener("click", () => {
-    $(".channel-text.active")[0].classList.remove("active");
-    el.classList.add("active");
-  });
-})
 
 // focus/blur on channel header click
 /*
@@ -72,7 +99,6 @@ $(".channels-header")[0].addEventListener("click", e => {
   //focused ? e.target.blur() : e.target.focus();
 });
 */
-
 </script>
 
 <style scoped lang="scss">
@@ -107,7 +133,8 @@ $button-bg-active: lighten($button-bg, 5%);
   }
 }
 
-html, body {
+html,
+body {
   height: 100%;
   background: $body-bg;
   color: $body-color;
@@ -191,7 +218,8 @@ html, body {
   &:not(.active) {
     animation: server-hover-out 0.6s ease;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       animation: server-hover-in 0.8s ease forwards;
     }
   }
@@ -205,7 +233,7 @@ html, body {
     justify-content: center;
   }
 
-  .server-icon > img {
+  .server-icon>img {
     border-radius: inherit;
     max-width: 100%;
   }
@@ -281,7 +309,8 @@ html, body {
   appearance: none;
   user-select: none;
 
-  > svg, > img {
+  >svg,
+  >img {
     max-width: 100%;
     max-height: 100%;
   }

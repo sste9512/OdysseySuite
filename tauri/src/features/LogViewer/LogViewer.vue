@@ -2,27 +2,27 @@
   <div>
     <table class="user-action-grid">
       <thead>
-      <tr>
-        <th>Id</th>
-        <th>Action</th>
-        <th>TimeStamp</th>
-      </tr>
+        <tr>
+          <th>Id</th>
+          <th>Action</th>
+          <th>TimeStamp</th>
+        </tr>
       </thead>
       <tbody>
-      <tr v-for="(action, index) in userActions.slice(0, 10)" :key="action.id">
-        <td>{{ action.id }}</td>
-        <td>{{ action.description }}</td>
-        <td>{{ action.timestamp }}</td>
-      </tr>
+        <tr v-for="(action, index) in userActions.slice(0, 10)" :key="action.id">
+          <td>{{ action.id }}</td>
+          <td>{{ action.description }}</td>
+          <td>{{ action.timestamp }}</td>
+        </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import { ref } from 'vue';
 
-import {useLoggingStore, UserAction} from "@/state/logging-store";
+import { useLoggingStore, UserAction } from "@/state/logging-store";
 
 
 const loggingStore = useLoggingStore();
@@ -51,7 +51,7 @@ const userActions = ref<UserAction[]>(loggingStore.getActionsByCategory("tabs"))
   padding: 8px;
   text-align: left;
 
- 
+
 }
 
 .user-action-grid th {
@@ -61,6 +61,4 @@ const userActions = ref<UserAction[]>(loggingStore.getActionsByCategory("tabs"))
 </style>
 
 
-<style scoped>
-
-</style>
+<style scoped></style>

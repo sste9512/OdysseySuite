@@ -1,0 +1,6 @@
+# Ignore SurrealDB database files
+**/*.db/**
+**/surrealdb.db/**
+**/surrealdb.db/LOG*
+**/surrealdb.db/LOCK
+**/surrealdb.db/MANIFEST*

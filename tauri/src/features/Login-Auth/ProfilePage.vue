@@ -33,7 +33,7 @@
           <v-window-item value="option-1">
             <v-card flat>
               <!-- Component to manage account-related settings -->
-              <AccountView></AccountView>
+              <AccountView :user="user"></AccountView>
             </v-card>
           </v-window-item>
 
@@ -42,7 +42,7 @@
           <v-window-item value="option-2">
             <v-card flat>
               <!-- Component to manage profile information -->
-              <ProfileInfoView></ProfileInfoView>
+              <ProfileInfoView :user="user"></ProfileInfoView>
             </v-card>
           </v-window-item>
 
@@ -51,7 +51,7 @@
           <v-window-item value="option-3">
             <v-card flat>
               <!-- Component to configure editor-specific settings -->
-              <EditorSettingsView></EditorSettingsView>
+              <EditorSettingsView :user="user"></EditorSettingsView>
             </v-card>
           </v-window-item>
 
@@ -60,7 +60,7 @@
           <v-window-item value="option-4">
             <v-card flat>
               <!-- Component to manage integrations -->
-              <IntegrationsGridView></IntegrationsGridView>
+              <IntegrationsGridView :user="user"></IntegrationsGridView>
             </v-card>
           </v-window-item>
 
@@ -69,33 +69,49 @@
           <v-window-item value="option-5">
             <v-card flat>
               <!-- Component for additional general settings -->
-              <Settings></Settings>
+              <Settings :user="user"></Settings>
             </v-card>
           </v-window-item>
-          
-          
+
+
         </v-window>
-        
+
       </div>
     </v-card>
   </v-sheet>
 </template>
 
 <script lang="ts">
-import ProfileInfoView from '../../components/ProfileViews/ProfileInfoView.vue'
-import EditorSettingsView from '../../components/ProfileViews/EditorSettingsView.vue'
-import AccountView from '../../components/ProfileViews/AccountView.vue'
-import IntegrationsGridView from "../../components/ProfileViews/IntegrationsGridView.vue";
 import Settings from "@/components/ProfileViews/Settings.vue";
+import { useLoginStore } from '@/state/login-store';
+import { computed, onMounted } from 'vue';
+import AccountView from '../../components/ProfileViews/AccountView.vue';
+import EditorSettingsView from '../../components/ProfileViews/EditorSettingsView.vue';
+import IntegrationsGridView from "../../components/ProfileViews/IntegrationsGridView.vue";
+import ProfileInfoView from '../../components/ProfileViews/ProfileInfoView.vue';
 
 
 export default {
   name: 'ProfilePage',
-  components: {Settings, IntegrationsGridView, AccountView, EditorSettingsView, ProfileInfoView},
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  data: () => ({
-    tab: 'option-1'
-  })
+  components: { Settings, IntegrationsGridView, AccountView, EditorSettingsView, ProfileInfoView },
+  setup() {
+    const loginStore = useLoginStore();
+
+    onMounted(async () => {
+      try {
+        await loginStore.loadUserFromStorage();
+      } catch (error) {
+        console.error('Error loading user data:', error);
+      }
+    });
+
+    const user = computed(() => loginStore.user);
+
+    return {
+      user,
+      tab: 'option-1'
+    };
+  }
 }
 </script>
 

@@ -1,10 +1,9 @@
+import { ChitinKey } from "@/data/chitin-key";
 import { Result } from "@/models/Result";
 import { invoke } from "@tauri-apps/api/core";
-import { ChitinKey } from "@/data/chitin-key";
 import { Biff } from "./biff";
 import { ErfFile } from "./erf";
 import { Rim } from "./rim";
-import { TpcData } from "./tpc-data";
 
 
 export class AuroraService {
@@ -96,13 +95,13 @@ export class AuroraService {
    */
   async readModelFiles(filePath: string, mdlId: number, mdxId: number): Promise<Result<[Uint8Array, Uint8Array]>> {
     try {
-      const [mdlData, mdxData] = await invoke<[number[], number[]]>('read_model_files', { 
+      const [mdlData, mdxData] = await invoke<[number[], number[]]>('read_model_files', {
         filePath,
         mdlId,
         mdxId
       });
-      return { 
-        ok: true, 
+      return {
+        ok: true,
         value: [new Uint8Array(mdlData), new Uint8Array(mdxData)]
       };
     } catch (error) {

@@ -1,18 +1,19 @@
 use std::fs::File;
-use std::io::{Read, Seek, Write};
+use std::io::{ Read, Seek, Write };
 
 use crate::domain::odyssey_api::tpc::TPC;
 
-
-
 #[tauri::command]
-pub async fn get_tpc_bytes_from_file(path: String, offset: u32, size: u32) -> Result<Vec<u8>, String> {
+pub async fn get_tpc_bytes_from_file(
+    path: String,
+    offset: u32,
+    size: u32
+) -> Result<Vec<u8>, String> {
     match std::fs::read(&path) {
         Ok(file_bytes) => Ok(file_bytes[offset as usize..(offset + size) as usize].to_vec()),
-        Err(err) => Err(format!("Failed to read TPC file '{}': {}", path, err))
+        Err(err) => Err(format!("Failed to read TPC file '{}': {}", path, err)),
     }
 }
-
 
 #[tauri::command]
 pub async fn get_tpc_from_file(path: String, offset: u32, size: u32) -> Result<TPC, String> {
@@ -25,8 +26,8 @@ pub async fn get_tpc_from_file(path: String, offset: u32, size: u32) -> Result<T
                 pack: None,
             });
             Ok(tpc)
-        },
-        Err(err) => Err(format!("Failed to read TPC file '{}': {}", path, err))
+        }
+        Err(err) => Err(format!("Failed to read TPC file '{}': {}", path, err)),
     }
 }
 
@@ -34,30 +35,32 @@ pub async fn get_tpc_from_file(path: String, offset: u32, size: u32) -> Result<T
 pub async fn get_bytes_from_file(path: String) -> Result<Vec<u8>, String> {
     match std::fs::read(&path) {
         Ok(file_bytes) => Ok(file_bytes),
-        Err(err) => Err(format!("Failed to read file '{}': {}", path, err))
+        Err(err) => Err(format!("Failed to read file '{}': {}", path, err)),
     }
 }
 
-
-
-
 #[tauri::command]
 pub async fn convert_bytes_to_tpc(resource_data: Vec<u8>) -> Result<TPC, String> {
-    Ok(TPC::new(crate::domain::odyssey_api::tpc::TPCOptions {
-        file: Some(resource_data),
-        filename: None,
-        pack: None,
-    }))
+    Ok(
+        TPC::new(crate::domain::odyssey_api::tpc::TPCOptions {
+            file: Some(resource_data),
+            filename: None,
+            pack: None,
+        })
+    )
 }
 
 #[tauri::command]
 pub async fn convert_file_to_tpc(path: String) -> Result<TPC, String> {
     match std::fs::read(&path) {
-        Ok(bytes) => Ok(TPC::new(crate::domain::odyssey_api::tpc::TPCOptions {
-            file: Some(bytes),
-            filename: Some(path),
-            pack: None,
-        })),
+        Ok(bytes) =>
+            Ok(
+                TPC::new(crate::domain::odyssey_api::tpc::TPCOptions {
+                    file: Some(bytes),
+                    filename: Some(path),
+                    pack: None,
+                })
+            ),
         Err(err) => Err(format!("Failed to read file '{}': {}", path, err)),
     }
 }
@@ -70,7 +73,7 @@ pub async fn write_tpc_to_file(path: String, tpc_data: TPC) -> Result<(), String
         Ok(f) => {
             println!("Successfully created file");
             f
-        },
+        }
         Err(e) => {
             println!("Failed to create file: {}", e);
             return Err(format!("Failed to create file '{}': {}", path, e));
@@ -83,7 +86,7 @@ pub async fn write_tpc_to_file(path: String, tpc_data: TPC) -> Result<(), String
         Ok(_) => {
             println!("Successfully wrote TPC data to file");
             Ok(())
-        },
+        }
         Err(e) => {
             println!("Failed to write TPC data: {}", e);
             Err(format!("Failed to write TPC data to file: {}", e))
@@ -91,13 +94,11 @@ pub async fn write_tpc_to_file(path: String, tpc_data: TPC) -> Result<(), String
     }
 }
 
-
-
 #[tauri::command]
 pub async fn read_bytes_from_detached_file(path: String) -> Result<Vec<u8>, String> {
     match std::fs::read(&path) {
         Ok(bytes) => Ok(bytes),
-        Err(e) => Err(format!("Failed to read file '{}': {}", path, e))
+        Err(e) => Err(format!("Failed to read file '{}': {}", path, e)),
     }
 }
 
@@ -112,11 +113,10 @@ pub async fn read_tpc_from_detached_file(path: String) -> Result<TPC, String> {
             });
             println!("TPC: {:?}", tpc.header.mip_map_count);
             Ok(tpc)
-        },
-        Err(e) => Err(format!("Failed to read file '{}': {}", path, e))
+        }
+        Err(e) => Err(format!("Failed to read file '{}': {}", path, e)),
     }
 }
-
 
 #[tauri::command]
 pub async fn convert_tpc_to_dds(tpc_data: TPC) -> Result<Vec<u8>, String> {
@@ -126,12 +126,11 @@ pub async fn convert_tpc_to_dds(tpc_data: TPC) -> Result<Vec<u8>, String> {
     }
 }
 
-
 // #[tauri::command]
 // pub async fn get_tpc_from_file_xoreos(path: String, offset: u64, size: u64) -> Result<crate::domain::odyssey_api::tpc_xoreos::TPC, String> {
-    
+
 //     println!("Opening file: {}", path);
-    
+
 //     // Open the file
 //     let mut file = match std::fs::File::open(&path) {
 //         Ok(f) => {
@@ -173,6 +172,3 @@ pub async fn convert_tpc_to_dds(tpc_data: TPC) -> Result<Vec<u8>, String> {
 //     }
 
 // }
-
-
-

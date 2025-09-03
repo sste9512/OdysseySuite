@@ -1,24 +1,44 @@
 <template>
   <figure class="snip1336">
-    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample87.jpg" alt="sample87" style="width: 100%; height: 50%"/>
+    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample87.jpg" alt="sample87"
+      style="width: 100%; height: 50%" />
     <figcaption>
-      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/profile-sample4.jpg" alt="profile-sample4" class="profile" />
-      <h2>Hans Down<span>Engineer</span></h2>
-      <p>I'm looking for something that can deliver a 50-pound payload of snow on a small feminine target. Can you suggest something? Hello...? </p>
-      <a href="#" class="follow">Follow</a>
-      <a href="#" class="info">More Info</a>
+      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/profile-sample4.jpg" alt="profile-sample4"
+        class="profile" />
+      <h2>{{ user?.email || 'Guest User' }}<span>{{ user?.username || 'User' }}</span></h2>
+      <p>{{ user?.is_admin ? 'Admin' : 'User' }}</p>
+      <a href="#" class="follow">Edit</a>
+      <a href="#" class="info">Delete</a>
     </figcaption>
   </figure>
 </template>
 
 <script lang="ts">
+import { useLoginStore } from '@/state/login-store';
+import { computed } from 'vue';
+
 export default {
-  name: "AccountView"
+  name: "AccountView",
+  props: {
+    user: {
+      type: Object,
+      default: null
+    }
+  },
+  setup(props: any) {
+    const loginStore = useLoginStore();
+    const currentUser = computed(() => props.user || loginStore.user);
+
+    return {
+      user: currentUser
+    };
+  }
 }
 </script>
 
 <style scoped>
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,600);
+
 .snip1336 {
   font-family: 'Roboto', Arial, sans-serif;
   position: relative;
@@ -32,23 +52,27 @@ export default {
   line-height: 1.4em;
   background-color: #141414;
 }
+
 .snip1336 * {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
 }
+
 .snip1336 img {
   max-width: 100%;
   vertical-align: top;
   opacity: 0.85;
 }
+
 .snip1336 figcaption {
   width: 100%;
   background-color: #141414;
   padding: 25px;
   position: relative;
 }
+
 .snip1336 figcaption:before {
   position: absolute;
   content: '';
@@ -60,6 +84,7 @@ export default {
   border-width: 55px 0 0 400px;
   border-color: transparent transparent transparent #141414;
 }
+
 .snip1336 figcaption a {
   padding: 5px;
   border: 1px solid #ffffff;
@@ -75,9 +100,11 @@ export default {
   font-weight: 600;
   letter-spacing: 1px;
 }
+
 .snip1336 figcaption a:hover {
   opacity: 1;
 }
+
 .snip1336 .profile {
   border-radius: 50%;
   position: absolute;
@@ -88,25 +115,28 @@ export default {
   opacity: 1;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
+
 .snip1336 .follow {
   margin-right: 4%;
   border-color: #2980b9;
   color: #2980b9;
 }
+
 .snip1336 h2 {
   margin: 0 0 5px;
   font-weight: 300;
 }
+
 .snip1336 h2 span {
   display: block;
   font-size: 0.5em;
   color: #2980b9;
 }
+
 .snip1336 p {
   margin: 0 0 10px;
   font-size: 0.8em;
   letter-spacing: 1px;
   opacity: 0.8;
 }
-
 </style>
