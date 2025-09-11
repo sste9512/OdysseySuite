@@ -290,7 +290,7 @@
 import ContextMenu from "../../components/ContextMenus/ContextMenu.vue";
 import { useTabViewStore } from "@/state/tab-store.ts";
 import { ref } from "vue";
-import { DirectoryService } from "@/data/directory-service.ts";
+import { DirectoryService } from "@/data/services/directory-service.ts";
 import { resourceDB } from "@/state/resource-database";
 
 const tabStore = useTabViewStore();

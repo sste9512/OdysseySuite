@@ -175,21 +175,37 @@ impl DocumentService {
         }
     }
 
-    /// Create a document with a specific ID
-    pub async fn create_with_id<T>(&self, table: &str, id: &str, data: T) -> DocumentResult<T>
-    where
-        T: Serialize + for<'de> Deserialize<'de> + 'static,
-    {
-        let db = self.get_db()?;
+    // /// Create a document with a specific ID
+    // pub async fn create_with_id<T>(&self, table: &str, id: &str, data: T) -> DocumentResult<T>
+    // where
+    //     T: Serialize + for<'de> Deserialize<'de> + 'static,
+    // {
+    //     let db = self.get_db()?;
         
-        let result: Option<T> = db
-            .create((table, id))
-            .content(data)
-            .await
-            .map_err(|e| DocumentError::QueryError(e.to_string()))?;
+    //     let result: Option<T> = db
+    //         .create((table, id))
+    //         .content(data)
+    //         .await
+    //         .map_err(|e| DocumentError::QueryError(e.to_string()))?;
 
-        result.ok_or(DocumentError::SerializationError("Failed to create document".to_string()))
-    }
+    //     result.ok_or(DocumentError::SerializationError("Failed to create document".to_string()))
+    // }
+
+      /// Create a document with a specific ID
+      pub async fn create_with_id<T>(&self, table: &str, id: &str, data: Value) -> DocumentResult<T>
+      where
+          T: Serialize + for<'de> Deserialize<'de> + 'static,
+      {
+          let db = self.get_db()?;
+          
+          let result: Option<T> = db
+              .create((table, id))
+              .content(data)
+              .await
+              .map_err(|e| DocumentError::QueryError(e.to_string()))?;
+  
+          result.ok_or(DocumentError::SerializationError("Failed to create document".to_string()))
+      }
 
     /// Read a document by ID
     pub async fn read<T>(&self, table: &str, id: &str) -> DocumentResult<Option<T>>

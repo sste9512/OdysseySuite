@@ -17,6 +17,105 @@ pub struct Project {
     pub created_at: String,
     pub staging_path: String,
     pub original_directory_path: String,
+    pub metrics: ProjectMetrics,
+}
+
+// For Collecting Metrics and overall diff comparisons later
+#[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
+pub struct ProjectMetrics {
+    pub project_id: String,
+    pub file_count: usize,
+    pub directory_count: usize,
+    pub total_bytes: u64,
+    pub operating_system: String,
+    pub last_updated: String,
+    pub file_types: std::collections::HashMap<String, usize>,
+    pub largest_file_path: Option<String>,
+    pub largest_file_size: u64,
+}
+
+impl ProjectMetrics {
+    pub fn new(project_id: &str) -> Self {
+        ProjectMetrics {
+            project_id: project_id.to_string(),
+            file_count: 0,
+            directory_count: 0,
+            total_bytes: 0,
+            operating_system: std::env::consts::OS.to_string(),
+            last_updated: chrono::Utc::now().to_rfc3339(),
+            file_types: std::collections::HashMap::new(),
+            largest_file_path: None,
+            largest_file_size: 0,
+        }
+    }
+
+    pub fn update_from_path(&mut self, path: &Path) -> Result<(), String> {
+        self.last_updated = chrono::Utc::now().to_rfc3339();
+        
+        if !path.exists() {
+            return Err(format!("Path does not exist: {:?}", path));
+        }
+
+        self.collect_metrics(path)
+    }
+
+    fn collect_metrics(&mut self, path: &Path) -> Result<(), String> {
+        if path.is_dir() {
+            self.directory_count += 1;
+            
+            let entries = match fs::read_dir(path) {
+                Ok(entries) => entries,
+                Err(e) => return Err(format!("Failed to read directory: {}", e)),
+            };
+
+            for entry in entries {
+                match entry {
+                    Ok(entry) => {
+                        let path = entry.path();
+                        if path.is_dir() {
+                            self.collect_metrics(&path)?;
+                        } else {
+                            self.process_file(&path)?;
+                        }
+                    },
+                    Err(e) => return Err(format!("Failed to access entry: {}", e)),
+                }
+            }
+        } else {
+            self.process_file(path)?;
+        }
+
+        Ok(())
+    }
+
+    fn process_file(&mut self, path: &Path) -> Result<(), String> {
+        self.file_count += 1;
+        
+        // Get file size
+        let metadata = match fs::metadata(path) {
+            Ok(metadata) => metadata,
+            Err(e) => return Err(format!("Failed to get file metadata: {}", e)),
+        };
+        
+        let file_size = metadata.len();
+        self.total_bytes += file_size;
+        
+        // Track file extension
+        if let Some(extension) = path.extension() {
+            if let Some(ext_str) = extension.to_str() {
+                let ext = ext_str.to_lowercase();
+                *self.file_types.entry(ext).or_insert(0) += 1;
+            }
+        }
+        
+        // Track largest file
+        if file_size > self.largest_file_size {
+            self.largest_file_size = file_size;
+            self.largest_file_path = path.to_str().map(String::from);
+        }
+        
+        Ok(())
+    }
 }
 
 
@@ -134,6 +233,7 @@ pub async fn create_project(
     let new_directory_name = format!("{}_{}", id, name);
     let new_directory_path = Path::new(&staging_path).join(new_directory_name);
 
+
     if let Err(e) = fs::create_dir_all(&new_directory_path) {
         return Err(format!("Failed to create project directory: {}", e));
     }
@@ -153,7 +253,20 @@ pub async fn create_project(
     ).await {
         Ok(project) => {
             println!("Project '{}' has been created.", name);
-            Ok(project)
+            // Update metrics
+            let mut metrics = ProjectMetrics::new(&project.id.to_string());
+            metrics.update_from_path(Path::new(&new_directory_path)).map_err(|e| format!("Failed to update metrics: {}", e))?;
+            let mut project = project;
+            project.metrics = metrics.clone();
+            // Update project in database
+            match repository.update_project(&project.id.to_string(), Some(name), Some(description), Some(staging_path)).await {
+                Ok(Some(updated_project)) => {
+                    println!("Project metrics updated successfully");
+                    Ok(updated_project)
+                }
+                Ok(None) => Err("Project not found".to_string()),
+                Err(e) => Err(format!("Failed to update project metrics: {}", e)),
+            }
         }
         Err(e) => Err(format!("Failed to create project in database: {}", e)),
     }

@@ -130,10 +130,10 @@
 <script lang="ts">
 import { defineComponent, ref, watch, computed, onMounted } from 'vue';
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
-import { ErfFile, ErfKeyEntry, ErfLocalizedString, ErfResourceTable, LanguageId } from '@/data/erf';
-import { AuroraService } from '@/data/aurora-service';
-import { ResourceType } from '@/data/resource_identification';
-import { ImageApi } from '@/data/image-api';
+import { ErfFile, ErfKeyEntry, ErfLocalizedString, ErfResourceTable, LanguageId } from '@/data/domain/erf';
+import { AuroraService } from '@/data/services/aurora-service';
+import { ResourceType } from '@/data/domain/resource_identification';
+import { ImageApi } from '@/data/services/image-api';
 
 import TpcImageViewerWithData from '@/components/DataPresentation/TpcImageViewerWithData.vue';
 

@@ -1,9 +1,9 @@
 import { ChitinKey } from "@/data/chitin-key";
 import { Result } from "@/models/Result";
 import { invoke } from "@tauri-apps/api/core";
-import { Biff } from "./biff";
-import { ErfFile } from "./erf";
-import { Rim } from "./rim";
+import { Biff } from "../domain/biff";
+import { ErfFile } from "../domain/erf";
+import { Rim } from "../domain/rim";
 
 
 export class AuroraService {

@@ -2,7 +2,7 @@
 
 
 import { onMounted } from 'vue';
-import { DirectoryService } from "@/data/directory-service.ts";
+import { DirectoryService } from "@/data/services/directory-service.ts";
 
 export default {
   setup() {

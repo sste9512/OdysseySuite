@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { Result } from '../models/Result';
+import { Result } from '../../models/Result';
 
 export interface Project {
   id: string;
@@ -59,7 +59,7 @@ export const projectService = {
     data: { name: string; description?: string | null; stagingPath: string }
   ): Promise<Result<Project>> {
     try {
-      const project = await invoke<Project>('update_project', {
+      const project = await invoke<Project>('update_project', { 
         id,
         name: data.name,
         description: data.description,

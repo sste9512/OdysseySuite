@@ -1,4 +1,4 @@
-import { userService } from '@/data/user-service';
+import { userService } from '@/data/services/user-service';
 import { Result } from '@/models/Result';
 import { User } from '@/models/User';
 import { defineStore } from 'pinia';

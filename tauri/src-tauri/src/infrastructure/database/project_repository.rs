@@ -4,7 +4,7 @@ use chrono::Utc;
 
 use super::document_service::{ DocumentService, DocumentResult, QueryBuilder };
 use crate::{
-    application::project_commands::Project,
+    application::project_commands::{Project, ProjectMetrics},
     infrastructure::database::document_service::DocumentError,
 };
 
@@ -27,6 +27,24 @@ impl ProjectRepository {
         Ok(())
     }
 
+    async fn ensure_metrics_table(&self) -> DocumentResult<()> {
+        let table_definition =
+            r#"
+            DEFINE TABLE metrics SCHEMAFULL;
+            DEFINE FIELD project_id ON metrics TYPE string;
+            DEFINE FIELD file_count ON metrics TYPE int;
+            DEFINE FIELD directory_count ON metrics TYPE int;
+            DEFINE FIELD total_bytes ON metrics TYPE int;
+            DEFINE FIELD operating_system ON metrics TYPE string;
+            DEFINE FIELD last_updated ON metrics TYPE string;
+            DEFINE FIELD file_types ON metrics TYPE object;
+            DEFINE FIELD largest_file_path ON metrics TYPE option<string>;
+            DEFINE FIELD largest_file_size ON metrics TYPE int;
+        "#;
+
+        self.document_service.define_table(table_definition).await
+    }
+
     /// Ensure the projects table is defined with proper schema
     async fn ensure_projects_table(&self) -> DocumentResult<()> {
         let table_definition =
@@ -39,13 +57,25 @@ impl ProjectRepository {
             DEFINE FIELD created_at ON projects TYPE string;
             DEFINE FIELD staging_path ON projects TYPE string;
             DEFINE FIELD original_directory_path ON projects TYPE string;
+            DEFINE FIELD metrics ON projects TYPE object;
             DEFINE INDEX projectUserIndex ON projects FIELDS user_id;
             DEFINE INDEX projectNameIndex ON projects FIELDS name;
         "#;
 
+        self.ensure_metrics_table().await?;
+
         self.document_service.define_table(table_definition).await
     }
 
+
+
+
+
+
+
+
+
+    
     /// Create a new project
     pub async fn create_project(
         &self,
@@ -55,27 +85,55 @@ impl ProjectRepository {
         staging_path: &str,
         original_directory_path: &str
     ) -> DocumentResult<Project> {
+        println!("Step 1: Generating new UUID for project");
         let id = Uuid::new_v4().to_string();
+        
+        println!("Step 2: Setting creation timestamp");
         let created_at = Utc::now().to_rfc3339();
+        
+        println!("Step 3: Initializing project metrics");
+        let metrics = ProjectMetrics::new(&id);
 
-        let project: Project = Project {
-            id: (id.clone(), user_id.to_string()).into(),
-            user_id: user_id.to_string(),
-            name: name.to_string(),
-            description: description.map(|s| s.to_string()),
-            created_at,
-            staging_path: staging_path.to_string(),
-            original_directory_path: original_directory_path.to_string()
+        println!("Step 4: Preparing project data JSON structure");
+        // Create project data WITHOUT the id field - let SurrealDB handle it
+        let project_data = json!({
+            "user_id": user_id,
+            "name": name,
+            "description": description,
+            "created_at": created_at,
+            "staging_path": staging_path,
+            "original_directory_path": original_directory_path,
+            "metrics": {
+                "project_id": metrics.project_id,
+                "file_count": metrics.file_count,
+                "directory_count": metrics.directory_count,
+                "total_bytes": metrics.total_bytes,
+                "operating_system": metrics.operating_system,
+                "last_updated": metrics.last_updated,
+                "file_types": metrics.file_types,
+                "largest_file_path": metrics.largest_file_path,
+                "largest_file_size": metrics.largest_file_size
+            }
+        });
+
+        println!("Step 5: Creating project in database with ID: {}", id);
+        // Use create_with_id to control the ID - SurrealDB will add the id field automatically
+        let result = match self.document_service.create_with_id::<Project>(
+            "projects",
+            &id,
+            project_data
+        ).await {
+            Ok(project) => {
+                println!("Step 6: Project created successfully");
+                project
+            },
+            Err(e) => {
+                println!("Step 6: Failed to create project - {}", e);
+                return Err(DocumentError::SerializationError(e.to_string()));
+            }
         };
 
-        // Use create_with_id to control the ID
-        let result = self.document_service.create::<Project>(
-            "projects",
-            project
-        ).await.map_err(|e| DocumentError::SerializationError(e.to_string()))?;
-
-        println!("Result: {:?}", result);
-
+        println!("Step 7: Returning created project - Result: {:?}", result);
         Ok(result)
     }
 
@@ -97,6 +155,18 @@ impl ProjectRepository {
     pub async fn list_all_projects(&self) -> DocumentResult<Vec<Project>> {
         self.document_service.read_all("projects").await
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /// Update a project
     pub async fn update_project(

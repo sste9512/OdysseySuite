@@ -96,10 +96,10 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import { AuroraService } from '@/data/aurora-service';
-import { KeyHeader, KeyEntry } from '@/data/chitin-key';
-import { FileEntry, FilenameEntry } from '@/data/chitin-key';
-import { ResourceType } from '@/data/resource_identification';
+import { AuroraService } from '@/data/services/aurora-service';
+import { KeyHeader, KeyEntry } from '@/data/domain/chitin-key';
+import { FileEntry, FilenameEntry } from '@/data/domain/chitin-key';
+import { ResourceType } from '@/data/domain/resource_identification';
 
 
 

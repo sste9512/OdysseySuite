@@ -1,7 +1,8 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { DirectoryService } from "@/data/directory-service";
-import { DriveStatistics } from "@/data/directory-service";
-import { DirectoryContents } from "@/data/directory-service";
+import { DirectoryService } from "@/data/services/directory-service";
+import { DriveStatistics } from "@/data/services/directory-service";
+import { DirectoryContents } from "@/data/services/directory-service";
+
 
 // TODO: Add logging Store to track actions and errors
 export const useFileSystemStore = defineStore("fileSystem", {

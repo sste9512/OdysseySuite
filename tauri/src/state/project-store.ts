@@ -1,4 +1,4 @@
-﻿import { Project, projectService } from "@/data/project_services";
+﻿import { Project, projectService } from "@/data/services/project_services";
 import { defineStore } from "pinia";
 import { computed, ref } from 'vue';
 import { Result } from '../models/Result';

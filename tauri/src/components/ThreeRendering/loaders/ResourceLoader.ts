@@ -7,7 +7,7 @@ import { KEYManager } from "../managers/KEYManager";
 import { RIMManager } from "../managers/RIMManager";
 import { IRIMResource } from "../interface/resource/IRIMResource";
 import { IERFResource } from "../interface/resource/IERFResource";
-import { AuroraService } from "@/data/aurora-service";
+import { AuroraService } from "@/data/services/aurora-service";
 
 /**
  * ResourceLoader class.

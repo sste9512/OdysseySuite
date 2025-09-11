@@ -74,9 +74,9 @@
 <script lang="ts">
 import { defineComponent, ref, watch, computed, onMounted } from 'vue';
 import ContextMenu from "@/components/ContextMenus/ContextMenu.vue";
-import { Rim } from '@/data/rim';
-import { AuroraService } from '@/data/aurora-service';
-import { ResourceType, resourceTypeFromNumber } from '@/data/resource_identification';
+import { Rim } from '@/data/domain/rim';
+import { AuroraService } from '@/data/services/aurora-service';
+import { ResourceType, resourceTypeFromNumber } from '@/data/domain/resource_identification';
 
 export default defineComponent({
   name: 'RimResourceView',

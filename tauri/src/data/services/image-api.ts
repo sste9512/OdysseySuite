@@ -1,6 +1,6 @@
 import { Result } from "@/models/Result";
 import { invoke } from "@tauri-apps/api/core";
-import { TPC_Xoreos, TpcData } from "./tpc-data";
+import { TPC_Xoreos, TpcData } from "../domain/tpc-data";
 import { TPC } from "@/components/Aurora-Rendering/types/TPC";
 
 
