@@ -289,11 +289,15 @@
 <script setup lang="ts">
 import ContextMenu from "../../components/ContextMenus/ContextMenu.vue";
 import { useTabViewStore } from "@/state/tab-store.ts";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { DirectoryService } from "@/data/directory-service.ts";
 import { resourceDB } from "@/state/resource-database";
+import { useProjectStore } from "@/state/project-store";
+import type { Project } from "@/data/project_services";
 
 const tabStore = useTabViewStore();
+const projectStore = useProjectStore();
+const selectedProject = ref<Project | null>(null);
 const keyFiles = ref<string[]>([]);
 const bifFiles = ref<string[]>([]);
 const erfFiles = ref<string[]>([]);
@@ -301,34 +305,22 @@ const gffFiles = ref<string[]>([]);
 const rimFiles = ref<string[]>([]);
 const showContextMenu = ref(false);
 
-const items3 = ref([
-  { text: 'Open in Explorer', icon: 'mdi-folder' },
-  { text: 'View Data', icon: 'mdi-account-multiple' },
-  { text: 'Open in Editor', icon: 'mdi-star' },
-  { text: 'Export', icon: 'mdi-history' },
-  { text: 'Extract', icon: 'mdi-check-circle' },
-]);
 
-const storageOptions = ref([
-  { text: 'Google Drive', icon: 'mdi-clock' },
-  { text: 'One Drive', icon: 'mdi-account' },
-  { text: 'Local Files', icon: 'mdi-flag' },
-]);
-
-const items = ref([
-  { title: 'Click Me' },
-  { title: 'Click Me' },
-  { title: 'Click Me' },
-  { title: 'Click Me 2' },
-]);
-
-const directoryService = new DirectoryService();
 
 // Load files
 const loadFiles = async () => {
-  let keyFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "key");
+  // Don't load files if no project is selected
+  if (!selectedProject.value?.original_directory_path) {
+    console.log('No project selected, skipping file loading');
+    return;
+  }
+
+  const directoryService = new DirectoryService();
+  console.log('Loading files for project:', selectedProject.value?.name);
+  let keyFileResults = await directoryService.searchFilesByExtension(selectedProject.value.original_directory_path, "key");
   if (keyFileResults.ok) {
     const keyFileNames = keyFileResults.value;
+    console.log('Key files found:', keyFileNames);
     keyFiles.value = keyFileNames;
     const resultDb = await resourceDB.storeAllFoundRelevantFiles(keyFileNames);
     if (resultDb.ok) {
@@ -340,9 +332,10 @@ const loadFiles = async () => {
     console.log(keyFileResults.error);
   }
 
-  let bifFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "bif");
+  let bifFileResults = await directoryService.searchFilesByExtension(selectedProject.value.original_directory_path, "bif");
   if (bifFileResults.ok) {
     const bifFileNames = bifFileResults.value;
+    console.log('BIF files found:', bifFileNames);
     bifFiles.value = bifFileNames;
     const resultDb = await resourceDB.storeAllFoundRelevantFiles(bifFileNames);
     if (resultDb.ok) {
@@ -354,9 +347,10 @@ const loadFiles = async () => {
     console.log(bifFileResults.error);
   }
 
-  let erfFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "erf");
+  let erfFileResults = await directoryService.searchFilesByExtension(selectedProject.value.original_directory_path, "erf");
   if (erfFileResults.ok) {
     const erfFileNames = erfFileResults.value;
+    console.log('ERF files found:', erfFileNames);
     erfFiles.value = erfFileNames;
     const resultDb = await resourceDB.storeAllFoundRelevantFiles(erfFileNames);
     if (resultDb.ok) {
@@ -368,9 +362,10 @@ const loadFiles = async () => {
     console.log(erfFileResults.error);
   }
 
-  let utfFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "utf");
+  let utfFileResults = await directoryService.searchFilesByExtension(selectedProject.value.original_directory_path, "utf");
   if (utfFileResults.ok) {
     const gffFileNames = utfFileResults.value;
+    console.log('GFF files found:', gffFileNames);
     gffFiles.value = gffFileNames;
     const resultDb = await resourceDB.storeAllFoundRelevantFiles(gffFileNames);
     if (resultDb.ok) {
@@ -382,9 +377,10 @@ const loadFiles = async () => {
     console.log(utfFileResults.error);
   }
 
-  let rimFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "rim");
+  let rimFileResults = await directoryService.searchFilesByExtension(selectedProject.value.original_directory_path, "rim");
   if (rimFileResults.ok) {
     const rimFileNames = rimFileResults.value;
+    console.log('RIM files found:', rimFileNames);
     rimFiles.value = rimFileNames;
     const resultDb = await resourceDB.storeAllFoundRelevantFiles(rimFileNames);
     if (resultDb.ok) {
@@ -396,9 +392,10 @@ const loadFiles = async () => {
     console.log(rimFileResults.error);
   }
 
-  let utiFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "uti");
+  let utiFileResults = await directoryService.searchFilesByExtension(selectedProject.value.original_directory_path, "uti");
   if (utiFileResults.ok) {
     const utiFileNames = utiFileResults.value;
+    console.log('UTI files found:', utiFileNames);
     gffFiles.value = utiFileNames;
     const resultDb = await resourceDB.storeAllFoundRelevantFiles(utiFileNames);
     if (resultDb.ok) {
@@ -411,7 +408,42 @@ const loadFiles = async () => {
   }
 };
 
-loadFiles();
+// Initialize with current project
+selectedProject.value = projectStore.selectedProject;
+
+// Watch for changes in the project store's selected project
+watch(
+  () => projectStore.selectedProject,
+  async (newProject, oldProject) => {
+    try {
+      console.log('Project changed in GameResourcesNavView:', {
+        old: oldProject?.name,
+        new: newProject?.name
+      });
+      
+      selectedProject.value = newProject;
+      
+      // Clear existing files when project changes
+      if (newProject?.id !== oldProject?.id) {
+        keyFiles.value = [];
+        bifFiles.value = [];
+        erfFiles.value = [];
+        gffFiles.value = [];
+        rimFiles.value = [];
+      }
+      
+      // Load files for the new project
+      if (newProject) {
+        await loadFiles();
+        console.log('Files loaded for project:', newProject.name);
+      }
+    } catch (error) {
+      console.error('Error handling project change in GameResourcesNavView:', error);
+    }
+  },
+  { immediate: true } // This will run on mount with the current value
+);
+
 
 const navigateToResourceView = (file: string) => {
   console.log("Navigating to Chitin Resource View for file:", file);

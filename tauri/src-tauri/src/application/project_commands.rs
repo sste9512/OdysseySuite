@@ -101,22 +101,14 @@ fn copy_dir_recursive(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> io::Resul
 /// Attach the user id to the project
 #[tauri::command]
 pub async fn create_project(
-    state: tauri::State<'_, Mutex<AppState>>,
     name: &str,
+    user_id: &str,
     description: Option<&str>,
     staging_path: &str,
     original_directory_path: &str
 ) -> Result<Project, String> {
     // Get user ID from app state
-    let guard = state.lock().await;
-    let user_id = match &guard.current_user {
-        Some(user) => user.id.clone(),
-        None => {
-            println!("No user found in app state");
-            return Err("No user found in app state".to_string());
-        }
-    };
-    drop(guard); // Release the lock early
+
 
     // Initialize repository
     let mut repository = ProjectRepository::new();
@@ -139,9 +131,30 @@ pub async fn create_project(
     }
 
     // Copy original game folder to the new directory
-    if let Err(e) = copy_dir_recursive(original_directory_path, &new_directory_path) {
-        return Err(format!("Failed to copy original directory: {}", e));
+    // if let Err(e) = copy_dir_recursive(original_directory_path, &new_directory_path) {
+    //     return Err(format!("Failed to copy original directory: {}", e));
+    // } 
+
+    // Copy all files from original directory to new directory (non-recursive)
+    if let Ok(entries) = fs::read_dir(original_directory_path) {
+        for entry in entries {
+            if let Ok(entry) = entry {
+                let source_path = entry.path();
+                if source_path.is_file() {
+                    if let Some(file_name) = source_path.file_name() {
+                        let dest_path = new_directory_path.join(file_name);
+                        if let Err(e) = fs::copy(&source_path, &dest_path) {
+                            return Err(format!("Failed to copy file {:?}: {}", source_path, e));
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        return Err(format!("Failed to read original directory: {}", original_directory_path));
     }
+
+    println!("Using user id: {:?}", user_id);
 
     // Create project in database using repository
     match repository.create_project(

@@ -2,6 +2,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from 'vue';
 import { Result } from '../models/Result';
+import { useAuthStore } from "./auth-store";
 
 export const useProjectStore = defineStore('project', () => {
   const projects = ref<Project[]>([]);
@@ -10,12 +11,19 @@ export const useProjectStore = defineStore('project', () => {
 
   async function loadProjects(): Promise<Result<Project[]>> {
     try {
-      const response = await projectService.listProjects('current-user-id'); // TODO: Get actual user ID
+      const authStore = useAuthStore();
+      const userId = authStore.currentUser?.id;
+      
+      if (!userId) {
+        return { ok: false, error: new Error('User not authenticated') };
+      }
+      
+      const response = await projectService.listProjects(userId);
       if (response.ok) {
         projects.value = response.value;
         return { ok: true, value: response.value };
       } else {
-        throw response.error;
+        return { ok: false, error: new Error('Failed to load projects') };
       }
     } catch (error) {
       console.error('Failed to load projects:', error);
@@ -29,6 +37,11 @@ export const useProjectStore = defineStore('project', () => {
 
   async function createProject(project: Partial<Project>): Promise<Result<Project>> {
     try {
+
+      const authStore = useAuthStore();
+      const user_id = authStore.currentUser?.id;
+
+
       const newProject = {
         ...defaultProject,
         ...project,
@@ -39,6 +52,7 @@ export const useProjectStore = defineStore('project', () => {
 
       const response = await projectService.createProject(
         newProject.name,
+        user_id,
         newProject.description || null,
         newProject.staging_path,
         newProject.original_directory_path

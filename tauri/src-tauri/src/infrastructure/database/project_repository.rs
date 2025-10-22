@@ -1,4 +1,5 @@
 use serde_json::{ json, Value };
+use surrealdb::RecordId;
 use uuid::Uuid;
 use chrono::Utc;
 
@@ -7,6 +8,25 @@ use crate::{
     application::project_commands::Project,
     infrastructure::database::document_service::DocumentError,
 };
+
+
+/// Adapter function to convert a string to a SurrealDB RecordId
+/// 
+/// # Arguments
+/// * `table` - The table name for the record
+/// * `id` - The string ID to convert
+/// 
+/// # Returns
+/// * `Result<RecordId, String>` - The RecordId or an error message
+pub fn string_to_record_id(table: &str, id: &str) -> RecordId {
+    RecordId::from((table, id))
+}
+
+/// Alternative: Direct conversion using the From trait
+/// This is simpler when you know the table name
+pub fn create_record_id(table: &str, id: &str) -> RecordId {
+    RecordId::from((table, id))
+}
 
 /// Repository for project-related database operations
 pub struct ProjectRepository {
@@ -59,7 +79,7 @@ impl ProjectRepository {
         let created_at = Utc::now().to_rfc3339();
 
         let project: Project = Project {
-            id: (id.clone(), user_id.to_string()).into(),
+            id: string_to_record_id("projects", &id),
             user_id: user_id.to_string(),
             name: name.to_string(),
             description: description.map(|s| s.to_string()),

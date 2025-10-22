@@ -33,6 +33,7 @@ export const projectService = {
    */
   async createProject(
     name: string,
+    userId: string,
     description: string | null,
     stagingPath: string,
     originalDirectoryPath: string
@@ -40,6 +41,7 @@ export const projectService = {
     try {
       const project = await invoke<Project>('create_project', {
         name,
+        userId,
         description,
         stagingPath,
         originalDirectoryPath
@@ -97,11 +99,12 @@ export const projectService = {
    */
   createProjectSync(
     name: string,
+    userId: string,
     description: string | null,
     stagingPath: string,
     originalDirectoryPath: string
   ): Promise<Result<Project>> {
-    return this.createProject(name, description, stagingPath, originalDirectoryPath);
+    return this.createProject(name, userId, description, stagingPath, originalDirectoryPath);
   },
 
   /**

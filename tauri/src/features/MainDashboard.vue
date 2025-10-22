@@ -101,7 +101,11 @@ export default {
       dialogGameSetup: null,
       drawerBottom: null,
       entries: [],
-      icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram']
+      icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
+      projectInfoDialog: false,
+      selectedProjectInfo: null,
+      snackbar: false,
+      snackbarText: ''
     }
   },
   mounted() {
@@ -122,12 +126,104 @@ export default {
 
     selectProject(project) {
       try {
-        this.projectStore.setCurrentProject(project);
+        console.log('Selecting project:', project);
+        this.projectStore.selectProject(project);
         // TODO: Switch the resource view to the currently selected project
-        this.tabViewStore.addTab(`project-${project.id}`, project.name, true, 'ProjectView');
+        //this.tabViewStore.addTab(`project-${project.id}`, project.name, true, 'ProjectView');
       } catch (error) {
         console.error('Error selecting project:', error);
       }
+    },
+
+    openContextMenu(event, project, menuProps) {
+      try {
+        // Close all other menus first
+        this.projectStore.projects.forEach(p => {
+          if (p.id !== project.id && p.menuOpen) {
+            p.menuOpen = false;
+          }
+        });
+        
+        // Toggle this menu
+        project.menuOpen = !project.menuOpen;
+        
+        // Trigger the menu activator
+        if (menuProps && menuProps.onClick) {
+          menuProps.onClick(event);
+        }
+      } catch (error) {
+        console.error('Error opening context menu:', error);
+      }
+    },
+
+    showProjectInfo(project) {
+      try {
+        this.selectedProjectInfo = project;
+        this.projectInfoDialog = true;
+      } catch (error) {
+        console.error('Error showing project info:', error);
+        this.showSnackbar('Failed to show project information');
+      }
+    },
+
+    async openInFileExplorer(project) {
+      try {
+        const { open } = await import('@tauri-apps/plugin-opener');
+        // Try to open the staging path first, fallback to original directory
+        const pathToOpen = project.staging_path || project.original_directory_path;
+        
+        if (pathToOpen) {
+          await open(pathToOpen);
+          this.showSnackbar('Opening in file explorer...');
+        } else {
+          this.showSnackbar('No valid path found for this project');
+        }
+      } catch (error) {
+        console.error('Error opening file explorer:', error);
+        this.showSnackbar('Failed to open file explorer');
+      }
+    },
+
+    copyToJson(project) {
+      try {
+        const projectJson = JSON.stringify(project, null, 2);
+        
+        // Use modern clipboard API
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(projectJson).then(() => {
+            this.showSnackbar('Project JSON copied to clipboard!');
+          }).catch((error) => {
+            console.error('Failed to copy to clipboard:', error);
+            this.showSnackbar('Failed to copy to clipboard');
+          });
+        } else {
+          // Fallback for older browsers or non-secure contexts
+          const textArea = document.createElement('textarea');
+          textArea.value = projectJson;
+          textArea.style.position = 'fixed';
+          textArea.style.left = '-999999px';
+          document.body.appendChild(textArea);
+          textArea.select();
+          
+          try {
+            document.execCommand('copy');
+            this.showSnackbar('Project JSON copied to clipboard!');
+          } catch (error) {
+            console.error('Fallback copy failed:', error);
+            this.showSnackbar('Failed to copy to clipboard');
+          }
+          
+          document.body.removeChild(textArea);
+        }
+      } catch (error) {
+        console.error('Error copying to JSON:', error);
+        this.showSnackbar('Failed to copy project data');
+      }
+    },
+
+    showSnackbar(text) {
+      this.snackbarText = text;
+      this.snackbar = true;
     }
   }
 }
@@ -155,13 +251,44 @@ export default {
 
       <v-navigation-drawer theme="dark" rail permanent>
         <v-list density="default" nav>
-          <v-list-item v-for="project in projectStore.projects" :key="project.id"
-            :prepend-icon="project.icon || 'mdi-view-dashboard'" :value="project.id" @click="selectProject(project)"
-            :title="project.name"
-            :tooltip="project.description || 'No description available'">
-            <v-avatar v-if="project.image" :image="project.image"></v-avatar>
-            <template v-slot:title>{{ project.name }}</template>
-          </v-list-item>
+          <v-menu
+            v-for="project in projectStore.projects"
+            :key="project.id"
+            v-model="project.menuOpen"
+            location="end"
+            transition="slide-x-transition"
+            :close-on-content-click="true"
+          >
+            <template v-slot:activator="{ props: menuProps }">
+              <v-list-item
+                :prepend-icon="project.icon || 'mdi-view-dashboard'"
+                :value="project.id"
+                @click="selectProject(project)"
+                @contextmenu.prevent="(e) => openContextMenu(e, project, menuProps)"
+                :title="project.name"
+              >
+                <v-avatar v-if="project.image" :image="project.image"></v-avatar>
+                <h6>{{ project.name }}</h6>
+                <template v-slot:title>{{ project.name }}</template>
+              </v-list-item>
+            </template>
+
+            <v-card min-width="250">
+              <v-list density="compact">
+                <v-list-item prepend-icon="mdi-information-outline" @click="showProjectInfo(project)">
+                  <v-list-item-title>View Project Information</v-list-item-title>
+                </v-list-item>
+                
+                <v-list-item prepend-icon="mdi-folder-open-outline" @click="openInFileExplorer(project)">
+                  <v-list-item-title>Open in File Explorer</v-list-item-title>
+                </v-list-item>
+                
+                <v-list-item prepend-icon="mdi-code-json" @click="copyToJson(project)">
+                  <v-list-item-title>Copy to JSON</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
         </v-list>
         <!--        <DiscordInnerNavView></DiscordInnerNavView>-->
       </v-navigation-drawer>
@@ -356,6 +483,74 @@ export default {
         </v-card-actions>
       </v-card>
     </v-overlay>
+
+    <!--- Project Information Dialog --->
+    <v-dialog v-model="projectInfoDialog" max-width="600">
+      <v-card class="dark-glass">
+        <v-card-title class="d-flex align-center">
+          <v-icon class="mr-2">mdi-information-outline</v-icon>
+          Project Information
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" variant="text" @click="projectInfoDialog = false"></v-btn>
+        </v-card-title>
+        
+        <v-divider></v-divider>
+        
+        <v-card-text v-if="selectedProjectInfo">
+          <v-list density="comfortable">
+            <v-list-item>
+              <v-list-item-title class="text-caption text-grey">Project Name</v-list-item-title>
+              <v-list-item-subtitle class="text-body-1">{{ selectedProjectInfo.name }}</v-list-item-subtitle>
+            </v-list-item>
+            
+            <v-list-item v-if="selectedProjectInfo.description">
+              <v-list-item-title class="text-caption text-grey">Description</v-list-item-title>
+              <v-list-item-subtitle class="text-body-1">{{ selectedProjectInfo.description }}</v-list-item-subtitle>
+            </v-list-item>
+            
+            <v-list-item>
+              <v-list-item-title class="text-caption text-grey">Project ID</v-list-item-title>
+              <v-list-item-subtitle class="text-body-2 font-mono">{{ selectedProjectInfo.id }}</v-list-item-subtitle>
+            </v-list-item>
+            
+            <v-list-item>
+              <v-list-item-title class="text-caption text-grey">User ID</v-list-item-title>
+              <v-list-item-subtitle class="text-body-2 font-mono">{{ selectedProjectInfo.user_id }}</v-list-item-subtitle>
+            </v-list-item>
+            
+            <v-list-item v-if="selectedProjectInfo.staging_path">
+              <v-list-item-title class="text-caption text-grey">Staging Path</v-list-item-title>
+              <v-list-item-subtitle class="text-body-2">{{ selectedProjectInfo.staging_path }}</v-list-item-subtitle>
+            </v-list-item>
+            
+            <v-list-item v-if="selectedProjectInfo.original_directory_path">
+              <v-list-item-title class="text-caption text-grey">Original Directory</v-list-item-title>
+              <v-list-item-subtitle class="text-body-2">{{ selectedProjectInfo.original_directory_path }}</v-list-item-subtitle>
+            </v-list-item>
+            
+            <v-list-item v-if="selectedProjectInfo.created_at">
+              <v-list-item-title class="text-caption text-grey">Created At</v-list-item-title>
+              <v-list-item-subtitle class="text-body-2">{{ selectedProjectInfo.created_at }}</v-list-item-subtitle>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        
+        <v-divider></v-divider>
+        
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="projectInfoDialog = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!--- Snackbar for notifications --->
+    <v-snackbar v-model="snackbar" :timeout="3000" location="bottom right">
+      {{ snackbarText }}
+      <template v-slot:actions>
+        <v-btn color="primary" variant="text" @click="snackbar = false">Close</v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -368,5 +563,9 @@ export default {
 .dark-glass {
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(28px) !important;
+}
+
+.font-mono {
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>

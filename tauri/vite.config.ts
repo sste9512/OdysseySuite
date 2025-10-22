@@ -20,6 +20,15 @@ export default defineConfig(async () => ({
     css: {
         preprocessorOptions: {
             scss: {
+                api: 'modern-compiler',
+                silenceDeprecations: [
+                    'legacy-js-api',
+                    'import',
+                    'global-builtin',
+                    'color-functions',
+                    'slash-div'
+                ],
+                quietDeps: true,
                 additionalData: `@import "@/assets/css/vuetify.scss";`
             }
         }
