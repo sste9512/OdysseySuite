@@ -377,10 +377,9 @@ const loadFiles = async () => {
     console.log(utfFileResults.error);
   }
 
-  let rimFileResults = await directoryService.searchFilesByExtension(selectedProject.value.original_directory_path, "rim");
+  let rimFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "rim");
   if (rimFileResults.ok) {
     const rimFileNames = rimFileResults.value;
-    console.log('RIM files found:', rimFileNames);
     rimFiles.value = rimFileNames;
     const resultDb = await resourceDB.storeAllFoundRelevantFiles(rimFileNames);
     if (resultDb.ok) {
@@ -420,9 +419,9 @@ watch(
         old: oldProject?.name,
         new: newProject?.name
       });
-      
+
       selectedProject.value = newProject;
-      
+
       // Clear existing files when project changes
       if (newProject?.id !== oldProject?.id) {
         keyFiles.value = [];
@@ -431,7 +430,7 @@ watch(
         gffFiles.value = [];
         rimFiles.value = [];
       }
-      
+
       // Load files for the new project
       if (newProject) {
         await loadFiles();

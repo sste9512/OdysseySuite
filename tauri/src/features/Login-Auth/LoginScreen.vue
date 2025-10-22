@@ -69,16 +69,20 @@ const handleLogin = async () => {
       
       if (projectsResult.ok) {
         console.log('Projects loaded:', projectsResult.value);
+        await router.push({ name: 'MainDashboard' });
       } else {
         console.error('Failed to load projects:', projectsResult.error);
+        alert(`Failed to load projects: ${projectsResult.error}`);
       }
       
-      await router.push({ name: 'MainDashboard' });
+      
     } else {
       console.error('Login failed:', result.error);
+      alert(`Login failed: ${result.error}`);
     }
   } catch (error) {
     console.error('Login failed:', error);
+    alert(`Login failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
 </script>

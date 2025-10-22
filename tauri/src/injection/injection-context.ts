@@ -2,7 +2,7 @@ import {container} from "tsyringe";
 import type {AxiosInstance} from "axios";
 import axios from "axios";
 import {useAuthStore} from "@/state/auth-store.ts";
-import {appDatabase} from "@/data/app-database";
+import {appDatabase} from "@/data/data-stores/app-database";
 import {
     FileExplorationClient,
     type IFileExplorationClient,
@@ -10,7 +10,7 @@ import {
     type IResourceEndpointsClient,
     ProjectManagementClient, ResourceEndpointsClient
 } from "@/clients/web-api-client";
-import { AppDatabase } from "@/data/app-database";
+import { type AppDatabase } from "@/data/data-stores/app-database";
 
 // TODO: Add bearer token here
 export class InjectionContext {

@@ -80,9 +80,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
-import { BiffHeader, VResourceEntry, FResourceEntry } from '@/data/biff';
-import { AuroraService } from '@/data/aurora-service';
-import { ResourceType } from '@/data/resource_identification';
+import { BiffHeader, VResourceEntry, FResourceEntry } from '@/data/domain/biff';
+import { AuroraService } from '@/data/services/aurora-service';
+import { ResourceType } from '@/data/domain/resource_identification';
 import { ModelViewerService } from '@/components/ThreeRendering/ModelViewerState';
 import MdlRenderer from '@/components/DataPresentation/MdlRenderer.vue';
 import { resourceDB } from '@/state/resource-database';

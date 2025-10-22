@@ -7,7 +7,7 @@ import {UI3DRenderer} from "./UI3DRenderer";
 // import { EditorFile } from "@/components/ThreeRendering/EditorFile";
 import { BinaryReader } from "./BinaryReader";
 import { SceneGraphNode } from "../DataPresentation/SceneGraphNode";
-import { AuroraService } from '@/data/aurora-service';
+import { AuroraService } from '@/data/services/aurora-service';
 import { UI3DRendererEventListenerTypes } from './UI3DRendererTypes';
 
 // export interface ModelViewerStateOptions extends BaseTabStateOptions {

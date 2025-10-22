@@ -152,12 +152,10 @@
 import { onMounted, ref, watch } from 'vue';
 import { TPC } from '@/components/Aurora-Rendering/types/TPC';
 import DirectoryViewer from '@/features/DirectoryViewer/DirectoryViewer.vue';
-import { ImageApi } from '@/data/image-api';
-import * as THREE from 'three';
+import { ImageApi } from '@/data/services/image-api';
 import TextureRenderer from './TextureRenderer.vue';
 import TgaRenderer from './TgaRenderer.vue';
-import { AuroraService } from '@/data/aurora-service';
-import DDSRenderer from './DDSRenderer.vue';
+import { AuroraService } from '@/data/services/aurora-service';
 import TPCRenderer from './TPCRenderer.vue';
 
 const currentImage = ref(null);
