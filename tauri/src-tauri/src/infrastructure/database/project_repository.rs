@@ -116,6 +116,7 @@ impl ProjectRepository {
 
         let project: Project = Project {
             id: string_to_record_id("projects", &id),
+            metrics: metrics,
             user_id: user_id.to_string(),
             name: name.to_string(),
             description: description.map(|s| s.to_string()),
@@ -123,26 +124,31 @@ impl ProjectRepository {
             staging_path: staging_path.to_string(),
             original_directory_path: original_directory_path.to_string()
         };
+
+        let metrics_clone = project.metrics.clone();
+
+        let metrics_data = json!({
+            "project_id": project.id.to_string(),
+            "file_count": metrics_clone.file_count,
+            "directory_count": metrics_clone.directory_count,
+            "total_bytes": metrics_clone.total_bytes,
+            "operating_system": project.metrics.operating_system,
+            "last_updated": metrics_clone.last_updated,
+            "file_types": metrics_clone.file_types,
+            "largest_file_path": metrics_clone.largest_file_path,
+            "largest_file_size": metrics_clone.largest_file_size
+        });
+
         println!("Step 4: Preparing project data JSON structure");
         // Create project data WITHOUT the id field - let SurrealDB handle it
         let project_data = json!({
             "user_id": user_id,
             "name": name,
             "description": description,
-            "created_at": created_at,
+            "created_at": project.created_at,
             "staging_path": staging_path,
             "original_directory_path": original_directory_path,
-            "metrics": {
-                "project_id": metrics.project_id,
-                "file_count": metrics.file_count,
-                "directory_count": metrics.directory_count,
-                "total_bytes": metrics.total_bytes,
-                "operating_system": metrics.operating_system,
-                "last_updated": metrics.last_updated,
-                "file_types": metrics.file_types,
-                "largest_file_path": metrics.largest_file_path,
-                "largest_file_size": metrics.largest_file_size
-            }
+            "metrics": metrics_data.clone()
         });
 
         println!("Step 5: Creating project in database with ID: {}", id);

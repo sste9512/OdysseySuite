@@ -11,7 +11,7 @@ use uuid::Uuid;
 
 /// Database representation of a user (with additional fields for database storage)
 #[derive(Debug, Clone, Serialize, Deserialize)]
-struct UserRecord {
+pub struct UserRecord {
     pub id: RecordId,
     pub username: String,
     pub password: String,
@@ -29,7 +29,7 @@ struct UserRecord {
 
 impl UserRecord {
     /// Convert UserRecord to domain User entity
-    fn to_user(&self) -> Result<User, UserError> {
+    pub fn to_user(&self) -> Result<User, UserError> {
         Ok(User {
             id: self.id.to_string(),
             username: self.username.clone(),
@@ -48,7 +48,7 @@ impl UserRecord {
     }
 
     /// Convert domain User to UserRecord
-    fn from_user(user: &User) -> Self {
+    pub fn from_user(user: &User) -> Self {
         Self {
             id: string_to_record_id("users", &user.id.clone()),
             username: user.username.clone(),
@@ -187,6 +187,66 @@ impl AuthorizationService {
         }
     }
 
+    /// Register a new user with email
+    pub async fn register(&self, username: &str, email: &str, password: &str) -> Result<User, UserError> {
+        println!("Starting user registration process for username: {}", username);
+        
+        // Validate input
+        if username.is_empty() {
+            return Err(UserError::EmptyUsername);
+        }
+        if password.is_empty() {
+            return Err(UserError::EmptyPassword);
+        }
+        if email.is_empty() {
+            return Err(UserError::DatabaseError("Email cannot be empty".to_string()));
+        }
+
+        // Check if user already exists
+        match self.find_user_by_username(username).await? {
+            Some(_) => {
+                println!("Registration failed: Username already exists");
+                return Err(UserError::DatabaseError("Username already exists".to_string()));
+            }
+            None => {
+                // Create new user with email
+                let user_id = Uuid::new_v4().to_string();
+                let now = Utc::now();
+
+                let user_record = UserRecord {
+                    id: string_to_record_id("users", &user_id.clone()),
+                    username: username.to_string(),
+                    password: password.to_string(),
+                    email: email.to_string(),
+                    created_at: now.to_rfc3339(),
+                    updated_at: now.to_rfc3339(),
+                    is_active: true,
+                    is_admin: false,
+                    profile_picture: None,
+                    login_time: Some(now.to_rfc3339()),
+                    last_logout_time: None,
+                    login_count: 1,
+                    failed_login_attempts: 0,
+                };
+                
+                let user_record_json = json!(user_record);
+                match self.document_service.create_with_id::<UserRecord>(Self::USERS_TABLE, &user_id, user_record_json).await {
+                    Ok(_) => {
+                        println!("Successfully registered new user in database");
+                        user_record.to_user()
+                    }
+                    Err(e) => {
+                        println!("Failed to register new user: {}", e);
+                        Err(UserError::DatabaseError(format!(
+                            "Failed to register new user: {}",
+                            e
+                        )))
+                    }
+                }
+            }
+        }
+    }
+
     /// Find user by username
     async fn find_user_by_username(&self, username: &str) -> Result<Option<UserRecord>, UserError> {
         let builder = QueryBuilder::new(Self::USERS_TABLE)
@@ -221,8 +281,8 @@ impl AuthorizationService {
             login_count: 1,
             failed_login_attempts: 0,
         };
-
-        match self.document_service.create_with_id(Self::USERS_TABLE, &user_id, user_record.clone()).await {
+        let user_record_json = json!(user_record);
+        match self.document_service.create_with_id::<UserRecord>(Self::USERS_TABLE, &user_id, user_record_json).await {
             Ok(_) => {
                 println!("Successfully created new user in database");
                 user_record.to_user()

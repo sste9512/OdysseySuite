@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 import {computed, ref} from "vue";
 import { userService } from "@/data/services/user-service";
 import { Result } from "@/models/Result";
-import { UserError, UserSafe } from "@/models/User";
+import { UserError, UserErrorType, UserSafe } from "@/models/User";
 
 export interface IUser {
     userName: string;
@@ -40,8 +40,30 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (error) {
             console.error('Login error:', error);
             const userError = error instanceof Error
-                ? new UserError(0, error.message)
-                : new UserError(0, 'Unknown error during login');
+                ? new UserError(UserErrorType.AuthenticationFailed, error.message)
+                : new UserError(UserErrorType.AuthenticationFailed, 'Unknown error during login');
+            return { ok: false, error: userError };
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
+    // Register a new user
+    async function register(username: string, email: string, password: string): Promise<Result<UserSafe, UserError>> {
+        try {
+            isLoading.value = true;
+            const result = await userService.register({ username, email, password });
+            
+            if (result.ok) {
+                setUser(result.value);
+            }
+            
+            return result;
+        } catch (error) {
+            console.error('Registration error:', error);
+            const userError = error instanceof Error
+                ? new UserError(UserErrorType.DatabaseError, error.message)
+                : new UserError(UserErrorType.DatabaseError, 'Unknown error during registration');
             return { ok: false, error: userError };
         } finally {
             isLoading.value = false;
@@ -68,8 +90,8 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (error) {
             console.error('Logout error:', error);
             const userError = error instanceof Error
-                ? new UserError(0, error.message)
-                : new UserError(0, 'Unknown error during logout');
+                ? new UserError(UserErrorType.DatabaseError, error.message)
+                : new UserError(UserErrorType.DatabaseError, 'Unknown error during logout');
             return { ok: false, error: userError };
         } finally {
             isLoading.value = false;
@@ -84,8 +106,8 @@ export const useAuthStore = defineStore('auth', () => {
         } catch (error) {
             console.error('Verification error:', error);
             const userError = error instanceof Error
-                ? new UserError(0, error.message)
-                : new UserError(0, 'Unknown error during verification');
+                ? new UserError(UserErrorType.AuthenticationFailed, error.message)
+                : new UserError(UserErrorType.AuthenticationFailed, 'Unknown error during verification');
             return { ok: false, error: userError };
         } finally {
             isLoading.value = false;
@@ -98,6 +120,7 @@ export const useAuthStore = defineStore('auth', () => {
         bearerToken,
         isLoading,
         login,
+        register,
         logout,
         verifyCredentials,
         setBearer,

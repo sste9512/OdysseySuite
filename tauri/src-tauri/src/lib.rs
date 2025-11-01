@@ -77,6 +77,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             application::user_commands::user_sign_in,
+            application::user_commands::user_register,
             application::user_commands::user_log_out,
             application::file_system_commands::list_directory_from_root,
             application::file_system_commands::get_directory_contents,

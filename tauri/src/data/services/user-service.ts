@@ -63,6 +63,29 @@ export class UserService {
   }
 
   /**
+   * Registers a new user
+   * Calls the Tauri user_register command
+   * @param userData - The new user's registration data
+   * @returns Promise containing a Result with either the User data or an error
+   */
+  async register(userData: CreateUserData): Promise<Result<UserSafe, UserError>> {
+    try {
+      const user = await invoke<UserSafe>('user_register', {
+        username: userData.username,
+        email: userData.email,
+        password: userData.password
+      });
+      return { ok: true, value: user };
+    } catch (error) {
+      console.error('Failed to register user:', error);
+      const userError = error instanceof Error
+        ? UserError.fromString(error.message)
+        : new UserError(UserErrorType.DatabaseError, 'Failed to register user');
+      return { ok: false, error: userError };
+    }
+  }
+
+  /**
    * Verifies user credentials without signing in
    * @param credentials - The user's login credentials
    * @returns Promise containing a Result with either a boolean indicating success or an error

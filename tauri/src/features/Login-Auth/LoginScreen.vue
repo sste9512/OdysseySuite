@@ -10,7 +10,7 @@ import { useAuthStore } from "../../state/auth-store";
 const loginStore = useLoginStore();
 const projectStore = useProjectStore();
 
-
+const isSignup = ref(false);
 const email = ref('');
 const password = ref('');
 const rememberMe = ref(false);
@@ -43,27 +43,38 @@ onMounted(() => {
 
 const handleLogin = async () => {
   try {
-    // Save credentials to localStorage if remember me is checked
-    if (rememberMe.value) {
-      localStorage.setItem('savedEmail', email.value);
-      localStorage.setItem('savedPassword', password.value);
-      localStorage.setItem('rememberMe', 'true');
+    let result;
+    
+    if (isSignup.value) {
+      // Handle signup mode
+      result = await useAuthStore().register(
+        signupName.value,
+        signupEmail.value,
+        signupPassword.value
+      );
     } else {
-      // Clear saved credentials if remember me is not checked
-      localStorage.removeItem('savedEmail');
-      localStorage.removeItem('savedPassword');
-      localStorage.removeItem('rememberMe');
+      // Handle login mode
+      // Save credentials to localStorage if remember me is checked
+      if (rememberMe.value) {
+        localStorage.setItem('savedEmail', email.value);
+        localStorage.setItem('savedPassword', password.value);
+        localStorage.setItem('rememberMe', 'true');
+      } else {
+        // Clear saved credentials if remember me is not checked
+        localStorage.removeItem('savedEmail');
+        localStorage.removeItem('savedPassword');
+        localStorage.removeItem('rememberMe');
+      }
+
+      result = await useAuthStore().login(
+        email.value,
+        password.value,
+      );
     }
 
-    // Use the auth store instead of login store
-    const result = await useAuthStore().login(
-      email.value,
-      password.value,
-    );
-
     if (result.ok) {
-      console.log('Login successful');
-      // If login was successful, fetch projects for the user
+      console.log(isSignup.value ? 'Registration successful' : 'Login successful');
+      // If authentication was successful, fetch projects for the user
       const userId = result.value.id;
       const projectsResult = await projectStore.loadProjects(userId);
       
@@ -77,12 +88,14 @@ const handleLogin = async () => {
       
       
     } else {
-      console.error('Login failed:', result.error);
-      alert(`Login failed: ${result.error}`);
+      const action = isSignup.value ? 'Registration' : 'Login';
+      console.error(`${action} failed:`, result.error);
+      alert(`${action} failed: ${result.error}`);
     }
   } catch (error) {
-    console.error('Login failed:', error);
-    alert(`Login failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    const action = isSignup.value ? 'Registration' : 'Login';
+    console.error(`${action} failed:`, error);
+    alert(`${action} failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
 </script>
@@ -96,7 +109,7 @@ const handleLogin = async () => {
         <div class="col-12 text-center align-self-center py-5">
           <div class="section pb-5 pt-5 pt-sm-2 text-center">
             <h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
-            <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+            <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" v-model="isSignup" />
             <label for="reg-log"></label>
             <div class="card-3d-wrap mx-auto">
               <div class="card-3d-wrapper">

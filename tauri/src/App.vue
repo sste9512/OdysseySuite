@@ -8,11 +8,6 @@ export default {
   setup() {
     onMounted(async () => {
    
-
-      
-
-      const files = await directoryService.listDirectoryFromRoot();
-      console.log(files);
     });
   }
 };

@@ -9,7 +9,7 @@ export const useProjectStore = defineStore('project', () => {
   const selectedProject = ref<Project | null>(null);
   const totalProjects = computed(() => projects.value.length);
 
-  async function loadProjects(): Promise<Result<Project[]>> {
+  async function loadProjects(userId: string): Promise<Result<Project[]>> {
     try {
       const authStore = useAuthStore();
       const userId = authStore.currentUser?.id;

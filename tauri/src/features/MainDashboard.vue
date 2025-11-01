@@ -131,7 +131,7 @@ export default {
         // TODO: Switch the resource view to the currently selected project
         //this.tabViewStore.addTab(`project-${project.id}`, project.name, true, 'ProjectView');
       } catch (error) {
-        console.error('Error selecting project:', error);
+        console.error('Error selecting project:', error); 
       }
     },
 
