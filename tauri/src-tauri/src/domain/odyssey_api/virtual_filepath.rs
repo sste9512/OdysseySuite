@@ -18,7 +18,7 @@ pub struct VirtualFilePath {
 }
 
 pub trait VirtualFilePathReader {
-    fn construct_virtual_filepath(&self, resref_name: &str) -> OdysseyResult<VirtualFilePath>
+    fn construct_virtual_filepath(&self, resref_name: &str) -> OdysseyResult<VirtualFilePath>;
 }
 
 // symbolic string marking, for literal and virtual translation
