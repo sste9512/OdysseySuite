@@ -49,6 +49,8 @@ pub fn run() {
             application::aurora_commands::extract_erf_resource,
             application::aurora_commands::extract_rim_resource,
             application::aurora_commands::read_model_files,
+            application::aurora_commands::read_twoda,
+            application::aurora_commands::read_twoda_from_name,
             application::project_commands::create_project,
             application::project_commands::list_projects,
             application::image_commands::convert_bytes_to_tpc,
@@ -60,6 +62,7 @@ pub fn run() {
             application::image_commands::get_tpc_bytes_from_file,
             application::image_commands::read_bytes_from_detached_file,
             application::image_commands::get_bytes_from_file,
+           
 
         ])
         .run(tauri::generate_context!())

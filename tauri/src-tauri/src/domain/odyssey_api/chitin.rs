@@ -1,9 +1,8 @@
+use crate::domain::odyssey_api::error::Result as OdysseyResult;
 use byteorder::{LittleEndian, ReadBytesExt};
 use serde::{Deserialize, Serialize};
 use std::io::{self, Read, Seek};
-
-
-
+use crate::domain::odyssey_api::virtual_filepath::{VirtualFilePath, VirtualFilePathReader};
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct ChitinKey {
@@ -14,12 +13,33 @@ pub struct ChitinKey {
 }
 
 pub trait ChitinKeyReader {
-    fn read_chitin_key<R: Read + Seek>(reader: &mut R) -> io::Result<ChitinKey>;
-    fn read_key_header<R: Read + Seek>(reader: &mut R) -> io::Result<KeyHeader>;
-    fn read_file_entries<R: Read + Seek>(reader: &mut R, count: u32, offset_to_file_table: u32) -> io::Result<Vec<FileEntry>>;
-    fn read_filenames<R: Read>(reader: &mut R, file_entries: &Vec<FileEntry>) -> io::Result<Vec<FilenameEntry>>;
-    fn read_key_entries<R: Read + Seek>(reader: &mut R, count: u32, offset_to_key_table: u32) -> io::Result<Vec<KeyEntry>>;
+    fn read_chitin_key<R: Read + Seek>(reader: &mut R) -> OdysseyResult<ChitinKey>;
+    fn read_key_header<R: Read + Seek>(reader: &mut R) -> OdysseyResult<KeyHeader>;
+    fn read_file_entries<R: Read + Seek>(
+        reader: &mut R,
+        count: u32,
+        offset_to_file_table: u32,
+    ) -> OdysseyResult<Vec<FileEntry>>;
+    fn read_filenames<R: Read>(
+        reader: &mut R,
+        file_entries: &Vec<FileEntry>,
+    ) -> OdysseyResult<Vec<FilenameEntry>>;
+    fn read_key_entries<R: Read + Seek>(
+        reader: &mut R,
+        count: u32,
+        offset_to_key_table: u32,
+    ) -> OdysseyResult<Vec<KeyEntry>>;
+
+    fn extract_resource_by_name<R: Read + Seek>(
+        &self,
+        reader: &mut R,
+        resref_name: &str,
+    ) -> OdysseyResult<Option<Vec<u8>>>;
+
 }
+
+
+
 
 impl ChitinKeyReader for ChitinKey {
     /// Reads a complete ChitinKey structure from the provided reader.
@@ -34,12 +54,14 @@ impl ChitinKeyReader for ChitinKey {
     /// * `reader` - Any type that implements Read trait to read bytes from
     ///
     /// # Returns
-    /// * `io::Result<ChitinKey>` - The parsed ChitinKey structure or an IO error
-    fn read_chitin_key<R: Read + Seek>(reader: &mut R) -> io::Result<ChitinKey> {
+    /// * `OdysseyResult<ChitinKey>` - The parsed ChitinKey structure or an OdysseyError
+    fn read_chitin_key<R: Read + Seek>(reader: &mut R) -> OdysseyResult<ChitinKey> {
         let header = Self::read_key_header(reader)?;
-        let file_entries = Self::read_file_entries(reader, header.bif_count, header.offset_to_file_table)?;
+        let file_entries =
+            Self::read_file_entries(reader, header.bif_count, header.offset_to_file_table)?;
         let filenames = Self::read_filenames(reader, &file_entries)?;
-        let key_entries = Self::read_key_entries(reader, header.key_count, header.offset_to_key_table)?;
+        let key_entries =
+            Self::read_key_entries(reader, header.key_count, header.offset_to_key_table)?;
 
         Ok(ChitinKey {
             header,
@@ -49,7 +71,7 @@ impl ChitinKeyReader for ChitinKey {
         })
     }
 
-    fn read_key_header<R: Read>(reader: &mut R) -> io::Result<KeyHeader> {
+    fn read_key_header<R: Read>(reader: &mut R) -> OdysseyResult<KeyHeader> {
         let mut header = KeyHeader::new();
         let mut file_type_buf = [0u8; 4];
 
@@ -72,7 +94,11 @@ impl ChitinKeyReader for ChitinKey {
         Ok(header)
     }
 
-    fn read_file_entries<R: Read + Seek>(reader: &mut R, count: u32, offset_to_file_table: u32) -> io::Result<Vec<FileEntry>> {
+    fn read_file_entries<R: Read + Seek>(
+        reader: &mut R,
+        count: u32,
+        offset_to_file_table: u32,
+    ) -> OdysseyResult<Vec<FileEntry>> {
         let mut entries = Vec::with_capacity(count as usize);
         reader.seek(io::SeekFrom::Start(offset_to_file_table as u64))?;
         for _ in 0..count {
@@ -86,7 +112,10 @@ impl ChitinKeyReader for ChitinKey {
         Ok(entries)
     }
 
-    fn read_filenames<R: Read>(reader: &mut R, file_entries: &Vec<FileEntry>) -> io::Result<Vec<FilenameEntry>> {
+    fn read_filenames<R: Read>(
+        reader: &mut R,
+        file_entries: &Vec<FileEntry>,
+    ) -> OdysseyResult<Vec<FilenameEntry>> {
         let mut names = Vec::with_capacity(file_entries.len() as usize);
         for entry in file_entries {
             let filename_buf = vec![0u8; entry.filename_size as usize]; // Buffer for reading filename string
@@ -101,7 +130,11 @@ impl ChitinKeyReader for ChitinKey {
         Ok(names)
     }
 
-    fn read_key_entries<R: Read + Seek>(reader: &mut R, count: u32, offset_to_key_table: u32) -> io::Result<Vec<KeyEntry>> {
+    fn read_key_entries<R: Read + Seek>(
+        reader: &mut R,
+        count: u32,
+        offset_to_key_table: u32,
+    ) -> OdysseyResult<Vec<KeyEntry>> {
         let mut entries = Vec::with_capacity(count as usize);
 
         reader.seek(io::SeekFrom::Start(offset_to_key_table as u64))?;
@@ -116,7 +149,69 @@ impl ChitinKeyReader for ChitinKey {
         }
         Ok(entries)
     }
+
+    fn extract_resource_by_name<R: Read + Seek>(
+        &self,
+        reader: &mut R,
+        resref_name: &str,
+    ) -> OdysseyResult<Option<Vec<u8>>> {
+        let target_resref: Vec<char> = resref_name.chars().take(16).collect();
+
+        for key_entry in &self.key_entries {
+            let entry_name: String = key_entry
+                .resref
+                .iter()
+                .take_while(|&&c| c != '\0')
+                .collect();
+
+            if entry_name.eq_ignore_ascii_case(resref_name) {
+                let bif_index = key_entry.get_bif_index() as usize;
+                let resource_index = key_entry.get_resource_index();
+
+                if bif_index < self.filenames.len() {
+                    // Return the key entry info - actual extraction would need BIF file access
+                    return Ok(Some(Vec::new()));
+                }
+            }
+        }
+        Ok(None)
+    }
+
+
 }
+
+ impl VirtualFilePathReader for ChitinKey {
+
+
+    fn construct_virtual_filepath(&self, resref_name: &str) -> OdysseyResult<VirtualFilePath> {
+        for key_entry in &self.key_entries {
+            let entry_name: String = key_entry
+                .resref
+                .iter()
+                .take_while(|&&c| c != '\0')
+                .collect();
+
+            if entry_name.eq_ignore_ascii_case(resref_name) {
+                let bif_index = key_entry.get_bif_index() as usize;
+
+                if bif_index < self.filenames.len() {
+                    let bif_filename = &self.filenames[bif_index].filename;
+                    let mut vfp = VirtualFilePath::new(bif_filename.clone(), resref_name.to_string());
+                    vfp.append_virtual_path(resref_name);
+                    return Ok(vfp);
+                }
+            }
+        }
+
+        let mut vfp = VirtualFilePath::new("", resref_name.to_string());
+        vfp.append_virtual_path(resref_name);
+
+        vfp.print_tree();
+        Ok(vfp)
+    }
+
+
+ }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum ResourceType {
@@ -257,5 +352,3 @@ impl KeyHeader {
         }
     }
 }
-
-

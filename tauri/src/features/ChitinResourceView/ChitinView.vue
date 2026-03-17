@@ -50,7 +50,7 @@
                         { title: 'Resref', key: 'resref' },
                         { title: 'Resource Type', key: 'resource_type' },
                         { title: 'Resource ID', key: 'res_id' }
-                    ]" :items="chitinData" :height="400" fixed-header>
+                    ]" :items="chitinData" :height="400" fixed-header @click:row="handleRowClick">
                         <template v-slot:item.resref="{ item }">
                             {{ removeNullCharacters(item.resref) }}
                         </template>
@@ -100,6 +100,7 @@ import { AuroraService } from '@/data/aurora-service';
 import { KeyHeader, KeyEntry } from '@/data/chitin-key';
 import { FileEntry, FilenameEntry } from '@/data/chitin-key';
 import { ResourceType } from '@/data/resource_identification';
+import { useTabViewStore } from '@/state/tab-store';
 
 
 
@@ -118,9 +119,8 @@ export default defineComponent({
         const loading = ref(false);
         const header = ref<KeyHeader | null>(null);
         const fileEntries = ref<FileEntry[]>([]);
-
-
         const filenameEntries = ref<FilenameEntry[]>([]);
+        const tabStore = useTabViewStore();
 
         const fileColumns = [
             {
@@ -187,6 +187,17 @@ export default defineComponent({
             return str.map(item => item.replace(/\u0000/g, '')).filter(item => item !== '').join('');
         };
 
+        const handleRowClick = (_event: any, row: { item: KeyEntry }) => {
+            const item = row.item;
+            // Check if the resource type is 2DA (ResourceType._2DA = 2017)
+            if (item.resource_type === ResourceType._2DA) {
+                const resref = removeNullCharacters(item.resref);
+                const fileName = `${resref}.2da`;
+                // Open a new 2DA viewer tab
+                tabStore.addTab(`2da-${resref}`, 'twoda', fileName, resref);
+            }
+        };
+
         const loadChitinData = async () => {
             try {
                 loading.value = true;
@@ -223,7 +234,8 @@ export default defineComponent({
             props,
             loadChitinData,
             getResourceTypeName,
-            removeNullCharacters
+            removeNullCharacters,
+            handleRowClick
         };
     }
 });

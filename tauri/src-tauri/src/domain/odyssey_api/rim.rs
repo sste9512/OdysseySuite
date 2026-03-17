@@ -1,6 +1,7 @@
 use std::collections::VecDeque;
 use std::io;
 use serde::{Deserialize, Serialize};
+use crate::domain::odyssey_api::error::{OdysseyError, Result as OdysseyResult};
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Rim {
@@ -32,7 +33,7 @@ impl Rim {
         rim
     }
 
-    pub fn read_from_file(path: &str) -> io::Result<Self> {
+    pub fn read_from_file(path: &str) -> OdysseyResult<Self> {
         let file_data = std::fs::read(path)?;
         Ok(Self::new(file_data))
     }
@@ -69,23 +70,17 @@ impl Rim {
         )
     }
 
-    pub fn read_resource_data(&self, resource_id: u32) -> io::Result<Vec<u8>> {
+    pub fn read_resource_data(&self, resource_id: u32) -> OdysseyResult<Vec<u8>> {
         // Convert u32 resource_id to i16 since that's what we store
         let resource_id = i16::try_from(resource_id).map_err(|_| {
-            io::Error::new(
-                io::ErrorKind::InvalidInput,
-                "Resource ID too large for i16"
-            )
+            OdysseyError::InvalidInput("Resource ID too large for i16".to_string())
         })?;
 
         // Find the key entry with matching resource_id
         let key_entry = self.key_entry_list.iter().find(|entry| {
             entry.resource_id == resource_id
         }).ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::NotFound,
-                format!("Resource with ID {} not found", resource_id)
-            )
+            OdysseyError::NotFound(format!("Resource with ID {} not found", resource_id))
         })?;
 
         // Get the data using the found key entry's index

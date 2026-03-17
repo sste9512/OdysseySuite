@@ -5,6 +5,7 @@ import { Biff } from "./biff";
 import { ErfFile } from "./erf";
 import { Rim } from "./rim";
 import { TpcData } from "./tpc-data";
+import { Twoda } from "./Twoda";
 
 
 export class AuroraService {
@@ -105,6 +106,35 @@ export class AuroraService {
         ok: true, 
         value: [new Uint8Array(mdlData), new Uint8Array(mdxData)]
       };
+    } catch (error) {
+      return { ok: false, error: error as Error };
+    }
+  }
+
+  /**
+   * Reads a 2DA file
+   * @param filepath Path to the 2DA file
+   * @returns Promise containing a Result with either the 2DA data or an error
+   */
+  async readTwoda(filepath: string): Promise<Result<Twoda>> {
+    try {
+      const twoda = await invoke<Twoda>('read_twoda', { filepath });
+      return { ok: true, value: twoda };
+    } catch (error) {
+      return { ok: false, error: error as Error };
+    }
+  }
+
+  /**
+   * Reads a 2DA file from the chitin.key
+   * @param chitinPath Path to the chitin.key file
+   * @param fileName Name of the 2DA file to read
+   * @returns Promise containing a Result with either the 2DA data or an error
+   */
+  async readTwodaFromName(chitinPath: string, fileName: string): Promise<Result<Twoda>> {
+    try {
+      const twoda = await invoke<Twoda>('read_twoda_from_name', { chitinPath, fileName });
+      return { ok: true, value: twoda };
     } catch (error) {
       return { ok: false, error: error as Error };
     }

@@ -22,10 +22,9 @@ pub mod s3tc;
 
 pub mod tpc_to_tga;
 
- 
+pub mod twoda;
 
+pub mod error;
 pub mod seekablereadstream;
-
- 
-
+pub mod virtual_filepath;
 // pub mod tpc_xoreos;

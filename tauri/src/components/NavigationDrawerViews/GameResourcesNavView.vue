@@ -117,6 +117,8 @@
           </li>
 
         </ul>
+    
+
 
 
         <header class="channels-list-header focusable">
@@ -139,8 +141,13 @@
             </button>
           </li>
 
-          <li class="channel focusable channel-text">
-            <span class="channel-name">help</span>
+
+          <header class="channels-list-header focusable">
+            <h5>2DA Resources</h5>
+          </header>
+
+          <li v-for="twoda in twoDaFiles" :key="twoda" class="channel focusable channel-text" @click="navigateToResourceView2DA(twoda)">
+            <span class="channel-name">{{ twoda.split('\\').pop() }}</span>
             <button class="button" role="button" aria-label="Invite">
               <svg>
                 <use xlink:href="#icon-invite" />
@@ -298,6 +305,7 @@ const bifFiles = ref<string[]>([]);
 const erfFiles = ref<string[]>([]);
 const gffFiles = ref<string[]>([]);
 const rimFiles = ref<string[]>([]);
+const twoDaFiles = ref<string[]>([]);
 const showContextMenu = ref(false);
 
 const items3 = ref([
@@ -408,6 +416,20 @@ const loadFiles = async () => {
   } else {
     console.log(utiFileResults.error);
   }
+
+  let twodaFileResults = await directoryService.searchFilesByExtension("E:/SteamLibrary/steamapps/common/swkotor", "2da");
+  if (twodaFileResults.ok) {
+    const twodaFileNames = twodaFileResults.value;
+    twoDaFiles.value = twodaFileNames;
+    const resultDb = await resourceDB.storeAllFoundRelevantFiles(twodaFileNames);
+    if (resultDb.ok) {
+      console.log('2DA files stored in database:', resultDb.value);
+    } else {
+      console.error('Failed to store 2DA files in database:', resultDb.error);
+    }
+  } else {
+    console.log(twodaFileResults.error);
+  }
 };
 
 loadFiles();
@@ -427,6 +449,11 @@ const navigateToResourceViewRim = (file: string) => {
   console.log("Navigating to RIM Resource View for file:", file);
   showContextMenu.value = false;
   tabStore.addTab('rim-tab', "rim",file.split('\\').pop() || 'Rim Resource', file);
+};
+const navigateToResourceView2DA = (file: string) => {
+  console.log("Navigating to 2DA Resource View for file:", file);
+  showContextMenu.value = false;
+  tabStore.addTab('2da-tab', "2da",file.split('\\').pop() || '2DA Resource', file);
 };
 const openContextMenu = (e: MouseEvent) => {
   console.log("This worked partially");

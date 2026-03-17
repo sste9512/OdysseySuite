@@ -20,6 +20,7 @@
       <ErfResourceView v-if="item.type === 'erf'" :path="item.value" />
       <BiffResourceView v-if="item.type === 'biff'" :filePath="item.value" />
       <RimResourceView v-if="item.type === 'rim'" :path="item.value" />
+      <TwodaViewer v-if="item.type === 'twoda'" :path="item.value" />
       <AdminDashboard v-if="item.type === 'admin'" />
 
 
@@ -42,6 +43,7 @@ import RimResourceView from "@/features/RimResourceView/RimResourceView.vue";
 
 import DirectoryViewer from "@/features/DirectoryViewer/DirectoryViewer.vue";
 import AdminDashboard from "./Administration/AdminDashboard.vue";
+import TwodaViewer from "@/components/DataPresentation/Twoda-Viewer.vue";
 
 export default defineComponent({
   name: 'TabNavigation',
@@ -54,6 +56,7 @@ export default defineComponent({
     AdminDashboard,
     BiffResourceView,
     RimResourceView,
+    TwodaViewer
   },
   setup() {
     const tabViewStore = useTabViewStore();
